@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "SignUp";
+
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<link href="~/css/StyleSheet.css" rel="stylesheet" />
+
+<body id="cuerpo">
+4
+    <div id="intro3">
+        <h1 class="col-4 pb-5">Creacion de la Cuenta, Rellene el formulario con tu informacion</h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-7">
+            <div id="formulario">
+                <h1 class="col-5 pt-5 pb-5">Datos personales del perfil</h1>
+                <div>
+                    <div class="row">
+                        <div class="col-8 pt-3 pb-2">
+                            <label for="Nombre Completo" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" aria-label="Nombre Completo">
+                        </div>
+                        <div class="col-8 pt-3 pb-2">
+                            <label for="Username" class="form-label">Username</label>
+                            <input type="text" class="form-control" aria-label="Username">
+                        </div>
+                        <div class="col-8 pt-3 pb-2">
+                            <label for="Correo" class="form-label">Correo</label>
+                            <input type="email" class="form-control" aria-label="Correo">
+                        </div>
+                        <div class="col-8 pt-3 pb-2">
+                            <label for="Contrasena" class="form-label">Contrasena</label>
+                            <input type="password" class="form-control" aria-label="Contrasena">
+                        </div>
+                        <div class="col-8 pt-3 pb-2">
+                            <label for="Confirmar Contrasena" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" aria-label="Confirmar Contrasena">
+                        </div>
+                        <div class="col-12 pt-3 pb-2">
+                            <button type="button" class="btn btn-primary mt-5  mb-5">Guardar Datos</button>
+                            <a href="@Url.Action("Login", "Home")" class="ps-2 ms-3"> Ya tengo una cuenta</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-5">
+            <img id="signUp" src="~/img/signUp.png" alt="index" />
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>

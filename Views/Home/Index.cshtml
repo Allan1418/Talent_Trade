@@ -1,8 +1,76 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+}
+<body id="cuerpo">
+    <div id="barraLateral" class="sidebar container-fluid">
+        <h2>Suscripciones</h2>
+        <ul class="pt-2">
+            <li class="pt-4">
+                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
+                <a href="link del perfil" class="ps-2"> materias</a>
+            </li>
+            <li class="pt-4">
+                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
+                <a href="link del perfil" class="ps-2"> materias</a>
+            </li>
+            <li class="pt-4">
+                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
+                <a href="link del perfil" class="ps-2"> materias</a>
+            </li>
+            <li class="pt-4">
+                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
+                <a href="link del perfil" class="ps-2"> materias</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="intro">
+        <h1 class="row-cols-12">Apoya tu pasión</h1>
+        <h3 class="row-cols-4">Impulsa tu creatividad</h3>
+        <h3 class="row-cols-4">¡Únete a nuestra comunidad!</h3>
+    </div>
+
+    <div id="intro" class="image-container">
+        <img id="index" src="~/img/menu.png" alt="index" />
+    </div>
+    
+    <div id="intro2">
+        <h1>¡Aquí te mostramos un poco sobre nuestras estrellas!</h1>
+        <h2>Talent Trade está diseñado para cualquier persona con una audiencia establecida o emergente</h2>
+        <h2>para todos aquellos que producen contenido atractivo de manera regular.</h2>
+    </div>
+
+    <div id="carrusel" class="container-fluid">
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="arrowL" onclick="navigate(-1)">&#9664;</div>
+            <div class="profiles">
+                <div class="profile">
+                    <div class="circle">
+                        <img src="https://www.egames.news/__export/1721813598210/sites/debate/img/2024/07/24/rias_gremory_de_high_school_dxd.jpg" alt="User   1" />
+                    </div>
+                    <div class="profile-name">User   1</div>
+                </div>
+                <div class="profile">
+                    <div class="circle">
+                        <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg" alt="User   2" />
+                    </div>
+                    <div class="profile-name">User   2</div>
+                </div>
+                <div class="profile">
+                    <div class="circle">
+                        <img src="https://example.com/image3.jpg" alt="User   3" />
+                    </div>
+                    <div class="profile-name">User   3</div>
+                </div>
+                <div class="profile">
+                    <div class="circle">
+                        <img src="https://example.com/image4.jpg" alt="User   4" />
+                    </div>
+                    <div class="profile-name">User   4</div>
+                </div>
+            </div>
+            <div class="arrowR" onclick="navigate(1)">&#9654;</div>
+        </div>
+    </div>
+</body>
