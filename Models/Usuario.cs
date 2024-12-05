@@ -9,7 +9,7 @@ namespace Talent_Trade.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public required string Id { get; set; }
+        public string? Id { get; set; }
 
         [BsonElement("nombreCompleto")]
         public required string NombreCompleto { get; set; }
