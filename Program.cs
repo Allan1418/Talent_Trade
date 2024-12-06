@@ -70,18 +70,45 @@ Usuario nuevoUsuario = new Usuario
 };
 
 IConfiguration config = builder.Configuration;
-UsuarioService usuarioService = new UsuarioService(config);
+UsuarioServices usuarioService = new UsuarioServices(config);
 
 
-nuevoUsuario = usuarioService.Create(nuevoUsuario);
+//nuevoUsuario = usuarioService.Create(nuevoUsuario);
 
 
-//usuarioService.Remove("67512a48660674cf1dd5b1d9");
+//usuarioService.Remove("6752af02bb165974e70076a0");
 
 
 //nuevoUsuario.NombreCompleto = "aaaaaaaaaaaa";
 //nuevoUsuario.Id = "67512b12ad47458b206fdd1f";
 
 //usuarioService.Update("67512b12ad47458b206fdd1f", nuevoUsuario);
+
+
+
+//------------------------------------------------------------------------------
+
+
+//ejemplo Prueba Creador Service
+Creador nuevoCreador = new Creador
+{
+    IdUser = "6752af25da5bad086bc3af71",
+    ShortDescripcion = "Short description of the creator",
+    AcercaDe = "Detailed information about the creator",
+    Niveles = new List<Creador.Nivel>
+    {
+        new Creador.Nivel { IdNiveles = ObjectId.GenerateNewId().ToString() },
+        new Creador.Nivel { IdNiveles = ObjectId.GenerateNewId().ToString() }
+    }
+};
+
+CreadorService creadorService = new CreadorService(config);
+
+
+//nuevoCreador = creadorService.Create(nuevoCreador);
+
+//string idCreadorAEliminar = "6752b10be809e6c7bda89d40";
+//creadorService.Remove(idCreadorAEliminar);
+
 
 app.Run();
