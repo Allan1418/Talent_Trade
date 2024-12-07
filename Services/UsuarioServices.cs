@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Talent_Trade.Models;
 
 namespace Talent_Trade.Services
@@ -14,11 +15,11 @@ namespace Talent_Trade.Services
             _usuarios = database.GetCollection<Usuario>("usuarios");
         }
 
-        public List<Usuario> Get() =>
+        public List<Usuario> GetAll() =>
             _usuarios.Find(usuario => true).ToList();
 
         public Usuario Get(string id) =>
-            _usuarios.Find<Usuario>(usuario => usuario.Id == id).FirstOrDefault();
+            _usuarios.Find<Usuario>(usuario => usuario.Id == ObjectId.Parse(id)).FirstOrDefault();
 
         public Usuario Create(Usuario usuario)
         {
@@ -27,12 +28,12 @@ namespace Talent_Trade.Services
         }
 
         public void Update(string id, Usuario usuarioIn) =>
-            _usuarios.ReplaceOne(usuario => usuario.Id == id, usuarioIn);
+            _usuarios.ReplaceOne(usuario => usuario.Id == ObjectId.Parse(id), usuarioIn);
 
         public void Remove(Usuario usuarioIn) =>
             _usuarios.DeleteOne(usuario => usuario.Id == usuarioIn.Id);
 
         public void Remove(string id) =>
-            _usuarios.DeleteOne(usuario => usuario.Id == id);
+            _usuarios.DeleteOne(usuario => usuario.Id == ObjectId.Parse(id));
     }
 }
