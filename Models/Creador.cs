@@ -14,6 +14,9 @@ namespace Talent_Trade.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? IdUser { get; set; }
 
+        [BsonElement("nombrePagina")]
+        public required string nombrePagina { get; set; }
+
         [BsonElement("imageBackground")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ImageBackground { get; set; }
@@ -25,17 +28,10 @@ namespace Talent_Trade.Models
         public string? AcercaDe { get; set; }
 
         [BsonElement("niveles")]
-        public List<Nivel>? Niveles { get; set; }
+        public List<string>? Niveles { get; set; }
 
         [BsonElement("ganancias")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Ganancias { get; set; }
-
-        public class Nivel
-        {
-            [BsonElement("idNiveles")]
-            [BsonRepresentation(BsonType.ObjectId)]
-            public string? IdNiveles { get; set; }
-        }
     }
 }

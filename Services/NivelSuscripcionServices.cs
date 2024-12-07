@@ -13,20 +13,25 @@ namespace Talent_Trade.Services
             IMongoDatabase database = client.GetDatabase("Talent_Hub");
             _nivelesSuscripciones = database.GetCollection<NivelSuscripcion>("nivelesSuscripciones");
         }
-        public async Task<List<NivelSuscripcion>> GetAllNivelesSuscripcione()
+        public List<NivelSuscripcion> GetAll() =>
+            _nivelesSuscripciones.Find(nivelesSuscripciones => true).ToList();
+
+        public NivelSuscripcion Get(string id) =>
+            _nivelesSuscripciones.Find<NivelSuscripcion>(nivelesSuscripciones => nivelesSuscripciones.Id == id).FirstOrDefault();
+
+        public NivelSuscripcion Create(NivelSuscripcion nivelesSuscripciones)
         {
-            return await _nivelesSuscripciones.Find(nivel => true).ToListAsync();
+            _nivelesSuscripciones.InsertOne(nivelesSuscripciones);
+            return nivelesSuscripciones;
         }
 
-        public async Task<NivelSuscripcion> GetIdNivelSuscripcion(string id)
-        {
-            return await _nivelesSuscripciones.Find(nivel => nivel.Id == id).FirstOrDefaultAsync();
-        }
+        public void Update(string id, NivelSuscripcion nivelSuscripcionIn) =>
+            _nivelesSuscripciones.ReplaceOne(nivelSuscripcion => nivelSuscripcion.Id == id, nivelSuscripcionIn);
 
-        public async Task CrearNivelSuscripcion(NivelSuscripcion nivelSuscripcion)
-        {
-            await _nivelesSuscripciones.InsertOneAsync(nivelSuscripcion);
-        }
+        public void Remove(NivelSuscripcion nivelSuscripcionIn) =>
+            _nivelesSuscripciones.DeleteOne(nivelSuscripcion => nivelSuscripcion.Id == nivelSuscripcionIn.Id);
 
+        public void Remove(string id) =>
+            _nivelesSuscripciones.DeleteOne(nivelSuscripcion => nivelSuscripcion.Id == id);
     }
 }

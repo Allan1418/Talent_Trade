@@ -14,11 +14,15 @@ namespace Talent_Trade.Services
             _creadores = database.GetCollection<Creador>("creadores");
         }
 
-        public List<Creador> GetAllCreadores() =>
-            _creadores.Find(creador => true).ToList();
+        public List<Creador> GetAll()
+        {
+            return _creadores.Find(creador => true).ToList();
+        }
 
-        public Creador GetIdCreador(string id) =>
-            _creadores.Find<Creador>(creador => creador.Id == id).FirstOrDefault();
+        public Creador Get(string id)
+        {
+            return _creadores.Find<Creador>(creador => creador.Id == id).FirstOrDefault();
+        }
 
         public Creador Create(Creador creador)
         {
@@ -26,13 +30,19 @@ namespace Talent_Trade.Services
             return creador;
         }
 
-        public void Update(string id, Creador creadorIn) =>
+        public void Update(string id, Creador creadorIn)
+        {
             _creadores.ReplaceOne(creador => creador.Id == id, creadorIn);
+        }
 
-        public void Remove(Creador creadorIn) =>
+        public void Remove(Creador creadorIn)
+        {
             _creadores.DeleteOne(creador => creador.Id == creadorIn.Id);
+        }
 
-        public void Remove(string id) =>
+        public void Remove(string id)
+        {
             _creadores.DeleteOne(creador => creador.Id == id);
+        }
     }
 }

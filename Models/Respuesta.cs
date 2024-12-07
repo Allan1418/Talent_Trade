@@ -20,13 +20,7 @@ namespace Talent_Trade.Models
         public DateTime Fecha { get; set; }
 
         [BsonElement("likes")]
-        public List<Like>? Likes { get; set; }
+        public List<string>? Likes { get; set; }
 
-        public class Like
-        {
-            [BsonElement("idUser")]
-            [BsonRepresentation(BsonType.ObjectId)]
-            public string? IdUser { get; set; }
-        }
     }
 }

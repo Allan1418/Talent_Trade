@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Creador";
 }
 <body id="cuerpo">
     <div>
@@ -7,18 +7,38 @@
             <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg"
                  alt="Responsive image"
                  style="width: 100%; height: auto; object-fit: cover;">
+  
         </div>
         <div class="header">
-            <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg" 
-            alt="Creador" class="profile-image">
-            <h1>Nombre del Creador</h1>
+            <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg"
+                 alt="Creador" class="profile-image">
+            <div class="pt-3 d-flex justify-content-center">
+                <label for="modal-toggle" class="subscribe-button text-center">
+                    Modificar Datos
+                </label>
+            </div>
+            <h1 class="pt-2">Nombre de la pagina</h1>
             <p>Descripción breve del creador y su trabajo.</p>
         </div>
 
-        <div class="text-center">
+        <div id="mebresias" class="row text-center">
+
+            <div class="col-4">
             <h2>Niveles de Membresía</h2>
-            <div class="level">
                 <h3>Nivel 1 - $1/mes</h3>
+                <p>Acceso a contenido exclusivo y actualizaciones.</p>
+                <button class="subscribe-button">Suscribirse</button>
+            </div>
+            
+            <div class="col-4">
+                <h2>Niveles de Membresía</h2>
+                <h3>Nivel 2 - $1/mes</h3>
+                <p>Acceso a contenido exclusivo y actualizaciones.</p>
+                <button class="subscribe-button">Suscribirse</button>
+            </div>
+            <div class="col-4">
+            <h2>Niveles de Membresía</h2>
+                <h3>Nivel 3 - $1/mes</h3>
                 <p>Acceso a contenido exclusivo y actualizaciones.</p>
                 <button class="subscribe-button">Suscribirse</button>
             </div>
@@ -30,3 +50,5 @@
         </div>
     </div>
 </body>
+
+

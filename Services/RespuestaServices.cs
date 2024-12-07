@@ -6,27 +6,33 @@ namespace Talent_Trade.Services
     public class RespuestaServices
     {
         private readonly IMongoCollection<Respuesta> _respuestas;
+
         public RespuestaServices(IConfiguration config)
         {
             MongoClient client = new MongoClient(config.GetConnectionString("MongoDB"));
             IMongoDatabase database = client.GetDatabase("Talent_Hub");
             _respuestas = database.GetCollection<Respuesta>("respuestas");
         }
-        
-        public async Task<List<Respuesta>> GetAllRespuestas()
+
+        public List<Respuesta> GetAll() =>
+            _respuestas.Find(respuestas => true).ToList();
+
+        public Respuesta Get(string id) =>
+            _respuestas.Find<Respuesta>(respuestas => respuestas.Id == id).FirstOrDefault();
+
+        public Respuesta Create(Respuesta respuestas)
         {
-            return await _respuestas.Find(respuesta => true).ToListAsync();
+            _respuestas.InsertOne(respuestas);
+            return respuestas;
         }
 
-        public async Task<Respuesta> GetIdRespuesta(string id)
-        {
-            return await _respuestas.Find(respuesta => respuesta.Id == id).FirstOrDefaultAsync();
-        }
+        public void Update(string id, Respuesta respuestaIn) =>
+            _respuestas.ReplaceOne(Respuesta => Respuesta.Id == id, respuestaIn);
 
-        public async Task CrearRespuesta(Respuesta respuesta)
-        {
-            await _respuestas.InsertOneAsync(respuesta);
-        }
+        public void Remove(Respuesta respuestaIn) =>
+            _respuestas.DeleteOne(Respuesta => Respuesta.Id == respuestaIn.Id);
 
+        public void Remove(string id) =>
+            _respuestas.DeleteOne(Respuesta => Respuesta.Id == id);
     }
 }

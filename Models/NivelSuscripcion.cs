@@ -20,6 +20,7 @@ namespace Talent_Trade.Models
         public string Descripcion { get; set; }
 
         [BsonElement("precio")]
-        public decimal Precio { get; set; } // Usamos decimal para representar valores monetarios con precisión
+        [BsonRepresentation(BsonType.Decimal128)]
+        public decimal Precio { get; set; }
     }
 }

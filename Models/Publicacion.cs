@@ -23,39 +23,16 @@ namespace Talent_Trade.Models
         public DateTime Fecha { get; set; }
 
         [BsonElement("likes")]
-        public List<Like> Likes { get; set; }
+        public List<string> Likes { get; set; }
 
         [BsonElement("tier")]
         public int Tier { get; set; }
 
         [BsonElement("comentarios")]
-        public List<Comentario> Comentarios { get; set; }
+        public List<string> Comentarios { get; set; }
 
         [BsonElement("adjuntos")]
-        public List<Multimedia> Adjuntos { get; set; }
+        public List<string> Adjuntos { get; set; }
 
-        public class Like
-        {
-            [BsonElement("idUser")]
-            [BsonRepresentation(BsonType.ObjectId)]
-            public string IdUser { get; set; }
-        }
-
-        public class Comentario
-        {
-            [BsonId]
-            [BsonRepresentation(BsonType.ObjectId)]
-            public string IdComentario { get; set; }
-
-            [BsonElement("idUsuario")]
-            [BsonRepresentation(BsonType.ObjectId)]
-            public string IdUsuario { get; set; }
-        }
-
-        public class Multimedia
-        {
-            [BsonElement("url")]
-            public string Url { get; set; }
-        }
     }
 }

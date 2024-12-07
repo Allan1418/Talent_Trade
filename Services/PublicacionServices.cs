@@ -6,26 +6,32 @@ namespace Talent_Trade.Services
     public class PublicacionServices
     {
         private readonly IMongoCollection<Publicacion> _publicaciones;
-            
+
         public PublicacionServices(IConfiguration config)
         {
             MongoClient client = new MongoClient(config.GetConnectionString("MongoDB"));
             IMongoDatabase database = client.GetDatabase("Talent_Hub");
             _publicaciones = database.GetCollection<Publicacion>("publicaciones");
         }
-        public async Task<List<Publicacion>> GetAllPublicaciones()
+        public List<Publicacion> GetAll() =>
+            _publicaciones.Find(publicacion => true).ToList();
+
+        public Publicacion Get(string id) =>
+            _publicaciones.Find<Publicacion>(publicacion => publicacion.Id == id).FirstOrDefault();
+
+        public Publicacion Create(Publicacion publicacion)
         {
-            return await _publicaciones.Find(publicacion => true).ToListAsync();
+            _publicaciones.InsertOne(publicacion);
+            return publicacion;
         }
 
-        public async Task<Publicacion> GetIdPublicacion(string id)
-        {
-            return await _publicaciones.Find(publicacion => publicacion.Id == id).FirstOrDefaultAsync();
-        }
+        public void Update(string id, Publicacion publicacionIn) =>
+            _publicaciones.ReplaceOne(publicacion => publicacion.Id == id, publicacionIn);
 
-        public async Task CrearPublicacion(Publicacion publicacion)
-        {
-            await _publicaciones.InsertOneAsync(publicacion);
-        }
+        public void Remove(Publicacion publicacionIn) =>
+            _publicaciones.DeleteOne(publicacion => publicacion.Id == publicacionIn.Id);
+
+        public void Remove(string id) =>
+            _publicaciones.DeleteOne(publicacion => publicacion.Id == id);
     }
 }
