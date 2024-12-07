@@ -19,7 +19,7 @@
         <div class="col-7">
             <div id="formulario2">
                 <h1 class="col-5 pt-5 pb-5">Datos personales del perfil</h1>
-                <div>
+                <form asp-controller="" asp-action="" method="post">
                     <div class="row">
                         <div class="col-8 pt-3 pb-2">
                             <label for="Username" class="form-label">Username</label>
@@ -30,11 +30,11 @@
                             <input type="password" class="form-control" aria-label="Contrasena">
                         </div>
                         <div class="col-12 pt-3 pb-2">
-                            <button type="button" class="btn btn-primary mt-5  mb-5">Guardar Datos</button>
+                            <button type="submit" class="btn btn-primary mt-5  mb-5">Guardar Datos</button>
                             <a href="@Url.Action("signUp", "Home")" class="ps-2 ms-3"> ¿No tienes una cuenta?</a>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 

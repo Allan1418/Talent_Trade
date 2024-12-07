@@ -76,12 +76,9 @@ h3 {
 
 #intro2 {
     padding: 0px 0px 20px 25%;
-    h3
-
-{
-    padding: 20px 0px 0px 5%;
-}
-
+    h3{
+          padding: 20px 0px 0px 5%;
+      }
 }
 
 
@@ -219,10 +216,11 @@ h3 {
     border: 5px solid white; 
 }
 
-.level {
+#mebresias {
     border: 1px solid #ddd;
     padding: 10px;
-    margin: 10px 0;
+    margin: 50px 20px 50px 20px;
+    padding: 10px 20px 0px 20px;
 }
 
 .subscribe-button {
@@ -232,4 +230,39 @@ h3 {
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
+}
+
+/*De aqui para abajo estan los estilos del popUp creador*/
+
+.modal-toggle {
+    display: none;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-toggle:checked + .modal {
+    display: block;
+}
+
+textarea {
+    height: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#editarCreador {
+    margin: 50px 50px 50px 50px;
 }
