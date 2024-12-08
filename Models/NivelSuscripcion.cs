@@ -11,16 +11,16 @@ namespace Talent_Trade.Models
 
         [BsonElement("idCreador")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string IdCreador { get; set; }
+        public string? IdCreador { get; set; }
 
         [BsonElement("nombre")]
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [BsonElement("descripcion")]
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         [BsonElement("precio")]
         [BsonRepresentation(BsonType.Decimal128)]
-        public decimal Precio { get; set; }
+        public decimal? Precio { get; set; }
     }
 }

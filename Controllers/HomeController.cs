@@ -21,6 +21,7 @@ namespace Talent_Trade.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
@@ -71,12 +72,18 @@ namespace Talent_Trade.Controllers
                     return View();
                 }
             }
-            return View(); // O redirige a la página de login con el error
+            return View();
         }
 
         public IActionResult SignUp()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
 
