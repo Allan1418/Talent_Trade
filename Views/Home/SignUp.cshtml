@@ -19,32 +19,33 @@
         <div class="col-7">
             <div id="formulario">
                 <h1 class="col-5 pt-5 pb-5">Datos personales del perfil</h1>
-                <form asp-controller="" asp-action="" method="post">
+                <form asp-controller="Home" asp-action="SignUp" method="post">
                     <div class="row">
                         <div class="col-8 pt-3 pb-2">
                             <label for="Nombre Completo" class="form-label">Nombre Completo</label>
-                            <input type="text" class="form-control" aria-label="Nombre Completo">
+                            <input type="text" class="form-control" aria-label="Nombre Completo" name="NombreCompleto">
                         </div>
                         <div class="col-8 pt-3 pb-2">
                             <label for="Username" class="form-label">Username</label>
-                            <input type="text" class="form-control" aria-label="Username">
+                            <input type="text" class="form-control" aria-label="Username" name="Username">
                         </div>
                         <div class="col-8 pt-3 pb-2">
                             <label for="Correo" class="form-label">Correo</label>
-                            <input type="email" class="form-control" aria-label="Correo">
+                            <input type="email" class="form-control" aria-label="Correo" name="Correo">
                         </div>
                         <div class="col-8 pt-3 pb-2">
                             <label for="Contrasena" class="form-label">Contrasena</label>
-                            <input type="password" class="form-control" aria-label="Contrasena">
+                            <input type="password" class="form-control" aria-label="Contrasena" name="Contrasena">
                         </div>
                         <div class="col-8 pt-3 pb-2">
                             <label for="Confirmar Contrasena" class="form-label">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" aria-label="Confirmar Contrasena">
+                            <input type="password" class="form-control" aria-label="Confirmar Contrasena" name="ConfirmarContrasena">
                         </div>
                         <div class="col-12 pt-3 pb-2">
                             <button type="submit" class="btn btn-primary mt-5  mb-5">Guardar Datos</button>
                             <a href="@Url.Action("Login", "Home")" class="ps-2 ms-3"> Ya tengo una cuenta</a>
                         </div>
+                        <div asp-validation-summary="All"></div>
                     </div>
                 </form>
             </div>

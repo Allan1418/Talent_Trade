@@ -13,10 +13,13 @@ namespace Talent_Trade.Controllers
 
         private readonly SignInManager<Usuario> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager)
+        private readonly UserManager<Usuario> _userManager;
+
+        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager)
         {
             _logger = logger;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -76,6 +79,46 @@ namespace Talent_Trade.Controllers
 
         public IActionResult SignUp()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignUp(string NombreCompleto, string Username, string Correo, string Contrasena, string ConfirmarContrasena)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Contrasena != ConfirmarContrasena)
+                {
+                    ModelState.AddModelError(string.Empty, "Las contraseñas no coinciden.");
+                    return View();
+                }
+
+                var usuario = new Usuario
+                {
+                    NombreCompleto = NombreCompleto,
+                    UserName = Username,
+                    Email = Correo,
+                    FechaRegistro = DateTime.Now
+                };
+
+                var result = await _userManager.CreateAsync(usuario, Contrasena);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(usuario, "usuario");
+                    await _userManager.UpdateAsync(usuario);
+
+                    return RedirectToAction("Login", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View();
+                }
+            }
             return View();
         }
 
