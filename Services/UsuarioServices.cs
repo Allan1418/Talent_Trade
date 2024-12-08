@@ -27,8 +27,8 @@ namespace Talent_Trade.Services
             return usuario;
         }
 
-        public void Update(string id, Usuario usuarioIn) =>
-            _usuarios.ReplaceOne(usuario => usuario.Id == ObjectId.Parse(id), usuarioIn);
+        public void Update(ObjectId id, Usuario usuarioIn) =>
+            _usuarios.ReplaceOne(usuario => usuario.Id == id, usuarioIn);
 
         public void Remove(Usuario usuarioIn) =>
             _usuarios.DeleteOne(usuario => usuario.Id == usuarioIn.Id);
