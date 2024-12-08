@@ -51,6 +51,7 @@ builder.Services.AddIdentityMongoDbProvider<Usuario, MongoRole>(identity =>
 mongo =>
 {
     mongo.ConnectionString = builder.Configuration.GetConnectionString("MongoDB");
+    mongo.UsersCollection = "usuarios";
     // ... otras opciones de MongoDB ...
 });
 

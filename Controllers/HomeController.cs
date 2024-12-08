@@ -37,12 +37,11 @@ namespace Talent_Trade.Controllers
         [HttpPost("Home/login")]
         public async Task<IActionResult> Login(string Username, string Contrasena)
         {
-            Console.WriteLine($"Inicio");
             if (ModelState.IsValid)
             {
-                Console.WriteLine($"Segundo");
-                Console.WriteLine($"User-" + Username);
-                Console.WriteLine($"Contra-" + Contrasena);
+                Console.WriteLine($"DatosUsuario:");
+                Console.WriteLine($"User---" + Username + "---");
+                Console.WriteLine($"Contra---" + Contrasena + "---");
 
                 var userManager = HttpContext.RequestServices.GetService<UserManager<Usuario>>();
                 var user = await userManager.FindByEmailAsync(Username);
@@ -53,20 +52,21 @@ namespace Talent_Trade.Controllers
                     if (result.Succeeded)
                     {
                         // Login exitoso
-                        Console.WriteLine($"Funca");
+                        Console.WriteLine($"Login exitoso!!!");
                         return RedirectToAction("Index", "Home");
                     }
                     else
                     {
                         // Login fallido
-                        Console.WriteLine($"NoFunca");
+                        Console.WriteLine($"Login fallido!!!");
                         ModelState.AddModelError(string.Empty, "Intento de inicio de sesión fallido.");
                         return View(); // O redirige a la página de login con el error
                     }
                 }
                 else
                 {
-                    // El usuario no se encontró
+                    // El usuario no se encontro
+                    Console.WriteLine($"El usuario no se encontro!!!");
                     ModelState.AddModelError(string.Empty, "Intento de inicio de sesión fallido.");
                     return View();
                 }
