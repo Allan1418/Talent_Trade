@@ -4,16 +4,15 @@
 <body id="cuerpo">
     <div>
         <div style="width: 100%; height: 250px; overflow: hidden;">
-            <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg"
+            <img src="https://static3.depositphotos.com/1006649/217/i/450/depositphotos_2171033-stock-photo-network-cables-connected-to-switch.jpg"
                  alt="Responsive image"
                  style="width: 100%; height: auto; object-fit: cover;">
-  
         </div>
         <div class="header">
-            <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg"
+            <img src="https://www.solbyte.com/blog/wp-content/uploads/iot.jpg"
                  alt="Creador" class="profile-image">
             <div class="pt-3 d-flex justify-content-center">
-                <label for="modal-toggle" class="subscribe-button text-center">
+                <label for="modal-toggle" class="subscribe-button text-center" id="modifyDataButton">
                     Modificar Datos
                 </label>
             </div>
@@ -22,33 +21,67 @@
         </div>
 
         <div id="mebresias" class="row text-center">
-
             <div class="col-4">
-            <h2>Niveles de Membresía</h2>
+                <h2>Niveles de Membresía</h2>
                 <h3>Nivel 1 - $1/mes</h3>
                 <p>Acceso a contenido exclusivo y actualizaciones.</p>
                 <button class="subscribe-button">Suscribirse</button>
             </div>
-            
-            <div class="col-4">
-                <h2>Niveles de Membresía</h2>
-                <h3>Nivel 2 - $1/mes</h3>
-                <p>Acceso a contenido exclusivo y actualizaciones.</p>
-                <button class="subscribe-button">Suscribirse</button>
-            </div>
-            <div class="col-4">
-            <h2>Niveles de Membresía</h2>
-                <h3>Nivel 3 - $1/mes</h3>
-                <p>Acceso a contenido exclusivo y actualizaciones.</p>
-                <button class="subscribe-button">Suscribirse</button>
+        </div>
+
+        <div class="header mb-5">
+            <div>
+                <h3> Acerca de</h3>
+                <p>Descripción.</p>
             </div>
         </div>
 
-        <div class="exclusive-content text-center">
+        <div class="exclusive-content text-center pt-5">
             <h2>Contenido Exclusivo</h2>
-            <p>Aquí se mostrarían publicaciones o contenido que solo los mecenas pueden ver.</p>
+            <div>
+                <div class="slider">
+                    <div class="slide">
+                        <img class="small-image" src="~/img/menu.png" alt="Imagen 1">
+                    </div>
+                    <div class="slide">
+                        <img class="small-image" src="~/img/login.png" alt="Imagen 2">
+                    </div>
+                    <div class="slide">
+                        <img class="small-image" src="~/img/signUp.png" alt="Imagen 3">
+                    </div>
+                </div>
+                <button class="prev me-3">&#10094;</button>
+                <button class="next">&#10095;</button>
+            </div>
         </div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Modificar Datos</h2>
+                <form id="modifyDataForm">
+                    <div class="form-group">
+                        <label for="nombrePagina">Nombre de la Página:</label>
+                        <input type="text" id="nombrePagina" name="nombrePagina" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shortDescripcion">Descripción Corta:</label>
+                        <textarea id="shortDescripcion" name="shortDescripcion" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="acercaDe">Acerca de:</label>
+                        <textarea id="acercaDe" name="acercaDe" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="niveles">Niveles de Membresía:</label>
+                        <textarea id="niveles" name="niveles" rows="3" placeholder="Ingrese niveles separados por comas"></textarea>
+                    </div>
+                    <button type="submit">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 </body>
 
-
+<script src="~/js/site.js"></script>
