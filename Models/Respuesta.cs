@@ -11,13 +11,13 @@ namespace Talent_Trade.Models
 
         [BsonElement("idUser")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string IdUser { get; set; }
+        public string? IdUser { get; set; }
 
         [BsonElement("texto")]
-        public string Texto { get; set; }
+        public string? Texto { get; set; }
 
         [BsonElement("fecha")]
-        public DateTime Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
 
         [BsonElement("likes")]
         public List<string>? Likes { get; set; }
