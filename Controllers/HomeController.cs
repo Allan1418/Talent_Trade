@@ -4,6 +4,8 @@ using Talent_Trade.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCore.Identity.Mongo.Model;
+using Microsoft.AspNetCore.Authorization;
+using Talent_Trade.Services;
 
 namespace Talent_Trade.Controllers
 {
@@ -15,11 +17,14 @@ namespace Talent_Trade.Controllers
 
         private readonly UserManager<Usuario> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager)
+        private readonly CreadorServices _creadorServices;
+
+        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, CreadorServices creadorServices)
         {
             _logger = logger;
             _signInManager = signInManager;
             _userManager = userManager;
+            _creadorServices = creadorServices;
         }
 
         public IActionResult Index()
@@ -133,6 +138,37 @@ namespace Talent_Trade.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        //Volverse creador
+        //[Authorize]
+        public async Task<IActionResult> VolverseCreador()
+        {
+
+            var usuario = await _userManager.GetUserAsync(User);
+
+            if (usuario != null && !await _userManager.IsInRoleAsync(usuario, "creador"))
+            {
+                await _userManager.AddToRoleAsync(usuario, "creador");
+
+                await _userManager.UpdateAsync(usuario);
+
+                await _signInManager.RefreshSignInAsync(usuario);
+
+                var creador = new Creador
+                {
+                    IdUser = usuario.Id.ToString()
+                };
+
+                creador = _creadorServices.Create(creador);
+                usuario.IdDeCreador = creador.Id;
+                await _userManager.UpdateAsync(usuario);
+
+
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

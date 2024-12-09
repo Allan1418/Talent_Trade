@@ -40,6 +40,9 @@ catch (Exception ex)
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// add services
+builder.Services.AddScoped<CreadorServices>();
+
 
 //Identity configuration
 builder.Services.AddIdentityMongoDbProvider<Usuario, MongoRole>(identity =>
@@ -47,6 +50,14 @@ builder.Services.AddIdentityMongoDbProvider<Usuario, MongoRole>(identity =>
     // Opciones de Identity (opcional)
     identity.SignIn.RequireConfirmedEmail = false;
     identity.User.RequireUniqueEmail = true;
+
+    // Configuracion del password
+    identity.Password.RequiredLength = 3;
+    identity.Password.RequireNonAlphanumeric = false;
+    identity.Password.RequireLowercase = false;
+    identity.Password.RequireUppercase = false;
+    identity.Password.RequireDigit = false;
+
 },
 mongo =>
 {
@@ -58,6 +69,8 @@ mongo =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     // ... opciones de cookies ...
+    //options.ExpireTimeSpan = TimeSpan.FromDays(30);
+    options.LoginPath = "/Home/Login";
 });
 
 builder.Services.AddAuthentication();
@@ -188,7 +201,7 @@ app.UseAuthentication();
 //    Console.WriteLine("d--- " + nuevoUsuario.Id);
 
 //    // Genera el hash de la contraseña
-//    var passwordHash = userManager.PasswordHasher.HashPassword(nuevoUsuario, "contraseñaSegura123");
+//    var passwordHash = userManager.PasswordHasher.HashPassword(nuevoUsuario, "1234");
 
 //    // Actualiza el usuario con el hash de la contraseña
 //    nuevoUsuario.PasswordHash = passwordHash;

@@ -15,7 +15,7 @@
     <header>
         <nav id="navbar" class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="@Url.Action("Index", "Home")"
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")">
                     <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" 
                     width="30" height="24" class="d-inline-block align-text-top">
                     Talent Trade
@@ -29,7 +29,8 @@
                         @if (User.IsInRole("creador"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Creador")">
+                                <a class="nav-link active" aria-current="page"
+                                   href="@Url.Action("Index", "Creador", new { username = User.Identity.Name })">
                                     <i class="fas fa-pencil-alt"></i> Mi pagina
                                 </a>
                             </li>
@@ -37,7 +38,7 @@
                         @if (!User.IsInRole("creador") && User.IsInRole("usuario"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Creador")">
+                                <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="VolverseCreador">
                                     <i class="fas fa-pencil-alt"></i> Vuelvete un creador
                                 </a>
                             </li>

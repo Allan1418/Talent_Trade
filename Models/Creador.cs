@@ -12,10 +12,10 @@ namespace Talent_Trade.Models
 
         [BsonElement("idUser")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdUser { get; set; }
+        public required string IdUser { get; set; }
 
         [BsonElement("nombrePagina")]
-        public required string nombrePagina { get; set; }
+        public string? nombrePagina { get; set; }
 
         [BsonElement("imageBackground")]
         [BsonRepresentation(BsonType.ObjectId)]

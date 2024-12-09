@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Creador";
 }
+@model dynamic
+
 <body id="cuerpo">
     <div>
         <div style="width: 100%; height: 250px; overflow: hidden;">
@@ -80,6 +82,29 @@
                 </form>
             </div>
         </div>
+
+        @if (Model != null)
+        {
+            <div class="pt-3 d-flex justify-content-center">
+                <p>Id del creador: @Model.Creador.IdUser</p>
+                <br>
+            </div>
+
+        }
+        @if (Model != null && Model.EsPropietario)
+        {
+            <div class="pt-3 d-flex justify-content-center">
+                <p>Es el propietario</p>
+                <br>
+            </div>
+
+        }
+        else
+        {
+            <div class="pt-3 d-flex justify-content-center">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
 
     </div>
 </body>

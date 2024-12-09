@@ -20,7 +20,7 @@ namespace Talent_Trade.Models
         public DateTime? Fecha { get; set; }
 
         [BsonElement("likes")]
-        public List<string?> Likes { get; set; }
+        public List<string>? Likes { get; set; }
 
     }
 }
