@@ -12,7 +12,7 @@ namespace Talent_Trade.Controllers
         }
 
         // GET: CreadorController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Detalle(int id)
         {
             return View();
         }
