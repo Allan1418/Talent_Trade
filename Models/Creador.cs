@@ -14,6 +14,9 @@ namespace Talent_Trade.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public required string IdUser { get; set; }
 
+        [BsonElement("UserName")]
+        public required string UserName { get; set; }
+        
         [BsonElement("nombrePagina")]
         public string? nombrePagina { get; set; }
 

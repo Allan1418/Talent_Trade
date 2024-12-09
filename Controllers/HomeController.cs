@@ -158,7 +158,8 @@ namespace Talent_Trade.Controllers
 
                 var creador = new Creador
                 {
-                    IdUser = usuario.Id.ToString()
+                    IdUser = usuario.Id.ToString(),
+                    UserName = usuario.UserName
                 };
 
                 creador = _creadorServices.Create(creador);

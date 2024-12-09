@@ -42,6 +42,8 @@ builder.Services.AddControllersWithViews();
 
 // add services
 builder.Services.AddScoped<CreadorServices>();
+builder.Services.AddScoped<GridFSService>();
+builder.Services.AddScoped<PublicacionServices>();
 
 
 //Identity configuration

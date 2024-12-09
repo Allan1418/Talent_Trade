@@ -33,5 +33,17 @@ namespace Talent_Trade.Services
 
         public void Remove(string id) =>
             _publicaciones.DeleteOne(publicacion => publicacion.Id == id);
+
+
+        public List<Publicacion> GetPublicacionesPorCreador(string idCreador, int pagina = 1, int sizePagina = 30)
+        {
+            var publicaciones = _publicaciones.Find(p => p.IdCreador == idCreador)
+                .SortByDescending(p => p.Fecha)
+                .Skip((pagina - 1) * sizePagina)
+                .Limit(sizePagina)
+                .ToList();
+
+            return publicaciones;
+        }
     }
 }
