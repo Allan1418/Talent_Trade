@@ -9,11 +9,13 @@ footer {
     color: white;
 }
 
+#error {
+    margin-top:20%;
+}
 /*De aqui para abajo estan los estilos del index*/
 #navbar {
     background-color: #1A1E23;
     width: 100%;
-    /* height: 70px; */ /* Elimina o aumenta este valor */
     overflow-y: auto;
     position: fixed;
     z-index: 1;
@@ -90,7 +92,7 @@ h3 {
 
 .profiles {
     display: flex;
-    gap: 100px;
+    gap: 80px;
     overflow-x: auto;
 }
 
@@ -219,12 +221,11 @@ h3 {
 }
 
 #mebresias {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin: 50px 20px 50px 20px;
-    padding: 10px 20px 0px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
 }
-
 .subscribe-button {
     background-color: #28a745;
     color: white;
@@ -255,111 +256,62 @@ h3 {
     margin-top: 20px;
 }
 
-/*De aqui para abajo estan los estilos del popUp creador*/
-
-.modal-toggle {
-    display: none;
+#publiTitulo{
+    text-align: center;
+    position: relative;
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    border: 1px solid #888;
-    width: 80%;
+#acercaDe {
+    padding: 3% 14% 3% 14%;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+#shortDes {
+    padding: 3% 24% 3% 24%;
 }
 
-.modal-toggle:checked + .modal {
-    display: block;
+#cuerpoContenido {
+    background-color: #1A1E23;
 }
 
-textarea {
-    height: 150px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#editarCreador {
-    margin: 50px 50px 50px 50px;
-}
-
-
-.small-image {
-    width: 700px;
-    height: 650px;
-}
-
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
+.card {
+    width: 300px;
+    margin: 10px;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #1A1E23;
+    margin: 10% 0% 10% 25%;
+    color:white;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+/* De aqui para abajo estan los estilos del popUp creador */
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
+.modal-body, .modal-content {
+    padding: 20px;
+    background-color: #19191A;
+    color: white;
+}
 
 .form-group {
     margin-bottom: 15px;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="email"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-sizing: border-box;
-}
-
-button[type="submit"] {
-    background-color: #4CAF50;
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+    background-color: #19191A;
     color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+    border: 1px solid white;
 }
+
+    .modal-body label {
+        color: white;
+    }
 
 
 /*De aqui para abajo estan los estilos del publicacion*/

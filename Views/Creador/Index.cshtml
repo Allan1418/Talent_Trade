@@ -3,113 +3,141 @@
 }
 @model dynamic
 
-<body id="cuerpo">
-    <div>
+@if (Model != null)
+{
+    <body id="cuerpo">
         <div style="width: 100%; height: 250px; overflow: hidden;">
             <img src="https://static3.depositphotos.com/1006649/217/i/450/depositphotos_2171033-stock-photo-network-cables-connected-to-switch.jpg"
                  alt="Responsive image"
                  style="width: 100%; height: auto; object-fit: cover;">
         </div>
-        <div class="header">
+        <div id="publiTitulo">
             <img src="https://www.solbyte.com/blog/wp-content/uploads/iot.jpg"
                  alt="Creador" class="profile-image">
-            <div class="pt-3 d-flex justify-content-center">
-                <label for="modal-toggle" class="subscribe-button text-center" id="modifyDataButton">
-                    Modificar Datos
-                </label>
-            </div>
-            <h1 class="pt-2">Nombre de la pagina</h1>
-            <p>Descripción breve del creador y su trabajo.</p>
-        </div>
-
-        <div id="mebresias" class="row text-center">
-            <div class="col-4">
-                <h2>Niveles de Membresía</h2>
-                <h3>Nivel 1 - $1/mes</h3>
-                <p>Acceso a contenido exclusivo y actualizaciones.</p>
-                <button class="subscribe-button">Suscribirse</button>
-            </div>
-        </div>
-
-        <div class="header mb-5">
-            <div>
-                <h3> Acerca de</h3>
-                <p>Descripción.</p>
-            </div>
-        </div>
-
-        <h2 class="header mb-5 mt-5">Contenido Exclusivo</h2>
-        
-        <div>
-            <div class="container">
-                <div class="post-image-container">
-                    <a href="@Url.Action("Index", "Publicacion")">
-                        <img src="~/img/login.png" alt="Imagen destacada" class="post-image">
-                    </a>
+            @if (Model != null && Model.EsPropietario)
+            {
+                <div class="pt-3 d-flex justify-content-center">
+                    <button id="modifyDataButton" class="subscribe-button text-center"
+                            data-bs-toggle="modal" data-bs-target="#modal">
+                        Modificar Datos
+                    </button>
+                    <script src="~/js/site.js"></script>
                 </div>
+            }
+            <h1 class="pt-2">@Model.Creador.nombrePagina</h1>
+            <p id="shortDes" class="fs-5">@Model.Creador.ShortDescripcion</p>
+        </div>
 
-                <div class="post-content-container">
-                    <h1 class="post-title">Título de la publicación</h1>
-                    <p class="post-date">Fecha de publicación</p>
-                    <p class="post-content">Contenido de la publicación</p>
-                    <div class="comments">
-                    </div>
+        <div id="mebresias" class="row container-fluid text-center">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="~/img/signUp.png" alt="Nivel 1">
+                    <h4 class="pt-5">Nivel 1</h4>
+                    <p class="pt-5">Descripción del nivel 1.</p>
+                    <button class="subscribe-button mt-5">Suscribirse</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="~/img/signUp.png" alt="Nivel 1">
+                    <h4 class="pt-5">Nivel 1</h4>
+                    <p class="pt-5">Descripción del nivel 1.</p>
+                    <button class="subscribe-button mt-5">Suscribirse</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="~/img/signUp.png" alt="Nivel 1">
+                    <h4 class="pt-5">Nivel 1</h4>
+                    <p class="pt-5">Descripción del nivel 1.</p>
+                    <button class="subscribe-button mt-5">Suscribirse</button>
                 </div>
             </div>
         </div>
 
+        <div class="nav nav-tabs container" id="myTab" role="tablist">
+            <button class="nav-link" id="publicaciones-tab" data-bs-toggle="tab" data-bs-target="#publicaciones" type="button" role="tab" aria-controls="publicaciones" aria-selected="false">Publicaciones</button>
+            <button class="nav-link active" id="acercaDe-tab" data-bs-toggle="tab" data-bs-target="#acercaDe" type="button" role="tab" aria-controls="acercaDe" aria-selected="true">Acerca de</button>
+        </div>
 
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="acercaDe" role="tabpanel" aria-labelledby="acercaDe-tab">
+                <div id="publiTitulo" class="mb-5">
+                    <div>
+                        <h1> Acerca de</h1>
+                        <p id="acercaDe" class="fs-5">@Model.Creador.AcercaDe</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
 
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="closeModal">&times;</span>
-                <h2>Modificar Datos</h2>
-                <form id="modifyDataForm">
-                    <div class="form-group">
-                        <label for="nombrePagina">Nombre de la Página:</label>
-                        <input type="text" id="nombrePagina" name="nombrePagina" required>
+                <h2 id="publiTitulo" class="mb-5 mt-5">Contenido Exclusivo</h2>
+
+                <div class="container">
+                    <div>
+                        <div id="cuerpoContenido" class="row">
+                            <div id="contenido" class="col-md-6 offset-md-3 pt-5 pb-5">
+                                <div style="background-color:#19191A" class="product-card">
+                                    <img src="https://www.solbyte.com/blog/wp-content/uploads/iot.jpg" class="product-image" alt="Producto">
+                                    <a href="@Url.Action("Index", "Publicacion")">
+                                        <h2>Titulo de la publicacion</h2>
+                                    </a>
+                                    <p>Bundle of 6 excel sheets for 3 phase power calculators.</p>
+                                    <p>
+                                        <a href="" class="btn btn-primary">Suscribete</a>
+                                    </p>
+                                    <p><strong>$3</strong></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="shortDescripcion">Descripción Corta:</label>
-                        <textarea id="shortDescripcion" name="shortDescripcion" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="acercaDe">Acerca de:</label>
-                        <textarea id="acercaDe" name="acercaDe" rows="4"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="niveles">Niveles de Membresía:</label>
-                        <textarea id="niveles" name="niveles" rows="3" placeholder="Ingrese niveles separados por comas"></textarea>
-                    </div>
-                    <button type="submit">Guardar Cambios</button>
-                </form>
+                </div>
             </div>
         </div>
 
-        @if (Model != null)
-        {
-            <div class="pt-3 d-flex justify-content-center">
-                <p>Id del creador: @Model.Creador.IdUser</p>
-                <br>
-            </div>
 
-        }
-        @if (Model != null && Model.EsPropietario)
-        {
-            <div class="pt-3 d-flex justify-content-center">
-                <p>Es el propietario</p>
-                <br>
+        <div id="modal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar Datos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="modifyDataForm" asp-controller="" asp-action="" method="post">
+                            <div class="mb-3">
+                                <label for="nombrePagina" class="form-label">Nombre de la Página</label>
+                                <textarea type="text" class="form-control" id="nombrePagina" name="nombrePagina" required>@Model.Creador.nombrePagina</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="shortDescripcion" class="form-label">Descripción Corta</label>
+                                <textarea class="form-control" id="shortDescripcion" name="shortDescripcion" rows="3">@Model.Creador.ShortDescripcion</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="acercaDe" class="form-label">Acerca De</label>
+                                <textarea class="form-control" id="AcercaDe" name="acercaDe" rows="3">@Model.Creador.AcercaDe</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ImageBackground" class="form-label">Subir Imagen</label>
+                                <input type="file" class="form-control" id="ImageBackground" name="ImageBackground">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" form="modifyDataForm" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
             </div>
+        </div>
 
-        }
-        else
-        {
-            <div class="pt-3 d-flex justify-content-center">
-                <div asp-validation-summary="All"></div>
-            </div>
-        }
-
+    </body>
+    <script src="~/js/site.js"></script>
+}
+else
+{
+    <div class="alert alert-danger text-center" role="alert">
+        <h1 id="error">Error 404: Página no encontrada</h1>
+        <p>La página que estás buscando no existe.</p>
     </div>
-</body>
-
-<script src="~/js/site.js"></script>
+}

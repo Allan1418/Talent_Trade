@@ -31,27 +31,3 @@ prevBtn.addEventListener('click', () => {
     showSlide(currentSlide);
 });
 
-
-
-
-var modal = document.getElementById('modal');
-
-var btn = document.getElementById('modifyDataButton');
-
-var span = document.getElementById('closeModal');
-
-var form = document.getElementById('modifyDataForm');
-
-btn.onclick = function () {
-    modal.style.display = "block";
-};
-
-span.onclick = function () {
-    modal.style.display = "none";
-};
-
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-};
