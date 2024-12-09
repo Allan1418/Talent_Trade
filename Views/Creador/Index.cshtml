@@ -38,24 +38,27 @@
             </div>
         </div>
 
-        <div class="exclusive-content text-center pt-5">
-            <h2>Contenido Exclusivo</h2>
-            <div>
-                <div class="slider">
-                    <div class="slide">
-                        <img class="small-image" src="~/img/menu.png" alt="Imagen 1">
-                    </div>
-                    <div class="slide">
-                        <img class="small-image" src="~/img/login.png" alt="Imagen 2">
-                    </div>
-                    <div class="slide">
-                        <img class="small-image" src="~/img/signUp.png" alt="Imagen 3">
+        <h2 class="header mb-5 mt-5">Contenido Exclusivo</h2>
+        
+        <div>
+            <div class="container">
+                <div class="post-image-container">
+                    <a href="@Url.Action("Detalle", "Creador")">
+                        <img src="~/img/login.png" alt="Imagen destacada" class="post-image">
+                    </a>
+                </div>
+
+                <div class="post-content-container">
+                    <h1 class="post-title">Título de la publicación</h1>
+                    <p class="post-date">Fecha de publicación</p>
+                    <p class="post-content">Contenido de la publicación</p>
+                    <div class="comments">
                     </div>
                 </div>
-                <button class="prev me-3">&#10094;</button>
-                <button class="next">&#10095;</button>
             </div>
         </div>
+
+
 
         <div id="modal" class="modal">
             <div class="modal-content">
