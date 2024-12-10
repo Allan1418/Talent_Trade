@@ -7,7 +7,7 @@
 {
     <body id="cuerpo">
 
-        <div style="width: 100%; height: 250px; overflow: hidden;">
+        <div style="width: 100%; height: 600px; overflow: hidden;">
             <img src="@Url.Action("File", "Home", new { id = Model.Creador.ImageBackground })"
                  alt="Responsive image"
                  style="width: 100%; height: auto; object-fit: cover;">
@@ -31,7 +31,7 @@
 
         <div id="mebresias" class="row container-fluid text-center">
 
-            @if (Model != null && Model.EsPropietario)
+            @if (Model.EsPropietario)
             {
                 <div class="pt-3 d-flex justify-content-center">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#membershipModal">
@@ -73,6 +73,16 @@
             </div>
             <div class="tab-pane fade show active" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
                 <h2 id="publiTitulo" class="mb-5 mt-5">Contenido Exclusivo</h2>
+                @if (Model.EsPropietario)
+                {
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearPublicacion">
+                            Crear publicacion
+                        </button>
+
+                        <script src="~/js/site.js"></script>
+                    </div>
+                }
                 <div class="container">
                     <div>
                         <div id="cuerpoContenido" class="row">
@@ -145,7 +155,7 @@
                             <div class="form-group">
                                 <label for="membershipSelect">Seleccionar Membresía</label>
                                 <select class="form-control" id="membershipSelect" name="membershipId">
-                                   <option>Nombre de las membresias</option>
+                                    <option>Nombre de las membresias</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -171,7 +181,7 @@
             </div>
         </div>
 
-        
+
         <div class="modal fade" id="createMembershipModal" tabindex="-1" aria-labelledby="createMembershipModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -180,7 +190,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="createMembershipForm" asp-controller="Memberships" asp-action="Create" method="post">
+                        <form id="createMembershipForm" asp-controller="" asp-action="" method="post">
                             <div class="modal-footer">
                                 <div class="form-group">
                                     <label for="membershipName">Nombre de la Membresía</label>
@@ -203,7 +213,41 @@
             </div>
         </div>
 
+        <div id="crearPublicacion" class="modal fade" tabindex="-1" aria-labelledby="modalPublicacion" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalPublicacionLabel">Crear Publicación</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="crearPublicacionForm" asp-controller="Creador" asp-action="CrearPublicacion" method="post">
+                            <div class="form-group">
+                                <label for="Titulo" class="control-label">Titulo</label>
+                                <input for="Titulo" class="form-control" />
+                                <span for="Titulo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Contenido" class="control-label">Contenido</label>
+                                <textarea for="Contenido" class="form-control" rows="4"></textarea>
+                                <span for="Contenido" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Archivos" class="control-label">Archivos</label>
+                                <input type="file" for="Archivos" class="form-control-file" multiple />
+                                <span for="Archivos" class="text-danger"></span>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" form="crearPublicacionForm" class="btn btn-primary">Crear</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </body>
+
     <script src="~/js/site.js"></script>
 }
 else

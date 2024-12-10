@@ -213,8 +213,8 @@ h3 {
 }
 
 .profile-image {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     margin-top: -75px; 
     border: 5px solid white; 
@@ -325,7 +325,7 @@ h3 {
     text-align: center;
     position: relative;
     padding-top: 6%;
-    padding-bottom 15%;
+    padding-bottom: 5%;
 }
 
 .product-card {
@@ -347,4 +347,16 @@ h3 {
     padding: 5px 10px;
     color: #fff;
     font-weight: bold;
+}
+
+.post-image-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.corner-button {
+    background-color: transparent;
+    position: absolute;
+    top: 29%;
+    left: 74%;
 }

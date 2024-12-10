@@ -2,20 +2,69 @@
     ViewData["Title"] = "Detalles de la publicación";
 }
 
-<h1 id="intro5">Contenido Exclusivo</h1>
 
-<div>
-    <div class="container">
-        <div class="post-image-container">
+<div style="background-color:#1A1E23" class="container">
+    <button type="button" class="corner-button" btn-primary" data-bs-toggle="modal" data-bs-target="#editarPublicacion">
+        <svg width="30" height="30">
+            <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white" />
+        </svg>
+    </button>
+
+    <div class="post-content-container">
+        <div class="post-image-container pb-5">
             <img src="~/img/login.png" alt="Imagen destacada" class="post-image">
         </div>
+        <h1 class="post-title">GEMINI</h1>
+        <p class="post-date"></p>
+        <p class="post-content"></p>
+        <div class="comments ">Dime cuál y te ayudo a crear algo personalizado.</div>
+    </div>
+</div>
 
-        <div class="post-content-container">
-            <h1 class="post-title">Título de la publicación</h1>
-            <p class="post-date">Fecha de publicación</p>
-            <p class="post-content">Contenido de la publicación</p>
-            <div class="comments">
+<div class="container">
+    <div class="modal fade" id="editarPublicacion" tabindex="-1" aria-labelledby="modalPublicacion" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPublicacion">Editar Publicación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-6">
+                        <img id="imagePreview" src="path/to/your/image.jpg" alt="Imagen de la publicación" class="img-fluid">
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('imageUpload').click();">Seleccionar Imagen</button>
+                    </div>
+                    <div class="col-md-6">
+                        <form id="editPublicationForm" asp-controller="" asp-action="" method="post">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" required>
+
+                            <label for="email">Correo electrónico:</label>
+                            <input type="email" id="email" name="email" required>
+
+                            <label for="mensaje">Mensaje:</label>
+                            <textarea id="mensaje" name="mensaje" required></textarea>
+
+                            <button type="submit">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" form="editPublicationForm" class="btn btn-primary">Guardar Cambios</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('imagePreview').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>
