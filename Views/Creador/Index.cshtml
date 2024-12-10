@@ -6,6 +6,7 @@
 @if (Model != null)
 {
     <body id="cuerpo">
+
         <div style="width: 100%; height: 250px; overflow: hidden;">
             <img src="https://static3.depositphotos.com/1006649/217/i/450/depositphotos_2171033-stock-photo-network-cables-connected-to-switch.jpg"
                  alt="Responsive image"
@@ -29,25 +30,20 @@
         </div>
 
         <div id="mebresias" class="row container-fluid text-center">
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="~/img/signUp.png" alt="Nivel 1">
-                    <h4 class="pt-5">Nivel 1</h4>
-                    <p class="pt-5">Descripción del nivel 1.</p>
-                    <button class="subscribe-button mt-5">Suscribirse</button>
+
+            @if (Model != null && Model.EsPropietario)
+            {
+                <div class="pt-3 d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#membershipModal">
+                        Crear/Editar Membresía
+                    </button>
+
+                    <script src="~/js/site.js"></script>
                 </div>
-            </div>
+            }
+
             <div class="col-md-4">
                 <div class="card">
-                    <img src="~/img/signUp.png" alt="Nivel 1">
-                    <h4 class="pt-5">Nivel 1</h4>
-                    <p class="pt-5">Descripción del nivel 1.</p>
-                    <button class="subscribe-button mt-5">Suscribirse</button>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="~/img/signUp.png" alt="Nivel 1">
                     <h4 class="pt-5">Nivel 1</h4>
                     <p class="pt-5">Descripción del nivel 1.</p>
                     <button class="subscribe-button mt-5">Suscribirse</button>
@@ -56,12 +52,18 @@
         </div>
 
         <div class="nav nav-tabs container" id="myTab" role="tablist">
-            <button class="nav-link" id="publicaciones-tab" data-bs-toggle="tab" data-bs-target="#publicaciones" type="button" role="tab" aria-controls="publicaciones" aria-selected="false">Publicaciones</button>
-            <button class="nav-link active" id="acercaDe-tab" data-bs-toggle="tab" data-bs-target="#acercaDe" type="button" role="tab" aria-controls="acercaDe" aria-selected="true">Acerca de</button>
+            <button class="nav-link active" id="publicaciones-tab" data-bs-toggle="tab" data-bs-target="#publicaciones"
+                    type="button" role="tab" aria-controls="publicaciones" aria-selected="true">
+                Publicaciones
+            </button>
+            <button class="nav-link" id="acercaDe-tab" data-bs-toggle="tab" data-bs-target="#acercaDe"
+                    type="button" role="tab" aria-controls="acercaDe" aria-selected="false">
+                Acerca de
+            </button>
         </div>
 
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="acercaDe" role="tabpanel" aria-labelledby="acercaDe-tab">
+            <div class="tab-pane fade" id="acercaDe" role="tabpanel" aria-labelledby="acercaDe-tab">
                 <div id="publiTitulo" class="mb-5">
                     <div>
                         <h1> Acerca de</h1>
@@ -69,10 +71,8 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
-
+            <div class="tab-pane fade show active" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
                 <h2 id="publiTitulo" class="mb-5 mt-5">Contenido Exclusivo</h2>
-
                 <div class="container">
                     <div>
                         <div id="cuerpoContenido" class="row">
@@ -126,6 +126,77 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" form="modifyDataForm" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="membershipModal" class="modal fade" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="membershipModalLabel">Editar Membresía</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editMembershipForm" asp-controller="" asp-action="" method="post">
+                            <div class="form-group">
+                                <label for="membershipSelect">Seleccionar Membresía</label>
+                                <select class="form-control" id="membershipSelect" name="membershipId">
+                                   <option>Nombre de las membresias</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="membershipName">Nombre de la Membresía</label>
+                                <input type="text" class="form-control" id="membershipName" name="nombre" />
+                            </div>
+                            <div class="form-group">
+                                <label for="membershipDescription">Descripción</label>
+                                <textarea class="form-control" id="membershipDescription" name="descripcion"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="membershipPrice">Precio</label>
+                                <input type="number" class="form-control" id="membershipPrice" name="precio" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" form="editMembershipForm" class="btn btn-primary">Guardar Cambios</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMembershipModal">Crear Nueva Membresía</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="modal fade" id="createMembershipModal" tabindex="-1" aria-labelledby="createMembershipModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createMembershipModalLabel">Crear Nueva Membresía</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createMembershipForm" asp-controller="Memberships" asp-action="Create" method="post">
+                            <div class="modal-footer">
+                                <div class="form-group">
+                                    <label for="membershipName">Nombre de la Membresía</label>
+                                    <input type="text" class="form-control" id="membershipName" name="nombre" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="membershipDescription">Descripción</label>
+                                    <textarea class="form-control" id="membershipDescription" name="descripcion"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="membershipPrice">Precio</label>
+                                    <input type="number" class="form-control" id="membershipPrice" name="precio" />
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Crear</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

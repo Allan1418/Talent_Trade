@@ -207,7 +207,7 @@ h3 {
 }
 
 .full-width-image {
-    width: 100%;
+    width: 150%;
     height: auto; 
     display: block; 
 }
@@ -312,6 +312,11 @@ h3 {
     .modal-body label {
         color: white;
     }
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+}
 
 
 /*De aqui para abajo estan los estilos del publicacion*/
