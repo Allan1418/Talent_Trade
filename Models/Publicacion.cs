@@ -34,5 +34,20 @@ namespace Talent_Trade.Models
         [BsonElement("adjuntos")]
         public List<string>? Adjuntos { get; set; }
 
+        public void TruncarContenido(int maxLength)
+        {
+            if (string.IsNullOrEmpty(Contenido))
+            {
+                return;
+            }
+
+            if (Contenido.Length <= maxLength)
+            {
+                return;
+            }
+
+            Contenido = Contenido.Substring(0, maxLength) + "...";
+        }
+
     }
 }

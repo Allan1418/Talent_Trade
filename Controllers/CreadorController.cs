@@ -64,6 +64,11 @@ namespace Talent_Trade.Controllers
 
                 publicaciones = _publicacionServices.GetPublicacionesPorCreador(creador.Id, pagina, 30);
 
+                foreach (var item in publicaciones)
+                {
+                    item.TruncarContenido(20);
+                }
+
             }
             else
             {
