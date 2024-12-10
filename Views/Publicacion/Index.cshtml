@@ -4,26 +4,29 @@
 
 @model dynamic
 
+
+<h1 id="intro5">Publicacion</h1>
+
+
 <div style="background-color:#1A1E23" class="container">
-    @if (Model != null && Model.EsPropietario)
-    {
-        <button type="button" class="corner-button" btn-primary" data-bs-toggle="modal" data-bs-target="#editarPublicacion">
-            <svg width="30" height="30">
-                <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white" />
-            </svg>
-        </button>
-    }
+    <button type="button" class="corner-button" btn-primary" data-bs-toggle="modal" data-bs-target="#editarPublicacion">
+        <svg width="30" height="30">
+            <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white" />
+        </svg>
+    </button>
+
 
     <div class="post-content-container">
+        <div class="post-image-container pb-5">
+            @foreach (var adjunto in @Model.Publicacion.Adjuntos)
+            {
+                <img src="@Url.Action("File", "Home", new { id = adjunto })" class="product-image" alt="Producto">
+
+            }
+        </div>
         <h1 class="post-title">@Model.Publicacion.Titulo</h1>
         <p class="post-date">@Model.Publicacion.Fecha.ToString("dd/MM/yyyy")</p>
         <p class="post-content">@Model.Publicacion.Contenido</p>
-        <div class="comments">
-            <p>@Model.Publicacion.Comentarios</p> <form asp-action="AgregarComentario">
-                <textarea name="Comentario" placeholder="Escribe tu comentario"></textarea>
-                <button type="submit">Enviar</button>
-            </form>
-        </div>
     </div>
 </div>
 
@@ -40,28 +43,28 @@
                     <div class="col-md-6">
                         <img id="imagePreview" src="path/to/your/image.jpg" alt="Imagen de la publicación" class="img-fluid">
                         <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                        <button type="button" class="btn btn-primary" onclick="document.getElementById('imageUpload').click();">Seleccionar Imagen</button>
+                        <button type="button" class="btn btn-primary pt-2" onclick="document.getElementById('imageUpload').click();">Seleccionar Imagen</button>
                     </div>
                     <div class="col-md-6">
                         <form id="editPublicationForm" asp-controller="" asp-action="" method="post">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                            <label for="email">Correo electrónico:</label>
-                            <input type="email" id="email" name="email" required>
-                            <label for="mensaje">Mensaje:</label>
-                            <textarea id="mensaje" name="mensaje" required></textarea>
-                            <button type="submit">Enviar</button>
+                            <label for="Titulo">Titulo:</label>
+                            <input type="text" id="Titulo" name="Titulo" required>
+
+                            <label for="Contenido">Contenido:</label>
+                            <input type="text" id="Contenido" name="Contenido" required>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" form="editPublicationForm" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
                         </form>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" form="editPublicationForm" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const reader = new FileReader();

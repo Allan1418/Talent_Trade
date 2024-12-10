@@ -89,29 +89,36 @@
                 }
                 @if (@Model.Publicaciones != null)
                 {
-                    @*recuerde que publicacion no existe en el modelo*@
-                    @*es Publicaciones, una lista con objetos Publicacion*@
-                    @*Antes verifique que (@Model.Publicaciones) no sea nulo, como en el if de la linea 90*@
-                    @*                     <div class="container">
+                    <div class="container">
                         <div>
                             <div id="cuerpoContenido" class="row">
-                                <div id="contenido" class="col-md-6 offset-md-3 pt-5 pb-5">
-                                    <div style="background-color:#19191A" class="product-card">
-                                        <img src="@Model.Publicacion.Adjuntos" class="product-image">
-                                        <h2>@Model.Publicacion.Titulo</h2>
-                                        <p>@Model.Publicacion.Descripcion</p>
-                                        <p>
-                                            <a href="@Url.Action("Publicacion", "Publicacion", new { id = Model.Publicacion.Id })"
-                                               class="btn btn-primary">Ver Publicacion</a>
-                                        </p>
-                                        <p><strong>@Model.Publicacion.Fecha</strong></p>
+                                @foreach (var Publicacion in @Model.Publicaciones)
+                                {
+                                    <div id="contenido" class="col-md-6 offset-md-3 pt-5 pb-5">
+                                        <div class="product-card">
+                                            @if (Publicacion.Adjuntos != null)
+                                            {
+                                                <ul>
+                                                    @foreach (var adjunto in Publicacion.Adjuntos)
+                                                    {
+                                                        <img src="@Url.Action("File", "Home", new { id = adjunto })" class="product-image" alt="Producto">
+
+                                                    }
+                                                </ul>
+                                            }
+                                            <h2>@Publicacion.Titulo</h2>
+                                            <p>@Publicacion.Contenido</p>
+                                            <p>
+                                                <a href="@Url.Action("Index", "Publicacion", new { id = Publicacion.Id })"
+                                                   class="btn btn-primary">Ver Publicacion</a>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
-                    </div> *@
+                    </div>
                 }
-
             </div>
         </div>
 
