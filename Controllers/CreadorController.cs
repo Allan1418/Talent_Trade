@@ -66,7 +66,7 @@ namespace Talent_Trade.Controllers
 
                 foreach (var item in publicaciones)
                 {
-                    item.TruncarContenido(20);
+                    item.TruncarContenido(45);
                 }
 
             }
@@ -181,6 +181,7 @@ namespace Talent_Trade.Controllers
                     ModelState.AddModelError(string.Empty, $"Error al crear la publicación: {ex.Message}");
                 }
             }
+            Console.WriteLine("---errorrr");
             return RedirectToAction("Index", "Home");
         }
 
