@@ -19,12 +19,15 @@ namespace Talent_Trade.Controllers
 
         private readonly CreadorServices _creadorServices;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, CreadorServices creadorServices)
+        private readonly GridFSService _gridFSService;
+
+        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, CreadorServices creadorServices, GridFSService gridFSService)
         {
             _logger = logger;
             _signInManager = signInManager;
             _userManager = userManager;
             _creadorServices = creadorServices;
+            _gridFSService = gridFSService;
         }
 
         public IActionResult Index()
@@ -159,7 +162,10 @@ namespace Talent_Trade.Controllers
                 var creador = new Creador
                 {
                     IdUser = usuario.Id.ToString(),
-                    UserName = usuario.UserName
+                    UserName = usuario.UserName,
+                    nombrePagina = "",
+                    ShortDescripcion = "",
+                    AcercaDe = ""
                 };
 
                 creador = _creadorServices.Create(creador);
@@ -170,6 +176,17 @@ namespace Talent_Trade.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet("File/{id}")]
+        public async Task<IActionResult> File(string id)
+        {
+            var imagen = await _gridFSService.ObtenerImagen(id);
+            if (imagen == null)
+            {
+                return NotFound();
+            }
+            return File(imagen.OpenReadStream(), imagen.ContentType);
         }
     }
 }

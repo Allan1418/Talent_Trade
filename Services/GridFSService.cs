@@ -2,6 +2,7 @@
 using MongoDB.Driver.GridFS;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
+using Talent_Trade.Models;
 
 public class GridFSService
 {
@@ -32,23 +33,24 @@ public class GridFSService
 
     public async Task<IFormFile> ObtenerImagen(string id)
     {
-        var objectId = new ObjectId(id);
 
         try
         {
-            // Obtener la imagen y los metadatos
-            using (var stream = await _gridFS.OpenDownloadStreamAsync(objectId))
-            {
-                var file = _gridFS.FindAsync(Builders<GridFSFileInfo>.Filter.Eq("_id", objectId)).Result.FirstOrDefault();
-                var filename = file.Filename;
-                var contentType = file.Metadata["contentType"].AsString;
-                var imagenBytes = await _gridFS.DownloadAsBytesAsync(objectId);
 
-                using (var memoryStream = new MemoryStream(imagenBytes))
-                {
-                    return new FormFile(memoryStream, 0, memoryStream.Length, filename, filename) { Headers = new HeaderDictionary { { "Content-Type", contentType } } };
-                }
-            }
+            var objectId = new ObjectId(id);
+
+            // Obtener la imagen y los metadatos
+            var stream = await _gridFS.OpenDownloadStreamAsync(objectId);
+
+            var file = _gridFS.FindAsync(Builders<GridFSFileInfo>.Filter.Eq("_id", objectId)).Result.FirstOrDefault();
+            var filename = file.Filename;
+            var contentType = file.Metadata["contentType"].AsString;
+            var imagenBytes = await _gridFS.DownloadAsBytesAsync(objectId);
+
+            // Crear el MemoryStream FUERA del using
+            var memoryStream = new MemoryStream(imagenBytes);
+
+            return new FormFile(memoryStream, 0, memoryStream.Length, filename, filename) { Headers = new HeaderDictionary { { "Content-Type", contentType } } };
         }
         catch (Exception ex)
         {

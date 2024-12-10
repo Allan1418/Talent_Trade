@@ -18,17 +18,17 @@ namespace Talent_Trade.Models
         public required string UserName { get; set; }
         
         [BsonElement("nombrePagina")]
-        public string? nombrePagina { get; set; }
+        public required string nombrePagina { get; set; }
 
         [BsonElement("imageBackground")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ImageBackground { get; set; }
 
         [BsonElement("shortDescripcion")]
-        public string? ShortDescripcion { get; set; }
+        public required string ShortDescripcion { get; set; }
 
         [BsonElement("acercaDe")]
-        public string? AcercaDe { get; set; }
+        public required string AcercaDe { get; set; }
 
         [BsonElement("niveles")]
         public List<string>? Niveles { get; set; }

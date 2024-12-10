@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SharpCompress.Readers;
 using System.Security.Claims;
 using Talent_Trade.Models;
 using Talent_Trade.Services;
@@ -76,24 +77,39 @@ namespace Talent_Trade.Controllers
                 EsPropietario = esPropietario,
                 Publicaciones = publicaciones
             };
+            ViewBag.Creador = creador;
 
             return View(modelo);
         }
 
-        [HttpGet("MostrarImagen/{id}")]
-        public async Task<IActionResult> MostrarImagen(string id)
-        {
-            var imagen = await _gridFSService.ObtenerImagen(id);
-            return File(imagen.OpenReadStream(), imagen.ContentType);
-        }
+
 
         [HttpPost("EditarCreador")]
-        public async Task<IActionResult> EditarCreador(Creador creador, IFormFile? nuevaImagen)
+        public async Task<IActionResult> EditarCreador(string nombrePagina, string shortDescripcion, string acercaDe, IFormFile? nuevaImagen)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+
+                    var usuario = await _userManager.GetUserAsync(User);
+
+                    if (usuario == null && usuario.IdDeCreador == null)
+                    {
+                        return Unauthorized();
+                    }
+
+                    var creador = _creadorServices.Get(usuario.IdDeCreador);
+
+                    if (creador == null)
+                    {
+                        return NotFound();
+                    }
+
+                    creador.nombrePagina = nombrePagina;
+                    creador.ShortDescripcion = shortDescripcion;
+                    creador.AcercaDe = acercaDe;
+
                     if (nuevaImagen != null)
                     {
                         if (creador.ImageBackground != null)
@@ -115,10 +131,53 @@ namespace Talent_Trade.Controllers
                 }
             }
 
-            // Si hay errores de validación o una excepción, volver a mostrar la vista de edición
-            return View(creador);
+            
+            return RedirectToAction("Index", "Home");
         }
 
+
+        [HttpPost("CrearPublicacion")]
+        public async Task<IActionResult> CrearPublicacion(string titulo, string contenido, List<IFormFile> archivos)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var usuario = await _userManager.GetUserAsync(User);
+
+                    if (usuario == null)
+                    {
+                        return Unauthorized();
+                    }
+
+                    var publicacion = new Publicacion
+                    {
+                        IdCreador = usuario.IdDeCreador,
+                        Titulo = titulo,
+                        Contenido = contenido,
+                        Fecha = DateTime.Now,
+                        Likes = new List<string>(),
+                        Comentarios = new List<string>(),
+                        Adjuntos = new List<string>()
+                    };
+
+                    foreach (var archivo in archivos)
+                    {
+                        var archivoId = await _gridFSService.SubirImagen(archivo);
+                        publicacion.Adjuntos.Add(archivoId);
+                    }
+
+                    _publicacionServices.Create(publicacion);
+
+                    return RedirectToAction("Index", "Creador", new { username = usuario.UserName });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Error al crear la publicación: {ex.Message}");
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
 
 
 

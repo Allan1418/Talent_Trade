@@ -7,14 +7,14 @@
 {
     <body id="cuerpo">
         <div style="width: 100%; height: 250px; overflow: hidden;">
-            <img src="https://static3.depositphotos.com/1006649/217/i/450/depositphotos_2171033-stock-photo-network-cables-connected-to-switch.jpg"
+            <img src="@Url.Action("File", "Home", new { id = Model.Creador.ImageBackground })"
                  alt="Responsive image"
                  style="width: 100%; height: auto; object-fit: cover;">
         </div>
         <div id="publiTitulo">
             <img src="https://www.solbyte.com/blog/wp-content/uploads/iot.jpg"
                  alt="Creador" class="profile-image">
-            @if (Model != null && Model.EsPropietario)
+            @if (Model.EsPropietario)
             {
                 <div class="pt-3 d-flex justify-content-center">
                     <button id="modifyDataButton" class="subscribe-button text-center"
@@ -104,7 +104,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="modifyDataForm" asp-controller="" asp-action="" method="post">
+                        <form id="modifyDataForm" asp-controller="Creador" asp-action="EditarCreador" method="post" enctype="multipart/form-data">
+
                             <div class="mb-3">
                                 <label for="nombrePagina" class="form-label">Nombre de la Página</label>
                                 <textarea type="text" class="form-control" id="nombrePagina" name="nombrePagina" required>@Model.Creador.nombrePagina</textarea>
@@ -118,8 +119,8 @@
                                 <textarea class="form-control" id="AcercaDe" name="acercaDe" rows="3">@Model.Creador.AcercaDe</textarea>
                             </div>
                             <div class="mb-3">
-                                <label for="ImageBackground" class="form-label">Subir Imagen</label>
-                                <input type="file" class="form-control" id="ImageBackground" name="ImageBackground">
+                                <label for="nuevaImagen" class="form-label">Subir Imagen</label>
+                                <input type="file" class="form-control" id="nuevaImagen" name="nuevaImagen">
                             </div>
                         </form>
                     </div>
