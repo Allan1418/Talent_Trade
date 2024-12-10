@@ -39,7 +39,6 @@ public class GridFSService
 
             var objectId = new ObjectId(id);
 
-            // Obtener la imagen y los metadatos
             var stream = await _gridFS.OpenDownloadStreamAsync(objectId);
 
             var file = _gridFS.FindAsync(Builders<GridFSFileInfo>.Filter.Eq("_id", objectId)).Result.FirstOrDefault();
@@ -47,7 +46,6 @@ public class GridFSService
             var contentType = file.Metadata["contentType"].AsString;
             var imagenBytes = await _gridFS.DownloadAsBytesAsync(objectId);
 
-            // Crear el MemoryStream FUERA del using
             var memoryStream = new MemoryStream(imagenBytes);
 
             return new FormFile(memoryStream, 0, memoryStream.Length, filename, filename) { Headers = new HeaderDictionary { { "Content-Type", contentType } } };
