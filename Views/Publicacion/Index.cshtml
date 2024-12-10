@@ -2,24 +2,31 @@
     ViewData["Title"] = "Detalles de la publicación";
 }
 
+@model dynamic
 
 <div style="background-color:#1A1E23" class="container">
-    <button type="button" class="corner-button" btn-primary" data-bs-toggle="modal" data-bs-target="#editarPublicacion">
-        <svg width="30" height="30">
-            <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white" />
-        </svg>
-    </button>
+    @if (Model != null && Model.EsPropietario)
+    {
+        <button type="button" class="corner-button" btn-primary" data-bs-toggle="modal" data-bs-target="#editarPublicacion">
+            <svg width="30" height="30">
+                <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white" />
+            </svg>
+        </button>
+    }
 
     <div class="post-content-container">
-        <div class="post-image-container pb-5">
-            <img src="~/img/login.png" alt="Imagen destacada" class="post-image">
+        <h1 class="post-title">@Model.Publicacion.Titulo</h1>
+        <p class="post-date">@Model.Publicacion.Fecha.ToString("dd/MM/yyyy")</p>
+        <p class="post-content">@Model.Publicacion.Contenido</p>
+        <div class="comments">
+            <p>@Model.Publicacion.Comentarios</p> <form asp-action="AgregarComentario">
+                <textarea name="Comentario" placeholder="Escribe tu comentario"></textarea>
+                <button type="submit">Enviar</button>
+            </form>
         </div>
-        <h1 class="post-title">GEMINI</h1>
-        <p class="post-date"></p>
-        <p class="post-content"></p>
-        <div class="comments ">Dime cuál y te ayudo a crear algo personalizado.</div>
     </div>
 </div>
+
 
 <div class="container">
     <div class="modal fade" id="editarPublicacion" tabindex="-1" aria-labelledby="modalPublicacion" aria-hidden="true">
@@ -39,13 +46,10 @@
                         <form id="editPublicationForm" asp-controller="" asp-action="" method="post">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" required>
-
                             <label for="email">Correo electrónico:</label>
                             <input type="email" id="email" name="email" required>
-
                             <label for="mensaje">Mensaje:</label>
                             <textarea id="mensaje" name="mensaje" required></textarea>
-
                             <button type="submit">Enviar</button>
                         </form>
                     </div>
@@ -58,7 +62,6 @@
         </div>
     </div>
 </div>
-
 <script>
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const reader = new FileReader();

@@ -35,9 +35,13 @@
             {
                 <div class="pt-3 d-flex justify-content-center">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#membershipModal">
-                        Crear/Editar Membresía
+                        Editar Membresía
                     </button>
 
+                    <button class="btn btn-primary ms-3" data-bs-toggle="modal"
+                            data-bs-target="#createMembershipModal">
+                        Crear Membresía
+                    </button>
                     <script src="~/js/site.js"></script>
                 </div>
             }
@@ -88,15 +92,14 @@
                         <div id="cuerpoContenido" class="row">
                             <div id="contenido" class="col-md-6 offset-md-3 pt-5 pb-5">
                                 <div style="background-color:#19191A" class="product-card">
-                                    <img src="https://www.solbyte.com/blog/wp-content/uploads/iot.jpg" class="product-image" alt="Producto">
-                                    <a href="@Url.Action("Index", "Publicacion")">
-                                        <h2>Titulo de la publicacion</h2>
-                                    </a>
-                                    <p>Bundle of 6 excel sheets for 3 phase power calculators.</p>
+                                    <img src="@Model.Publicacion.Adjuntos" class="product-image">
+                                    <h2>@Model.Publicacion.Titulo</h2>
+                                    <p>@Model.Publicacion.Descripcion</p>
                                     <p>
-                                        <a href="" class="btn btn-primary">Suscribete</a>
+                                        <a href="@Url.Action("Publicacion", "Publicacion", new { id = Model.Publicacion.Id })"
+                                           class="btn btn-primary">Ver Publicacion</a>
                                     </p>
-                                    <p><strong>$3</strong></p>
+                                    <p><strong>@Model.Publicacion.Fecha</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +178,6 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" form="editMembershipForm" class="btn btn-primary">Guardar Cambios</button>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMembershipModal">Crear Nueva Membresía</button>
                     </div>
                 </div>
             </div>
@@ -204,7 +206,7 @@
                                     <label for="membershipPrice">Precio</label>
                                     <input type="number" class="form-control" id="membershipPrice" name="precio" />
                                 </div>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Atrás">Atrás</button>
                                 <button type="submit" class="btn btn-primary">Crear</button>
                             </div>
                         </form>
@@ -221,21 +223,21 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="crearPublicacionForm" asp-controller="Creador" asp-action="CrearPublicacion" method="post">
+                        <form id="crearPublicacionForm" asp-controller="Creador" asp-action="CrearPublicacion" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="Titulo" class="control-label">Titulo</label>
-                                <input for="Titulo" class="form-control" />
-                                <span for="Titulo" class="text-danger"></span>
+                                <input name="titulo" id="Titulo" class="form-control" required />
+                                <span for="titulo" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label for="Contenido" class="control-label">Contenido</label>
-                                <textarea for="Contenido" class="form-control" rows="4"></textarea>
-                                <span for="Contenido" class="text-danger"></span>
+                                <textarea name="contenido" id="Contenido" class="form-control" rows="4" required></textarea>
+                                <span for="contenido" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label for="Archivos" class="control-label">Archivos</label>
-                                <input type="file" for="Archivos" class="form-control-file" multiple />
-                                <span for="Archivos" class="text-danger"></span>
+                                <input type="file" name="archivos" id="Archivos" class="form-control-file" multiple />
+                                <span for="archivos" class="text-danger"></span>
                             </div>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" form="crearPublicacionForm" class="btn btn-primary">Crear</button>
@@ -243,11 +245,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
     </body>
-
     <script src="~/js/site.js"></script>
 }
 else
