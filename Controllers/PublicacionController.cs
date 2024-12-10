@@ -31,7 +31,7 @@ namespace Talent_Trade.Controllers
         }
 
         [HttpGet("Publicacion/{id}")]
-        public IActionResult Publicacion(string id)
+        public IActionResult Index(string id)
         {
 
             var publicacion = _publicacionServices.Get(id);
