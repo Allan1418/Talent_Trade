@@ -24,6 +24,11 @@ namespace Talent_Trade.Services
             return _creadores.Find<Creador>(creador => creador.Id == id).FirstOrDefault();
         }
 
+        public Creador GetByIdUser(string idUser)
+        {
+            return _creadores.Find<Creador>(creador => creador.IdUser == idUser).FirstOrDefault();
+        }
+
         public Creador Create(Creador creador)
         {
             _creadores.InsertOne(creador);
