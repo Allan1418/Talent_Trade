@@ -45,6 +45,7 @@ namespace Talent_Trade.Controllers
             Creador? creador = null;
             bool esPropietario = false;
             List<Publicacion>? publicaciones = null;
+            string? imagenPerfil = null;
 
             if (user != null && user.IdDeCreador != null)
             {
@@ -61,6 +62,8 @@ namespace Talent_Trade.Controllers
                 {
                     esPropietario = true;
                 }
+
+                imagenPerfil = user.ImagePerfil;
 
                 publicaciones = _publicacionServices.GetPublicacionesPorCreador(creador.Id, pagina, 30);
 
@@ -80,7 +83,8 @@ namespace Talent_Trade.Controllers
             {
                 Creador = creador,
                 EsPropietario = esPropietario,
-                Publicaciones = publicaciones
+                Publicaciones = publicaciones,
+                ImagenPerfil = imagenPerfil
             };
             ViewBag.Creador = creador;
 

@@ -78,7 +78,7 @@ namespace Talent_Trade.Controllers
                 EsPropietario = EsPropietarioDePublicacion(publicacion)
             };
 
-            Console.WriteLine(modelo.EsPropietario);
+            //Console.WriteLine(modelo.EsPropietario);
             return View(modelo);
         }
 
