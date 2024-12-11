@@ -18,12 +18,18 @@ namespace Talent_Trade.Controllers
 
         private readonly PublicacionServices _publicacionServices;
 
-        public CreadorController(UserManager<Usuario> userManager, CreadorServices creadorServices, GridFSService gridFSService, PublicacionServices publicacionServices)
+        private readonly NivelSuscripcionServices _nivelSuscripcionServices;
+
+        public CreadorController(UserManager<Usuario> userManager, CreadorServices creadorServices,
+            GridFSService gridFSService, PublicacionServices publicacionServices,
+            NivelSuscripcionServices nivelSuscripcionServices
+            )
         {
             _userManager = userManager;
             _creadorServices = creadorServices;
             _gridFSService = gridFSService;
             _publicacionServices = publicacionServices;
+            _nivelSuscripcionServices = nivelSuscripcionServices;
         }
 
 
@@ -46,6 +52,7 @@ namespace Talent_Trade.Controllers
             bool esPropietario = false;
             List<Publicacion>? publicaciones = null;
             string? imagenPerfil = null;
+            List<NivelSuscripcion>? niveles = null;
 
             if (user != null && user.IdDeCreador != null)
             {
@@ -57,13 +64,15 @@ namespace Talent_Trade.Controllers
                     return View();
                 }
 
-               
+
                 if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.NameIdentifier) == user.Id.ToString())
                 {
                     esPropietario = true;
                 }
 
                 imagenPerfil = user.ImagePerfil;
+
+                niveles = _nivelSuscripcionServices.GetByCreadorIdOrderByPrecio(creador.Id);
 
                 publicaciones = _publicacionServices.GetPublicacionesPorCreador(creador.Id, pagina, 30);
 
@@ -84,7 +93,8 @@ namespace Talent_Trade.Controllers
                 Creador = creador,
                 EsPropietario = esPropietario,
                 Publicaciones = publicaciones,
-                ImagenPerfil = imagenPerfil
+                ImagenPerfil = imagenPerfil,
+                Niveles = niveles
             };
             ViewBag.Creador = creador;
 
@@ -136,12 +146,12 @@ namespace Talent_Trade.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, $"Error al editar el creador: {ex.Message}");
+                    return StatusCode(500);
                 }
             }
 
-            
-            return RedirectToAction("Index", "Home");
+
+            return BadRequest();
         }
 
 
@@ -182,84 +192,127 @@ namespace Talent_Trade.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, $"Error al crear la publicación: {ex.Message}");
+                    return StatusCode(500);
                 }
             }
-            Console.WriteLine("---errorrr");
-            return RedirectToAction("Index", "Home");
+            return BadRequest();
         }
 
-
-
-
-
-        // GET: CreadorController/Details/5
-        public ActionResult Detalle(int id)
+        [HttpPost("CrearNivelSuscripcion")]
+        public async Task<IActionResult> CrearNivelSuscripcion(string nombre, string descripcion, decimal precio)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    var usuario = await _userManager.GetUserAsync(User);
+
+                    if (usuario == null && !await _userManager.IsInRoleAsync(usuario, "creador"))
+                    {
+                        return Unauthorized();
+                    }
+
+                    var nivelSuscripcion = new NivelSuscripcion
+                    {
+                        IdCreador = usuario.IdDeCreador,
+                        Nombre = nombre,
+                        Descripcion = descripcion,
+                        Precio = precio
+                    };
+
+                    _nivelSuscripcionServices.Create(nivelSuscripcion);
+
+                    return RedirectToAction("Index", "Creador", new { username = usuario.UserName });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500);
+                }
+            }
+
+            return BadRequest();
         }
 
-        // GET: CreadorController/Create
-        public ActionResult Create()
+        [HttpPost("EditarNivelSuscripcion")]
+        public async Task<IActionResult> EditarNivelSuscripcion(string id, string nombre, string descripcion, decimal precio)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var usuario = await _userManager.GetUserAsync(User);
+
+                    if (usuario == null)
+                    {
+                        return Unauthorized();
+                    }
+
+                    var nivelSuscripcion = _nivelSuscripcionServices.Get(id);
+
+                    if (nivelSuscripcion == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (nivelSuscripcion.IdCreador != usuario.IdDeCreador)
+                    {
+                        return Forbid();
+                    }
+
+                    nivelSuscripcion.Nombre = nombre;
+                    nivelSuscripcion.Descripcion = descripcion;
+                    nivelSuscripcion.Precio = precio;
+
+                    _nivelSuscripcionServices.Update(id, nivelSuscripcion);
+
+                    return RedirectToAction("Index", "Creador", new { username = usuario.UserName });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500);
+                }
+            }
+
+            return BadRequest();
         }
 
-        // POST: CreadorController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+
+        [HttpPost("EliminarNivelSuscripcion")]
+        public async Task<IActionResult> EliminarNivelSuscripcion(string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var usuario = await _userManager.GetUserAsync(User);
+
+                if (usuario == null)
+                {
+                    return Unauthorized();
+                }
+
+                var nivelSuscripcion = _nivelSuscripcionServices.Get(id);
+
+                if (nivelSuscripcion == null)
+                {
+                    return NotFound();
+                }
+
+                if (nivelSuscripcion.IdCreador != usuario.IdDeCreador)
+                {
+                    return Forbid();
+                }
+
+                _nivelSuscripcionServices.Remove(id);
+
+                return RedirectToAction("Index", "Creador", new { username = usuario.UserName });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return BadRequest(ex);
             }
         }
 
-        // GET: CreadorController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: CreadorController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: CreadorController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CreadorController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

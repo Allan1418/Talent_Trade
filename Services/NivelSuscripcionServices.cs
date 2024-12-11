@@ -19,6 +19,13 @@ namespace Talent_Trade.Services
         public NivelSuscripcion Get(string id) =>
             _nivelesSuscripciones.Find<NivelSuscripcion>(nivelesSuscripciones => nivelesSuscripciones.Id == id).FirstOrDefault();
 
+        public List<NivelSuscripcion> GetByCreadorIdOrderByPrecio(string idCreador)
+        {
+            return _nivelesSuscripciones.Find(nivel => nivel.IdCreador == idCreador)
+                                         .SortBy(nivel => nivel.Precio)
+                                         .ToList();
+        }
+
         public NivelSuscripcion Create(NivelSuscripcion nivelesSuscripciones)
         {
             _nivelesSuscripciones.InsertOne(nivelesSuscripciones);
