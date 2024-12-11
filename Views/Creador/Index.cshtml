@@ -90,32 +90,27 @@
                 @if (@Model.Publicaciones != null)
                 {
                     <div class="container">
-                        <div>
-                            <div id="cuerpoContenido" class="row">
-                                @foreach (var Publicacion in @Model.Publicaciones)
-                                {
-                                    <div id="contenido" class="col-md-6 offset-md-3 pt-5 pb-5">
-                                        <div class="product-card">
-                                            @if (Publicacion.Adjuntos != null)
+                        <div id="cuerpoContenido" class="row">
+                            @foreach (var Publicacion in @Model.Publicaciones)
+                            {
+                                <div id="contenido" class="col-md-12 offset-md-12">
+                                    <div style="background-color:#1A1E23" class="product-card mb-5">
+                                        @if (Publicacion.Adjuntos != null)
+                                        {
+                                            @foreach (var adjunto in Publicacion.Adjuntos)
                                             {
-                                                <ul>
-                                                    @foreach (var adjunto in Publicacion.Adjuntos)
-                                                    {
-                                                        <img src="@Url.Action("File", "Home", new { id = adjunto })" class="product-image" alt="Producto">
-
-                                                    }
-                                                </ul>
+                                                <img src="@Url.Action("File", "Home", new { id = adjunto })" class="img-fluid rounded imagen-publicacion" alt="Producto">
                                             }
-                                            <h2>@Publicacion.Titulo</h2>
-                                            <p>@Publicacion.Contenido</p>
-                                            <p>
-                                                <a href="@Url.Action("Index", "Publicacion", new { id = Publicacion.Id })"
-                                                   class="btn btn-primary">Ver Publicacion</a>
-                                            </p>
-                                        </div>
+                                        }
+                                        <h2>@Publicacion.Titulo</h2>
+                                        <p>@Publicacion.Contenido</p>
+                                        <p>
+                                            <a href="@Url.Action("Index", "Publicacion", new { id = Publicacion.Id })"
+                                               class="btn btn-primary">Ver Publicacion</a>
+                                        </p>
                                     </div>
-                                }
-                            </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 }
