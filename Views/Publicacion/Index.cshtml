@@ -1,71 +1,108 @@
 ﻿@{
     ViewData["Title"] = "Detalles de la publicación";
 }
-
 @model dynamic
 
 @if (Model != null)
 {
-    <h1 id="intro5">Detalles de la Publicación</h1>
+    <h1 id="intro5" class="text-center text-white mb-4">Detalles de la Publicación</h1>
 
-    <div class="container" style="background-color:#1A1E23">
-        <button type="button" class="corner-button btn-primary" data-bs-toggle="modal" data-bs-target="#editarPublicacion">
-            <svg width="30" height="30">
-                <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white" />
-            </svg>
-        </button>
+    <div class="container" style="display: flex; flex-wrap: wrap; align-items: stretch;">
+        <!-- Contenedor principal -->
+        <div class="image-section" style="flex: 2; padding: 10px;">
+            @if (Model.Publicacion.Adjuntos != null && Model.Publicacion.Adjuntos.Count > 0)
+            {
+                <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (var i = 0; i < Model.Publicacion.Adjuntos.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "")" aria-label="Slide @i"></button>
+                        }
+                    </div>
 
-        @if (Model.Publicacion.Adjuntos != null)
-        {
-            <div class="post-content-container">
-                <div class="post-image-container pb-5">
-                    @foreach (var adjunto in Model.Publicacion.Adjuntos)
-                    {
-                        <div class="image-container">
-                            <img src="@Url.Action("File", "Home", new { id = adjunto })" class="product-image" alt="Producto">
-                            <button type="button" class="btn btn-danger btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#eliminarImagenModal"
-                                    data-id-publicacion="@Model.Publicacion.Id" data-id-imagen="@adjunto">
-                                Eliminar
-                            </button>
-                        </div>
-                    }
+                    <div class="carousel-inner">
+                        @for (var i = 0; i < Model.Publicacion.Adjuntos.Count; i++)
+                        {
+                            var adjunto = Model.Publicacion.Adjuntos[i];
+                            <div class="carousel-item @(i == 0 ? "active" : "") position-relative">
+                                <img src="@Url.Action("File", "Home", new { id = adjunto })" class="d-block w-100" alt="Imagen de publicación" style="max-height: 500px; object-fit: contain;" />
+
+                                @if (Model.EsPropietario)
+                                {
+                                    <form asp-controller="Publicacion" asp-action="EliminarImagenPublicacion" method="post" class="position-absolute top-0 end-0 m-2">
+                                        <input type="hidden" name="idPublicacion" value="@Model.Publicacion.Id" />
+                                        <input type="hidden" name="idImagen" value="@adjunto" />
+                                        <button id="modalesPublicacion" type="submit" class="btn btn-sm btn-danger">Eliminar Imagen</button>
+                                    </form>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
                 </div>
-                <h1 class="post-title">@Model.Publicacion.Titulo</h1>
-                <p class="post-date">@Model.Publicacion.Fecha.ToString("dd/MM/yyyy")</p>
-                <p class="post-content">@Model.Publicacion.Contenido</p>
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-danger text-center" role="alert">
-                <h1 id="error">Error 404: Página no encontrada</h1>
-                <p>La página que estás buscando no existe.</p>
-            </div>
-        }
+            }
+            else
+            {
+                <p style="color:white" class="text-muted text-center">No hay imágenes asociadas a esta publicación.</p>
+            }
+        </div>
+
+        <!-- Sección de detalles -->
+        <div class="details-section" style="flex: 1; background-color: #1A1E23; color: white; padding: 20px; border-radius: 10px; margin-left: 10px;">
+            <h2>@Model.Publicacion.Titulo</h2>
+            <p class="text-muted">Publicado el: @Model.Publicacion.Fecha.ToString("dd/MM/yyyy")</p>
+            <p>@Model.Publicacion.Contenido</p>
+
+            @if (Model.EsPropietario)
+            {
+                <div class="d-flex col-12 gap-2 mt-3">
+                    <button id="modalesPublicacion" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarPublicacionModal">
+                        Editar Publicación
+                    </button>
+
+                    <button id="modalesPublicacion" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarImagenesModal">
+                        Agregar Imágenes
+                    </button>
+
+                    <form asp-controller="Publicacion" asp-action="EliminarPublicacion" method="post">
+                        <input type="hidden" name="id" value="@Model.Publicacion.Id" />
+                        <button id="modalesPublicacion" type="submit" class="btn btn-danger">Eliminar Publicación</button>
+                    </form>
+                </div>
+            }
+        </div>
     </div>
 
     <!-- Modal: Editar Publicación -->
-    <div class="modal fade" id="editarPublicacion" tabindex="-1" aria-labelledby="editarPublicacionLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="editarPublicacionModal" tabindex="-1" aria-labelledby="editarPublicacionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-warning text-dark">
                     <h5 class="modal-title" id="editarPublicacionLabel">Editar Publicación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <form asp-action="EditarPublicacion" method="post">
+                <form asp-controller="Publicacion" asp-action="EditarPublicacion" method="post">
                     <div class="modal-body">
                         <input type="hidden" name="id" value="@Model.Publicacion.Id" />
-                        <div class="form-group">
-                            <label for="titulo">Título</label>
+                        <div class="mb-3">
+                            <label for="titulo" class="form-label">Título</label>
                             <input type="text" class="form-control" id="titulo" name="titulo" value="@Model.Publicacion.Titulo" required />
                         </div>
-                        <div class="form-group">
-                            <label for="contenido">Contenido</label>
-                            <textarea class="form-control" id="contenido" name="contenido" rows="3" required>@Model.Publicacion.Contenido</textarea>
+                        <div class="mb-3">
+                            <label for="contenido" class="form-label">Contenido</label>
+                            <textarea class="form-control" id="contenido" name="contenido" rows="4" required>@Model.Publicacion.Contenido</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                     </div>
                 </form>
@@ -74,72 +111,34 @@
     </div>
 
     <!-- Modal: Agregar Imágenes -->
-    <div class="modal fade" id="agregarImagenesModal" tabindex="-1" aria-labelledby="agregarImagenesModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="agregarImagenesModal" tabindex="-1" aria-labelledby="agregarImagenesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="agregarImagenesModalLabel">Agregar Imágenes</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="agregarImagenesLabel">Agregar Imágenes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <form asp-action="AgregarImagenesPublicacion" method="post" enctype="multipart/form-data">
+                <form asp-controller="Publicacion" asp-action="AgregarImagenesPublicacion" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <input type="hidden" name="id" value="@Model.Publicacion.Id" />
-                        <div class="form-group">
-                            <label for="imagenes">Seleccionar Imágenes</label>
+                        <div class="mb-3">
+                            <label for="imagenes" class="form-label">Seleccionar imágenes</label>
                             <input type="file" class="form-control" id="imagenes" name="imagenes" multiple required />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Agregar Imágenes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Subir Imágenes</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- Modal: Eliminar Imagen -->
-    <div class="modal fade" id="eliminarImagenModal" tabindex="-1" aria-labelledby="eliminarImagenModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eliminarImagenModalLabel">Eliminar Imagen</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form asp-action="EliminarImagenPublicacion" method="post">
-                    <div class="modal-body">
-                        <input type="hidden" id="idPublicacionEliminarImagen" name="idPublicacion" />
-                        <input type="hidden" id="idImagenEliminar" name="idImagen" />
-                        <p>¿Estás seguro de que deseas eliminar esta imagen?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Eliminar Publicación -->
-    <div class="modal fade" id="eliminarPublicacionModal" tabindex="-1" aria-labelledby="eliminarPublicacionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eliminarPublicacionModalLabel">Eliminar Publicación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form asp-action="EliminarPublicacion" method="post">
-                    <div class="modal-body">
-                        <input type="hidden" name="id" value="@Model.Publicacion.Id" />
-                        <p>¿Estás seguro de que deseas eliminar esta publicación?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+}
+else
+{
+    <div class="alert alert-danger text-center">
+        <h1>Error 404</h1>
+        <p>La publicación que estás buscando no existe.</p>
     </div>
 }

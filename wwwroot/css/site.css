@@ -388,3 +388,13 @@ h3 {
     width: 16%;
     margin: 10px;
 }
+
+#modalesPublicacion {
+    background-color: transparent;
+    color:white;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    margin-top: 50px;
+}
