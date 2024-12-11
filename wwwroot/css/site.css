@@ -269,8 +269,13 @@ h3 {
 }
 
 #shortDes {
-    padding: 3% 24% 3% 24%;
+    text-align: center;
+    padding: 10px 5%;
+    margin: 0 auto;
+    max-width: 80%;
+    word-wrap: break-word; /* Para evitar desbordamientos */
 }
+
 
 #cuerpoContenido {
     margin: 3% 25% 5% 25%;
@@ -302,6 +307,22 @@ h3 {
     width: 20%;
     margin: 10px;
 }
+
+.carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 90%;
+    overflow: hidden;
+}
+
+    .carousel img {
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
 
 /* De aqui para abajo estan los estilos del popUp creador */
 
@@ -369,10 +390,10 @@ h3 {
 }
 
 .corner-button {
-    background-color: transparent;
     position: absolute;
-    top: 29%;
-    left: 71%;
+    top: 10%;
+    right: 10%;
+    z-index: 2; /* Asegúrate de que esté encima del contenido */
 }
 
 .modal-dialog {

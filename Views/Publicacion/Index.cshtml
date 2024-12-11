@@ -59,8 +59,7 @@
         <div class="details-section" style="flex: 1; background-color: #1A1E23; color: white; padding: 20px; border-radius: 10px; margin-left: 10px;">
             <h2>@Model.Publicacion.Titulo</h2>
             <p class="text-muted">Publicado el: @Model.Publicacion.Fecha.ToString("dd/MM/yyyy")</p>
-            <p>@Model.Publicacion.Contenido</p>
-
+            <span id="contenidoTexto">@Model.Publicacion.Contenido</span>
             @if (Model.EsPropietario)
             {
                 <div class="d-flex col-12 gap-2 mt-3">
@@ -79,6 +78,9 @@
                 </div>
             }
         </div>
+
+        
+
     </div>
 
     <!-- Modal: Editar Publicación -->
@@ -134,6 +136,35 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function insertarSaltosDeLinea(texto, limite) {
+            let resultado = '';
+            let contador = 0;
+
+            for (let i = 0; i < texto.length; i++) {
+                resultado += texto[i];
+                contador++;
+
+                if (contador === limite) {
+                    resultado += '\n'; 
+                    contador = 0;
+                }
+            }
+
+            return resultado;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const contenidoElemento = document.getElementById('contenidoTexto');
+            if (contenidoElemento) {
+                const textoOriginal = contenidoElemento.textContent || contenidoElemento.innerText;
+                const textoModificado = insertarSaltosDeLinea(textoOriginal, 57); 
+
+                contenidoElemento.innerHTML = textoModificado.replace(/\n/g, '<br>');
+            }
+        });
+    </script>
 }
 else
 {
