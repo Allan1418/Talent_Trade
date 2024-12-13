@@ -137,6 +137,80 @@
         </div>
     </div>
 
+    <!-- Sección de comentarios -->
+    <div class="comments-section mt-4 mx-auto" style="max-width: 800px; background-color: #1A1E23; color: white; padding: 20px; border-radius: 10px;">
+        <h3>Comentarios</h3>
+
+        <!-- Lista de comentarios -->
+        <div class="comment-list mt-3">
+            <div class="comment-item mb-3 p-3" style="background-color: #2C3136; border-radius: 8px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Nombre del Usuario</strong>
+                    <small class="text-muted">01/01/2024 12:00</small>
+                </div>
+                <p>Este es un comentario de ejemplo.</p>
+                <div class="d-flex gap-2 mt-2">
+                    <form method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal">Editar</button>
+                </div>
+            </div>
+
+            <div class="comment-item mb-3 p-3" style="background-color: #2C3136; border-radius: 8px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Otro Usuario</strong>
+                    <small class="text-muted">01/01/2024 12:30</small>
+                </div>
+                <p>Este es otro comentario de ejemplo.</p>
+                <div class="d-flex gap-2 mt-2">
+                    <form method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal">Editar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario para agregar un comentario -->
+        <div class="add-comment mt-4">
+            <h5>Agregar un comentario</h5>
+            <form method="post">
+                <div class="mb-3">
+                    <textarea class="form-control" name="contenido" rows="3" placeholder="Escribe tu comentario..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Comentar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para editar comentario -->
+    <div class="modal fade" id="editarComentarioModal" tabindex="-1" aria-labelledby="editarComentarioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="editarComentarioLabel">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="contenidoComentario" class="form-label">Contenido del Comentario</label>
+                            <textarea class="form-control" id="contenidoComentario" name="contenido" rows="3" required>Texto del comentario seleccionado</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
     <script>
         function insertarSaltosDeLinea(texto, limite) {
             let resultado = '';

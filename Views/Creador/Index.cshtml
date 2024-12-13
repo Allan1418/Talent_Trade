@@ -12,8 +12,13 @@
                  style="width: 100%; height: auto; object-fit: cover;">
         </div>
         <div id="publiTitulo">
-            <img src="https://www.solbyte.com/blog/wp-content/uploads/iot.jpg"
-                 alt="Creador" class="profile-image">
+
+            @if (Model.ImagenPerfil != null)
+            {
+                <img src="@Url.Action("File", "Home", new { id = Model.ImagenPerfil })"
+                     alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+            }
+
             @if (Model.EsPropietario)
             {
                 <div class="pt-3 d-flex justify-content-center">
@@ -28,30 +33,87 @@
             <p id="shortDes" class="fs-5">@Model.Creador.ShortDescripcion</p>
         </div>
 
-        <div id="mebresias" class="row container-fluid text-center">
-            @if (Model.EsPropietario)
-            {
-                <div class="pt-3 d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#membershipModal">
-                        Editar Membresía
-                    </button>
-
-                    <button class="btn btn-primary ms-3" data-bs-toggle="modal"
-                            data-bs-target="#createMembershipModal">
-                        Crear Membresía
-                    </button>
-                    <script src="~/js/site.js"></script>
-                </div>
-            }
-
-            <div class="col-md-4">
-                <div class="card">
-                    <h4 class="pt-5">Nivel 1</h4>
-                    <p class="pt-5">Descripción del nivel 1.</p>
-                    <button class="subscribe-button mt-5">Suscribirse</button>
-                </div>
+        @if (Model.EsPropietario)
+        {
+            <div class="d-flex justify-content-center pt-5">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMembershipModal">
+                    Crear Membresía
+                </button>
             </div>
+        }
+
+        <div id="membresias" class="container text-center">
+            <!-- Barra deslizante de membresías -->
+            <div class="row flex-nowrap overflow-auto justify-content-center" style="white-space: nowrap;">
+                @if (Model.Niveles != null)
+                {
+                    foreach (var nivel in Model.Niveles)
+                    {
+                        <div class="col-md-4 d-inline-block" style="float: none;">
+                            <div class="card text-center mx-auto mb-4" style="max-width: 18rem;">
+                                <div class="card-body">
+                                    <h4 class="card-title pt-3 text-truncate" style="max-width: 200px; margin: 0 auto;">@nivel.Nombre</h4>
+                                    <p class="card-text pt-3">@nivel.Descripcion</p>
+                                    <p class="card-text">Precio: $@nivel.Precio</p>
+                                    @if (Model.EsPropietario)
+                                    {
+                                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#editarModal-@nivel.Id">
+                                            Editar Membresía
+                                        </button>
+
+                                        <form asp-action="EliminarNivelSuscripcion" asp-controller="Creador" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@nivel.Id" />
+                                            <button type="submit" class="btn btn-danger mt-3">Eliminar</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success mt-3">Suscribirse</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Modales de edición -->
+            @if (Model.Niveles != null)
+            {
+                foreach (var nivel in Model.Niveles)
+                {
+                    <div class="modal fade" id="editarModal-@nivel.Id" tabindex="-1" aria-labelledby="editarModalLabel-@nivel.Id" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editarModalLabel-@nivel.Id">Editar Membresía</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form asp-action="EditarNivelSuscripcion" asp-controller="Creador" method="post">
+                                        <input type="hidden" name="id" value="@nivel.Id" />
+                                        <div class="mb-3">
+                                            <label for="nombre-@nivel.Id" class="form-label">Nombre</label>
+                                            <input type="text" id="nombre-@nivel.Id" name="nombre" class="form-control" value="@nivel.Nombre" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="descripcion-@nivel.Id" class="form-label">Descripción</label>
+                                            <textarea id="descripcion-@nivel.Id" name="descripcion" class="form-control" required>@nivel.Descripcion</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="precio-@nivel.Id" class="form-label">Precio</label>
+                                            <input type="number" id="precio-@nivel.Id" name="precio" class="form-control" value="@nivel.Precio" required />
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
         </div>
+
 
         <div class="nav nav-tabs container" id="myTab" role="tablist">
             <button class="nav-link active" id="publicaciones-tab" data-bs-toggle="tab" data-bs-target="#publicaciones"
@@ -148,77 +210,6 @@
         </div>
 
 
-
-
-        <div id="membershipModal" class="modal fade" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="membershipModalLabel">Editar Membresía</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editMembershipForm" asp-controller="" asp-action="" method="post">
-                            <div class="form-group">
-                                <label for="membershipSelect">Seleccionar Membresía</label>
-                                <select class="form-control" id="membershipSelect" name="membershipId">
-                                    <option>Nombre de las membresias</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="membershipName">Nombre de la Membresía</label>
-                                <input type="text" class="form-control" id="membershipName" name="nombre" />
-                            </div>
-                            <div class="form-group">
-                                <label for="membershipDescription">Descripción</label>
-                                <textarea class="form-control" id="membershipDescription" name="descripcion"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="membershipPrice">Precio</label>
-                                <input type="number" class="form-control" id="membershipPrice" name="precio" />
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" form="editMembershipForm" class="btn btn-primary">Guardar Cambios</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade" id="createMembershipModal" tabindex="-1" aria-labelledby="createMembershipModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createMembershipModalLabel">Crear Nueva Membresía</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="createMembershipForm" asp-controller="" asp-action="" method="post">
-                            <div class="modal-footer">
-                                <div class="form-group">
-                                    <label for="membershipName">Nombre de la Membresía</label>
-                                    <input type="text" class="form-control" id="membershipName" name="nombre" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="membershipDescription">Descripción</label>
-                                    <textarea class="form-control" id="membershipDescription" name="descripcion"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="membershipPrice">Precio</label>
-                                    <input type="number" class="form-control" id="membershipPrice" name="precio" />
-                                </div>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Atrás">Atrás</button>
-                                <button type="submit" class="btn btn-primary">Crear</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="crearPublicacion" class="modal fade" tabindex="-1" aria-labelledby="modalPublicacion" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -249,6 +240,39 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+
+
+        <div class="modal fade" id="createMembershipModal" tabindex="-1" aria-labelledby="createMembershipModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createMembershipModalLabel">Crear Nueva Membresía</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form asp-action="CrearNivelSuscripcion" asp-controller="Creador" method="post">
+                            <div class="mb-3">
+                                <label for="nuevoNombre" class="form-label">Nombre</label>
+                                <input type="text" id="nuevoNombre" name="nombre" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="nuevaDescripcion" class="form-label">Descripción</label>
+                                <textarea id="nuevaDescripcion" name="descripcion" class="form-control" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nuevoPrecio" class="form-label">Precio</label>
+                                <input type="number" id="nuevoPrecio" name="precio" class="form-control" required />
+                            </div>
+                            <button type="submit" class="btn btn-success">Crear Membresía</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </body>
     <script src="~/js/site.js"></script>
 }
