@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    <div class="container py-5">
+    <div id="Perfil" class="container">
         <div class="text-center mb-4">
             <h1 class="display-5 fw-bold text-primary">Perfil Profesional</h1>
             <p class="lead">Bienvenido, <strong>@Model.Usuario.NombreCompleto</strong></p>
@@ -11,7 +11,7 @@
         <div class="row g-4">
             <!-- Sección de Imagen de Perfil -->
             <div class="col-6">
-                <div class="card shadow-sm text-center">
+                <div style="background-color:#1A1E23" class="card shadow-sm text-center">
                     <div class="card-body">
                         <h5 class="card-title text-secondary">Imagen de Perfil</h5>
                         @if (Model.Usuario.ImagePerfil != null)
@@ -35,8 +35,8 @@
 
             <!-- Sección de Información del Usuario -->
             <div class="col-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
+                <div style="background-color:#1A1E23" class="card shadow-sm">
+                    <div style="color: white" class="card-body">
                         <h5 class="card-title text-secondary">Información del Usuario</h5>
                         <p><i class="fas fa-envelope text-primary"></i> <strong>Email:</strong> @Model.Usuario.Email</p>
                         <p><i class="fas fa-calendar-alt text-primary"></i> <strong>Fecha de Registro:</strong> @Model.Usuario.FechaRegistro.ToString("dd/MM/yyyy")</p>
