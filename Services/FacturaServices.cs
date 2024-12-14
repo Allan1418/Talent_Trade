@@ -20,6 +20,9 @@ namespace Talent_Trade.Services
         public Factura Get(string id) =>
             _facturas.Find<Factura>(facturas => facturas.Id == id).FirstOrDefault();
 
+        public List<Factura> GetByIdUser(string idUser) => 
+            _facturas.Find(factura => factura.IdUser == idUser).ToList();
+
         public Factura Create(Factura facturas)
         {
             _facturas.InsertOne(facturas);

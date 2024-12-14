@@ -35,11 +35,11 @@ namespace Talent_Trade.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? IdDeCreador { get; set; }
 
-        [BsonElement("Suscripciones")]
-        public List<string>? Suscripciones { get; set; }
+        //[BsonElement("Suscripciones")]
+        //public List<string>? Suscripciones { get; set; } = [];
 
-        [BsonElement("facturas")]
-        public List<string>? Facturas { get; set; }
+        //[BsonElement("facturas")]
+        //public List<string>? Facturas { get; set; } = [];
     }
 
 }

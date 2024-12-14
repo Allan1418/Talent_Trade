@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Talent_Trade.Models;
+using Talent_Trade.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCore.Identity.Mongo.Model;
@@ -21,13 +22,19 @@ namespace Talent_Trade.Controllers
 
         private readonly GridFSService _gridFSService;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, CreadorServices creadorServices, GridFSService gridFSService)
+        private readonly SuscripcionServices _suscripcionServices;
+
+        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, 
+            UserManager<Usuario> userManager, CreadorServices creadorServices, 
+            GridFSService gridFSService, SuscripcionServices suscripcionServices
+            )
         {
             _logger = logger;
             _signInManager = signInManager;
             _userManager = userManager;
             _creadorServices = creadorServices;
             _gridFSService = gridFSService;
+            _suscripcionServices = suscripcionServices;
         }
 
         public IActionResult Index()
@@ -62,6 +69,16 @@ namespace Talent_Trade.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, Contrasena, false, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
+
+                        // check suscripciones
+                        foreach (var item in await _suscripcionServices.GetSuscripcionesUsuarioAsync())
+                        {
+                            if (item.FechaVencimiento < DateTime.Now)
+                            {
+                                _suscripcionServices.Remove(item.Id);
+                            }
+                        }
+
                         // Login exitoso
                         Console.WriteLine($"Login exitoso!!!");
                         return RedirectToAction("Index", "Home");
@@ -182,6 +199,7 @@ namespace Talent_Trade.Controllers
         public async Task<IActionResult> File(string id)
         {
             var imagen = await _gridFSService.ObtenerImagen(id);
+
             if (imagen == null)
             {
                 return NotFound();

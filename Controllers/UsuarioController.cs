@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Talent_Trade.Models;
 using Talent_Trade.Services;
 
@@ -11,16 +12,21 @@ namespace Talent_Trade.Controllers
 
         private readonly GridFSService _gridFSService;
 
-        public UsuarioController(UserManager<Usuario> userManager, GridFSService gridFSService)
+        private readonly FacturaServices _facturaServices;
+
+        public UsuarioController(UserManager<Usuario> userManager, GridFSService gridFSService, FacturaServices facturaServices)
         {
             _userManager = userManager;
             _gridFSService = gridFSService;
+            _facturaServices = facturaServices;
 
         }
 
 
         public async Task<IActionResult> Index()
         {
+
+            List<Factura>? facturas;
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -36,10 +42,13 @@ namespace Talent_Trade.Controllers
                 esCreador = true;
             }
 
+            facturas = _facturaServices.GetByIdUser(usuario.Id.ToString());
+
             var modelo = new
             {
                 EsCreador = esCreador,
-                Usuario = usuario
+                Usuario = usuario,
+                Facturas = facturas
             };
 
             return View(modelo);
@@ -65,7 +74,7 @@ namespace Talent_Trade.Controllers
                         await _gridFSService.EliminarImagen(usuario.ImagePerfil);
                     }
 
-                    var nuevoIdImagen = await _gridFSService.SubirImagen(nuevaImagen);
+                    var nuevoIdImagen = await _gridFSService.SubirImagen(nuevaImagen, null);
                     usuario.ImagePerfil = nuevoIdImagen;
 
                     var result = await _userManager.UpdateAsync(usuario);

@@ -45,6 +45,8 @@ builder.Services.AddScoped<CreadorServices>();
 builder.Services.AddScoped<GridFSService>();
 builder.Services.AddScoped<PublicacionServices>();
 builder.Services.AddScoped<NivelSuscripcionServices>();
+builder.Services.AddScoped<SuscripcionServices>();
+builder.Services.AddScoped<FacturaServices>();
 
 
 //Identity configuration
@@ -162,7 +164,12 @@ app.UseAuthentication();
 //usuarioService.Update("67512b12ad47458b206fdd1f", nuevoUsuario);
 
 
+
+//-----------------------------------------
+//-----------------------------------------
+//-----------------------------------------
 //ejemplo de Usuario listo para logeo
+
 //using (var scope = app.Services.CreateScope())
 //{
 //    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<MongoRole>>();

@@ -17,14 +17,21 @@ namespace Talent_Trade.Controllers
 
         private readonly PublicacionServices _publicacionServices;
 
-        public PublicacionController(UserManager<Usuario> userManager, CreadorServices creadorServices, GridFSService gridFSService, PublicacionServices publicacionServices)
+        private readonly NivelSuscripcionServices _nivelSuscripcionServices;
+
+        private readonly SuscripcionServices _suscripcionServices;
+
+        public PublicacionController(UserManager<Usuario> userManager, CreadorServices creadorServices, 
+            GridFSService gridFSService, PublicacionServices publicacionServices, 
+            NivelSuscripcionServices nivelSuscripcionServices, SuscripcionServices suscripcionServices
+            )
         {
             _userManager = userManager;
             _creadorServices = creadorServices;
             _gridFSService = gridFSService;
             _publicacionServices = publicacionServices;
-
-
+            _nivelSuscripcionServices = nivelSuscripcionServices;
+            _suscripcionServices = suscripcionServices;
 
         }
 
@@ -51,7 +58,8 @@ namespace Talent_Trade.Controllers
         [HttpGet("Publicacion/{id}")]
         public async Task<ActionResult> Index(string id)
         {
-            Publicacion publicacion = null;
+            Publicacion? publicacion = null;
+            List<NivelSuscripcion>? niveles = null;
 
             try
             {
@@ -72,10 +80,20 @@ namespace Talent_Trade.Controllers
                 return NotFound();
             }
 
+            niveles = _nivelSuscripcionServices.GetByCreadorIdOrderByPrecio(publicacion.IdCreador);
+
+            publicacion.TieneAcceso = await _suscripcionServices.CheckTierAsync(publicacion.IdNivelSuscripcion);
+
+            if (!publicacion.TieneAcceso)
+            {
+                publicacion.TruncarContenido(45);
+            }
+
             var modelo = new
             {
                 Publicacion = publicacion,
-                EsPropietario = EsPropietarioDePublicacion(publicacion)
+                EsPropietario = EsPropietarioDePublicacion(publicacion),
+                Niveles = niveles,
             };
 
             //Console.WriteLine(modelo.EsPropietario);
@@ -84,7 +102,7 @@ namespace Talent_Trade.Controllers
 
 
         [HttpPost("EditarPublicacion")]
-        public IActionResult EditarPublicacion(string id, string titulo, string contenido)
+        public async Task<ActionResult> EditarPublicacion(string id, string titulo, string contenido, string? idNivelSuscripcion)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +123,17 @@ namespace Talent_Trade.Controllers
 
                     publicacion.Titulo = titulo;
                     publicacion.Contenido = contenido;
+
+                    if (publicacion.IdNivelSuscripcion != idNivelSuscripcion)
+                    {
+                        foreach (var item in publicacion.Adjuntos)
+                        {
+                            await _gridFSService.UpdateIdNivelSuscripcionAsync(item, idNivelSuscripcion);
+                        }
+                    }
+
+
+                    publicacion.IdNivelSuscripcion = idNivelSuscripcion;
 
                     _publicacionServices.Update(id, publicacion);
 
@@ -140,7 +169,7 @@ namespace Talent_Trade.Controllers
 
                     foreach (var imagen in imagenes)
                     {
-                        var imagenId = await _gridFSService.SubirImagen(imagen);
+                        var imagenId = await _gridFSService.SubirImagen(imagen, publicacion.IdNivelSuscripcion);
                         publicacion.Adjuntos.Add(imagenId);
                     }
                     _publicacionServices.Update(id, publicacion);

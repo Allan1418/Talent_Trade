@@ -20,9 +20,14 @@ namespace Talent_Trade.Controllers
 
         private readonly NivelSuscripcionServices _nivelSuscripcionServices;
 
+        private readonly SuscripcionServices _suscripcionServices;
+
+        private readonly FacturaServices _facturaServices;
+
         public CreadorController(UserManager<Usuario> userManager, CreadorServices creadorServices,
             GridFSService gridFSService, PublicacionServices publicacionServices,
-            NivelSuscripcionServices nivelSuscripcionServices
+            NivelSuscripcionServices nivelSuscripcionServices, SuscripcionServices suscripcionServices,
+            FacturaServices facturaServices
             )
         {
             _userManager = userManager;
@@ -30,12 +35,12 @@ namespace Talent_Trade.Controllers
             _gridFSService = gridFSService;
             _publicacionServices = publicacionServices;
             _nivelSuscripcionServices = nivelSuscripcionServices;
+            _suscripcionServices = suscripcionServices;
+            _facturaServices = facturaServices;
         }
 
 
 
-
-        // GET: CreadorController
         [HttpGet]
         public ActionResult Index()
         {
@@ -53,6 +58,7 @@ namespace Talent_Trade.Controllers
             List<Publicacion>? publicaciones = null;
             string? imagenPerfil = null;
             List<NivelSuscripcion>? niveles = null;
+            NivelSuscripcion? suscripcionActual = null;
 
             if (user != null && user.IdDeCreador != null)
             {
@@ -79,7 +85,12 @@ namespace Talent_Trade.Controllers
                 foreach (var item in publicaciones)
                 {
                     item.TruncarContenido(45);
+                    item.TieneAcceso = await _suscripcionServices.CheckTierAsync(item.IdNivelSuscripcion);
                 }
+
+
+                suscripcionActual = await _suscripcionServices.GetNivelSuscripcionUsuarioAsync();
+
 
             }
             else
@@ -94,7 +105,8 @@ namespace Talent_Trade.Controllers
                 EsPropietario = esPropietario,
                 Publicaciones = publicaciones,
                 ImagenPerfil = imagenPerfil,
-                Niveles = niveles
+                Niveles = niveles,
+                SuscripcionActual = suscripcionActual
             };
             ViewBag.Creador = creador;
 
@@ -136,7 +148,7 @@ namespace Talent_Trade.Controllers
                             await _gridFSService.EliminarImagen(creador.ImageBackground);
                         }
 
-                        var nuevoIdImagen = await _gridFSService.SubirImagen(nuevaImagen);
+                        var nuevoIdImagen = await _gridFSService.SubirImagen(nuevaImagen, null);
                         creador.ImageBackground = nuevoIdImagen;
                     }
 
@@ -156,7 +168,7 @@ namespace Talent_Trade.Controllers
 
 
         [HttpPost("CrearPublicacion")]
-        public async Task<IActionResult> CrearPublicacion(string titulo, string contenido, List<IFormFile> archivos)
+        public async Task<IActionResult> CrearPublicacion(string titulo, string contenido, string? idNivelSuscripcion, List<IFormFile> archivos)
         {
             if (ModelState.IsValid)
             {
@@ -177,12 +189,13 @@ namespace Talent_Trade.Controllers
                         Fecha = DateTime.Now,
                         Likes = new List<string>(),
                         Comentarios = new List<string>(),
-                        Adjuntos = new List<string>()
+                        Adjuntos = new List<string>(),
+                        IdNivelSuscripcion = idNivelSuscripcion
                     };
 
                     foreach (var archivo in archivos)
                     {
-                        var archivoId = await _gridFSService.SubirImagen(archivo);
+                        var archivoId = await _gridFSService.SubirImagen(archivo, idNivelSuscripcion);
                         publicacion.Adjuntos.Add(archivoId);
                     }
 
@@ -312,6 +325,73 @@ namespace Talent_Trade.Controllers
             }
         }
 
+
+        [HttpPost("Suscribirse/{idNivelSuscripcion}")]
+        public async Task<IActionResult> Suscribirse(string idNivelSuscripcion)
+        {
+
+            Suscripcion? suscripcionVieja = null;
+
+            var usuario = await _userManager.GetUserAsync(User);
+            if (usuario == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+
+            var nivelSuscripcion = _nivelSuscripcionServices.Get(idNivelSuscripcion);
+            if (nivelSuscripcion == null)
+            {
+                return NotFound("Nivel de suscripción no encontrado.");
+            }
+
+            var creador = _creadorServices.Get(nivelSuscripcion.IdCreador);
+            if (creador == null)
+            {
+                return StatusCode(500);
+            }
+
+            if (!await _suscripcionServices.CheckTierAsync(nivelSuscripcion.Id))
+            {
+
+                suscripcionVieja = await _suscripcionServices.GetSuscripcionByCreadorAsync(nivelSuscripcion.IdCreador);
+
+                if (suscripcionVieja != null)
+                {
+                    _suscripcionServices.Remove(suscripcionVieja.Id);
+                }
+
+                var nuevaSuscripcion = new Suscripcion
+                {
+                    IdUser = usuario.Id.ToString(),
+                    IdNivelSuscripcion = nivelSuscripcion.Id,
+                    IdCreador = nivelSuscripcion.IdCreador,
+                    FechaVencimiento = DateTime.Now.AddMonths(1)
+                };
+
+                nuevaSuscripcion = _suscripcionServices.Create(nuevaSuscripcion);
+
+                var nuevaFactura = new Factura
+                {
+                    IdUser = usuario.Id.ToString(),
+                    IdCreador = creador.Id,
+                    Monto = nivelSuscripcion.Precio,
+                    FechaPago = DateTime.Now
+                };
+
+                _facturaServices.Create(nuevaFactura);
+
+
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Ya tienes una suscripción a un nivel superior para este creador.");
+                return RedirectToAction("Index", "Creador", new { username = creador.UserName });
+            }
+
+            return RedirectToAction("Index", "Creador", new { username = creador.UserName });
+        }
 
 
     }

@@ -11,13 +11,17 @@ namespace Talent_Trade.Models
 
         [BsonElement("idUser")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdUser { get; set; }
+        public required string IdUser { get; set; }
 
         [BsonElement("idCreador")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdCreador { get; set; }
+        public required string IdCreador { get; set; }
+
+        [BsonElement("idNivelSuscripcion")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public required string IdNivelSuscripcion { get; set; }
 
         [BsonElement("fechaVencimiento")]
-        public DateTime? FechaVencimiento { get; set; }
+        public required DateTime FechaVencimiento { get; set; }
     }
 }
