@@ -55,7 +55,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" href="#">@(User.Identity.IsAuthenticated ? User.Identity.Name : "Invitado")</a>
+                                <a class="nav-link" href="@Url.Action("Index", "Usuario")">@(User.Identity.IsAuthenticated ? User.Identity.Name : "Invitado")</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("Logout", "Home")">Cerrar Sesión</a> 

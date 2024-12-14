@@ -1,0 +1,93 @@
+﻿@model dynamic
+
+@if (Model != null)
+{
+    <div id="Perfil" class="container">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-primary">Perfil Profesional</h1>
+            <p class="lead">Bienvenido, <strong>@Model.Usuario.NombreCompleto</strong></p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sección de Imagen de Perfil -->
+            <div class="col-6">
+                <div style="background-color:#1A1E23" class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary">Imagen de Perfil</h5>
+                        @if (Model.Usuario.ImagePerfil != null)
+                        {
+                            <img src="@Url.Action("File", "Home", new { id = Model.Usuario.ImagePerfil })" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+                        }
+                        else
+                        {
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
+                                <i class="fas fa-user-circle fa-5x text-muted"></i>
+                            </div>
+                            <p class="text-muted">No tienes una imagen de perfil.</p>
+                        }
+
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCambiarImagen">
+                            <i class="fas fa-camera"></i> Cambiar Imagen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Información del Usuario -->
+            <div class="col-6">
+                <div style="background-color:#1A1E23" class="card shadow-sm">
+                    <div style="color: white" class="card-body">
+                        <h5 class="card-title text-secondary">Información del Usuario</h5>
+                        <p><i class="fas fa-envelope text-primary"></i> <strong>Email:</strong> @Model.Usuario.Email</p>
+                        <p><i class="fas fa-calendar-alt text-primary"></i> <strong>Fecha de Registro:</strong> @Model.Usuario.FechaRegistro.ToString("dd/MM/yyyy")</p>
+
+                        <h5 class="mt-4 text-secondary">Facturas</h5>
+                        @if (Model.Usuario.Facturas != null && Model.Usuario.Facturas.Count > 0)
+                        {
+                            <ul class="list-group">
+                                @foreach (var factura in Model.Usuario.Facturas)
+                                {
+                                    <li class="list-group-item">
+                                        <i class="fas fa-file-invoice-dollar text-success"></i> @factura
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-primary">No tienes facturas registradas.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para cambiar imagen -->
+    <div class="modal fade" id="modalCambiarImagen" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar Imagen de Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form asp-controller="Usuario" asp-action="CambiarImagenPerfil" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="nuevaImagen" class="form-label">Seleccionar nueva imagen:</label>
+                            <input type="file" id="nuevaImagen" name="nuevaImagen" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Actualizar Imagen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger text-center" role="alert">
+        <h1 id="error">Error 404: Página no encontrada</h1>
+        <p>La página que estás buscando no existe.</p>
+    </div>
+}

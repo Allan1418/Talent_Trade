@@ -5,12 +5,12 @@
 
 footer {
     padding-top: 1%;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     color: white;
 }
 
 #error {
-    margin-top:20%;
+    margin-top: 20%;
 }
 /*De aqui para abajo estan los estilos del index*/
 #navbar {
@@ -30,18 +30,23 @@ footer {
 
 #intro {
     padding: 5% 0px 0px 17%;
-    h3{
-        padding: 20px 0px 0px 5%;
-    }
+    h3
+
+{
+    padding: 20px 0px 0px 5%;
+}
 
 }
 
 #barraLateral {
     margin-top: 3%;
     background-color: #1A1E23;
-    h2{
-        margin-top: 13%;
-      }
+    h2
+
+{
+    margin-top: 13%;
+}
+
 }
 
 .sidebar {
@@ -57,7 +62,8 @@ footer {
     padding-top: 100px;
     margin-left: 260px;
     flex-grow: 2;
-h1
+    h1
+
 {
     padding-top: 50px;
     margin-left: 240px;
@@ -80,9 +86,12 @@ h3 {
 
 #intro2 {
     padding: 0px 0px 20px 25%;
-    h3{
-          padding: 20px 0px 0px 5%;
-      }
+    h3
+
+{
+    padding: 20px 0px 0px 5%;
+}
+
 }
 
 
@@ -174,7 +183,7 @@ h3 {
 }
 
 #signUp {
-    width:90%;
+    width: 90%;
 }
 
 
@@ -195,7 +204,7 @@ h3 {
 }
 
 #login {
-    width:440%;
+    width: 440%;
 }
 
 /*De aqui para abajo estan los estilos de Creador*/
@@ -208,16 +217,16 @@ h3 {
 
 .full-width-image {
     width: 150%;
-    height: auto; 
-    display: block; 
+    height: auto;
+    display: block;
 }
 
 .profile-image {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    margin-top: -75px; 
-    border: 5px solid white; 
+    margin-top: -75px;
+    border: 5px solid white;
 }
 
 #mebresias {
@@ -226,6 +235,7 @@ h3 {
     justify-content: center;
     text-align: center;
 }
+
 .subscribe-button {
     background-color: #28a745;
     color: white;
@@ -236,13 +246,13 @@ h3 {
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 20px;
 }
 
 .post-image-container {
-    height: 500px; 
+    height: 500px;
     overflow: hidden;
 }
 
@@ -256,7 +266,7 @@ h3 {
     margin-top: 20px;
 }
 
-#publiTitulo{
+#publiTitulo {
     text-align: center;
     position: relative;
 }
@@ -266,11 +276,16 @@ h3 {
 }
 
 #shortDes {
-    padding: 3% 24% 3% 24%;
+    text-align: center;
+    padding: 10px 5%;
+    margin: 0 auto;
+    max-width: 80%;
+    word-wrap: break-word;
 }
 
+
 #cuerpoContenido {
-    background-color: #1A1E23;
+    margin: 3% 25% 5% 25%;
 }
 
 .container {
@@ -279,20 +294,141 @@ h3 {
     align-items: center;
 }
 
-.card {
-    width: 300px;
-    margin: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #1A1E23;
-    margin: 10% 0% 10% 25%;
-    color:white;
+.contenedor-imagenes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: normal;
 }
+
+.imagen-publicacion {
+    width: 20%;
+    margin: 10px;
+}
+
+
+/* De aqui para abajo estan los estilos de la cartaMembresia*/
+
+.membresias-container {
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.membresias-card-container {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    max-width: 1000px;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+}
+
+.membresias-card {
+    flex: 0 0 calc(33.33% - 20px);
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 20px 20px 200px 30px;
+    min-height: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    scroll-snap-align: center;
+    flex: 0 0 calc(33.33% - 20px);
+    scroll-snap-align: start; 
+    max-width: calc(33.33% - 20px); 
+}
+
+.membresias-card-title {
+    margin: 0;
+    font-size: 24px;
+}
+
+.membresias-price {
+    font-size: 30px;
+    margin: 10px 0;
+}
+
+.membresias-button-suscribe,
+.membresias-button-edit,
+.membresias-button-delete {
+    background-color: #19191A;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .membresias-button-suscribe:hover {
+        background-color: White;
+        color: black;
+    }
+
+.membresias-button-delete {
+    background-color: red;
+    color: white;
+}
+
+.membresias-form-delete {
+    display: inline;
+}
+
+.membresias-card-text {
+    max-height: 300px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 19px;
+    margin-top: 20px;
+}
+
+    .navigation button {
+        background-color: #2F3148;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+        .navigation button:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #2F3148;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+    .dot.active {
+        opacity: 1;
+        transform: scale(1.2);
+        background-color: white;
+    }
 
 /* De aqui para abajo estan los estilos del popUp creador */
 
 .modal-body, .modal-content {
-    padding: 20px;
+    padding: 3px;
     background-color: #19191A;
     color: white;
 }
@@ -309,54 +445,110 @@ h3 {
     border: 1px solid white;
 }
 
-    .modal-body label {
-        color: white;
-    }
+.modal-body label {
+    color: white;
+}
 
 .modal-footer {
     display: flex;
     justify-content: center;
 }
 
+.custom-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 
 /*De aqui para abajo estan los estilos del publicacion*/
 
-#intro5 {
-    text-align: center;
-    position: relative;
-    padding-top: 6%;
-    padding-bottom: 5%;
+.carousel-control-next, 
+.carousel-control-prev {
+    margin-top: 10%;
 }
 
+/* Títulos de Sección */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFD700;
+    margin-bottom: 1rem;
+}
+
+/* Tarjetas de Publicaciones */
 .product-card {
-    border: 1px solid #ccc;
+    background-color: #1A1E23;
+    border-radius: 10px;
     padding: 20px;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.product-image {
-    max-width: 100%;
+    .product-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+.imagen-publicacion {
+    width: 60%;
     height: auto;
-    margin-bottom: 20px;
+    border-radius: 10px;
 }
 
-.product-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    color: #fff;
-    font-weight: bold;
+.product-title {
+    font-size: 1.5rem;
+    color: #FFD700;
+    margin: 1rem 0;
 }
 
-.post-image-container {
-    text-align: center;
-    margin-top: 20px;
+.product-description {
+    font-size: 1rem;
+    color: #CCCCCC;
 }
 
-.corner-button {
-    background-color: transparent;
-    position: absolute;
-    top: 29%;
-    left: 71%;
+/* Botones */
+.btn-primary {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: white;
+        color: black;
+    }
+
+.btn-outline-light {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    border-radius: 50px;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .btn-outline-light:hover {
+        background-color: white;
+        color: black;
+    }
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .product-card {
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+#Perfil {
+    padding-top:6%;
+    padding-bottom:24%;
 }
