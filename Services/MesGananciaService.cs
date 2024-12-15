@@ -11,7 +11,7 @@ namespace Talent_Trade.Services
         {
             MongoClient client = new MongoClient(config.GetConnectionString("MongoDB"));
             IMongoDatabase database = client.GetDatabase("Talent_Hub");
-            _mesGanancias = database.GetCollection<MesGanancia>("mesGanancias");
+            _mesGanancias = database.GetCollection<MesGanancia>("mesesGanancias");
         }
 
         public List<MesGanancia> Get() =>

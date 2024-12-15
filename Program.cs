@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using AspNetCore.Identity.Mongo;
 using AspNetCore.Identity.Mongo.Model;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -134,41 +135,6 @@ app.UseAuthentication();
 
 
 
-
-
-
-//ejemplo Prueba Usuario Service
-//Usuario nuevoUsuario = new Usuario
-//{
-//    NombreCompleto = "Juan Pérez2",
-//    UserName = "juanperez",
-//    Email = "juan.perez@example.com",
-//    PasswordHash = "contraseñaSegura123",
-//    FechaRegistro = DateTime.Now,
-//    // Id, ImagePerfil, IdDeCreador se asignarán automáticamente o después 
-//    // Suscripciones y Facturas se pueden inicializar como listas vacías o con valores
-//    Suscripciones = new List<string>(),
-//    Facturas = new List<string>()
-//};
-
-//IConfiguration config = builder.Configuration;
-//UsuarioService usuarioService = new UsuarioService(config);
-
-//Console.WriteLine("a--- " + nuevoUsuario.Id);
-//nuevoUsuario = usuarioService.Create(nuevoUsuario);
-//Console.WriteLine("d--- " + nuevoUsuario.Id);
-
-
-//usuarioService.Remove("67512a48660674cf1dd5b1d9");
-
-
-//nuevoUsuario.NombreCompleto = "aaaaaaaaaaaa";
-//nuevoUsuario.Id = "67512b12ad47458b206fdd1f";
-
-//usuarioService.Update("67512b12ad47458b206fdd1f", nuevoUsuario);
-
-
-
 //-----------------------------------------
 //-----------------------------------------
 //-----------------------------------------
@@ -226,4 +192,52 @@ app.UseAuthentication();
 //    usuarioService.Update(nuevoUsuario.Id, nuevoUsuario);
 //}
 
+
+
+async void resetearBD()
+{
+    var connectionString = builder.Configuration.GetConnectionString("MongoDB");
+    var client = new MongoClient(connectionString);
+    var url = MongoUrl.Create(connectionString);
+    var database = client.GetDatabase(url.DatabaseName);
+
+    var json = File.ReadAllText("comandosMongo.json");
+    var comandos = JArray.Parse(json);
+
+    foreach (var comando in comandos)
+    {
+
+        var commandDocument = BsonDocument.Parse(comando.ToString());
+        await database.RunCommandAsync<BsonDocument>(commandDocument);
+    }
+}
+
+
+
+//*******************************************************************************
+//*   ______   ___   _   _  _____  _____ ______    ______ _____  _   _  _____   *
+//*   |  _  \ / _ \ | \ | ||  __ \|  ___|| ___ \  |___  /|  _  || \ | ||  ___|  *
+//*   | | | |/ /_\ \|  \| || |  \/| |__  | |_/ /     / / | | | ||  \| || |__    *
+//*   | | | ||  _  || . ` || | __ |  __| |    /     / /  | | | || . ` ||  __|   *
+//*   | |/ / | | | || |\  || |_\ \| |___ | |\ \   ./ /___\ \_/ /| |\  || |___   *
+//*   |___/  \_| |_/\_| \_/ \____/\____/ \_| \_|  \_____/ \___/ \_| \_/\____/   *
+//*                                                                             *
+//*******************************************************************************                                                                          
+//
+//Descomentar la linea de abajo para Resetear la Base de Datos de Mongo
+
+//resetearBD();
+
+
+//-*volver a comentarla despues de iniciar el servidor una vez
+
+
+
+
+
+
+
+//inicio Aplicacion
 app.Run();
+
+

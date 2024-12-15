@@ -30,11 +30,11 @@ namespace Talent_Trade.Models
         [BsonElement("acercaDe")]
         public required string AcercaDe { get; set; }
 
-        [BsonElement("niveles")]
-        public List<string>? Niveles { get; set; }
+        //[BsonElement("niveles")]
+        //public List<string>? Niveles { get; set; }
 
-        [BsonElement("ganancias")]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Ganancias { get; set; }
+        //[BsonElement("ganancias")]
+        //[BsonRepresentation(BsonType.ObjectId)]
+        //public string? Ganancias { get; set; }
     }
 }

@@ -1,0 +1,392 @@
+﻿[
+  {
+    "drop": "comentarios"
+  },
+  {
+    "create": "comentarios",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idUser",
+          "idPublicacion",
+          "texto",
+          "fecha"
+        ],
+        "properties": {
+          "idUser": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "idPublicacion": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "texto": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser una string y es obligatorio"
+          },
+          "fecha": {
+            "bsonType": "date",
+            "description": "debe ser una fecha y es obligatorio"
+          },
+          "likes": {
+            "bsonType": [
+              "array",
+              "null"
+            ],
+            "description": "debe ser un array de strings o null",
+            "items": {
+              "bsonType": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "creadores" 
+  },
+  {
+    "create": "creadores",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idUser",
+          "UserName",
+          "nombrePagina",
+          "shortDescripcion",
+          "acercaDe"
+        ],
+        "properties": {
+          "idUser": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "UserName": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "nombrePagina": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "imageBackground": {
+            "bsonType": ["objectId", "null"],
+            "description": "debe ser un ObjectId o null"
+          },
+          "shortDescripcion": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "acercaDe": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "facturas"
+  },
+  {
+    "create": "facturas",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idUser",
+          "idCreador",
+          "monto",
+          "fechaPago"
+        ],
+        "properties": {
+          "idUser": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "idCreador": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "monto": {
+            "bsonType": "decimal",
+            "minimum": 0,
+            "description": "debe ser un numero decimal mayor o igual a cero y es obligatorio"
+          },
+          "fechaPago": {
+            "bsonType": "date",
+            "description": "debe ser una fecha y es obligatorio"
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "ganancias"
+  },
+  {
+    "create": "ganancias",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idCreador",
+          "sinRetirar",
+          "retirado",
+          "total"
+        ],
+        "properties": {
+          "idCreador": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "sinRetirar": {
+            "bsonType": "decimal",
+            "minimum": 0,
+            "description": "debe ser un numero decimal mayor o igual a cero y es obligatorio"
+          },
+          "retirado": {
+            "bsonType": "decimal",
+            "minimum": 0,
+            "description": "debe ser un numero decimal mayor o igual a cero y es obligatorio"
+          },
+          "total": {
+            "bsonType": "decimal",
+            "minimum": 0,
+            "description": "debe ser un numero decimal mayor o igual a cero y es obligatorio"
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "mesesGanancias"
+  },
+  {
+    "create": "mesesGanancias",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idCreador",
+          "month",
+          "year",
+          "total"
+        ],
+        "properties": {
+          "idCreador": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "month": {
+            "bsonType": "int",
+            "minimum": 1,
+            "maximum": 13,
+            "description": "debe ser un numero entero entre 1 y 12 y es obligatorio"
+          },
+          "year": {
+            "bsonType": "int",
+            "minimum": 1950,
+            "description": "debe ser un numero entero mayor o igual a 1950 y es obligatorio"
+          },
+          "total": {
+            "bsonType": "decimal",
+            "minimum": 0,
+            "description": "debe ser un numero decimal mayor o igual a cero y es obligatorio"
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "nivelesSuscripciones"
+  },
+  {
+    "create": "nivelesSuscripciones",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idCreador",
+          "nombre",
+          "descripcion",
+          "precio"
+        ],
+        "properties": {
+          "idCreador": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "nombre": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "descripcion": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "precio": {
+            "bsonType": "decimal",
+            "minimum": 0,
+            "description": "debe ser un numero decimal mayor o igual a cero y es obligatorio"
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "publicaciones"
+  },
+  {
+    "create": "publicaciones",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idCreador",
+          "titulo",
+          "contenido",
+          "fecha"
+        ],
+        "properties": {
+          "idCreador": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "titulo": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "contenido": {
+            "bsonType": "string",
+            "minLength": 1,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "fecha": {
+            "bsonType": "date",
+            "description": "debe ser una fecha y es obligatorio"
+          },
+          "likes": {
+            "bsonType": [
+              "array",
+              "null"
+            ],
+            "description": "debe ser un array de strings o null",
+            "items": {
+              "bsonType": "string"
+            }
+          },
+          "IdNivelSuscripcion": {
+            "bsonType": [
+              "string",
+              "null"
+            ],
+            "description": "debe ser un string o null"
+          },
+          "adjuntos": {
+            "bsonType": [
+              "array",
+              "null"
+            ],
+            "description": "debe ser un array de strings o null",
+            "items": {
+              "bsonType": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "respuestas"
+  },
+  {
+    "create": "respuestas",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idUser",
+          "idComentario",
+          "texto",
+          "fecha"
+        ],
+        "properties": {
+          "idUser": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "idComentario": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "texto": {
+            "bsonType": "string",
+            "minLength": 0,
+            "description": "debe ser un string y es obligatorio"
+          },
+          "fecha": {
+            "bsonType": "date",
+            "description": "debe ser una fecha y es obligatorio"
+          },
+          "likes": {
+            "bsonType": [
+              "array",
+              "null"
+            ],
+            "description": "debe ser un array de strings o null",
+            "items": {
+              "bsonType": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "drop": "suscripciones"
+  },
+  {
+    "create": "suscripciones",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "idUser",
+          "idCreador",
+          "idNivelSuscripcion",
+          "fechaVencimiento"
+        ],
+        "properties": {
+          "idUser": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "idCreador": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "idNivelSuscripcion": {
+            "bsonType": "objectId",
+            "description": "debe ser un ObjectId y es obligatorio"
+          },
+          "fechaVencimiento": {
+            "bsonType": "date",
+            "description": "debe ser una fecha y es obligatorio"
+          }
+        }
+      }
+    }
+  }
+]

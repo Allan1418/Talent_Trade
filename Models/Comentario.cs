@@ -1,4 +1,4 @@
-﻿ using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Talent_Trade.Models
@@ -12,7 +12,7 @@ namespace Talent_Trade.Models
         [BsonElement("idUser")]
         [BsonRepresentation(BsonType.ObjectId)]
         public required string IdUser { get; set; }
-        
+
         [BsonElement("idPublicacion")]
         [BsonRepresentation(BsonType.ObjectId)]
         public required string IdPublicacion { get; set; }
@@ -28,10 +28,10 @@ namespace Talent_Trade.Models
 
         [BsonIgnore]
         public string? FotoPerfil { get; set; }
-        
+
         [BsonIgnore]
         public string? UserName { get; set; }
-        
+
         [BsonIgnore]
         public List<Respuesta>? Respuestas { get; set; }
 
