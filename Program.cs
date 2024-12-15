@@ -47,6 +47,8 @@ builder.Services.AddScoped<PublicacionServices>();
 builder.Services.AddScoped<NivelSuscripcionServices>();
 builder.Services.AddScoped<SuscripcionServices>();
 builder.Services.AddScoped<FacturaServices>();
+builder.Services.AddScoped<GananciaService>();
+builder.Services.AddScoped<MesGananciaService>();
 
 
 //Identity configuration

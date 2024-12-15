@@ -24,10 +24,16 @@ namespace Talent_Trade.Controllers
 
         private readonly FacturaServices _facturaServices;
 
-        public CreadorController(UserManager<Usuario> userManager, CreadorServices creadorServices,
-            GridFSService gridFSService, PublicacionServices publicacionServices,
-            NivelSuscripcionServices nivelSuscripcionServices, SuscripcionServices suscripcionServices,
-            FacturaServices facturaServices
+        private readonly GananciaService _gananciaService;
+
+        public CreadorController(UserManager<Usuario> userManager, 
+            CreadorServices creadorServices,
+            GridFSService gridFSService, 
+            PublicacionServices publicacionServices,
+            NivelSuscripcionServices nivelSuscripcionServices, 
+            SuscripcionServices suscripcionServices,
+            FacturaServices facturaServices,
+            GananciaService gananciaService
             )
         {
             _userManager = userManager;
@@ -37,6 +43,7 @@ namespace Talent_Trade.Controllers
             _nivelSuscripcionServices = nivelSuscripcionServices;
             _suscripcionServices = suscripcionServices;
             _facturaServices = facturaServices;
+            _gananciaService = gananciaService;
         }
 
 
@@ -381,7 +388,7 @@ namespace Talent_Trade.Controllers
 
                 _facturaServices.Create(nuevaFactura);
 
-
+                _gananciaService.SumarGananciaSinRetirar(creador.Id, nivelSuscripcion.Precio);
 
             }
             else

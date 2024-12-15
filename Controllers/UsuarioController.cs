@@ -14,11 +14,22 @@ namespace Talent_Trade.Controllers
 
         private readonly FacturaServices _facturaServices;
 
-        public UsuarioController(UserManager<Usuario> userManager, GridFSService gridFSService, FacturaServices facturaServices)
+        private readonly GananciaService _gananciaService;
+
+        private readonly MesGananciaService _mesGananciaService;
+
+        public UsuarioController(UserManager<Usuario> userManager, 
+            GridFSService gridFSService, 
+            FacturaServices facturaServices, 
+            GananciaService gananciaService,
+            MesGananciaService mesGananciaService
+            )
         {
             _userManager = userManager;
             _gridFSService = gridFSService;
             _facturaServices = facturaServices;
+            _gananciaService = gananciaService;
+            _mesGananciaService = mesGananciaService;
 
         }
 
@@ -26,7 +37,9 @@ namespace Talent_Trade.Controllers
         public async Task<IActionResult> Index()
         {
 
-            List<Factura>? facturas;
+            List<Factura>? facturas = null;
+            Ganancia? ganancia = null;
+            List<MesGanancia>? mesesGanancias = null;
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -40,6 +53,8 @@ namespace Talent_Trade.Controllers
             if (await _userManager.IsInRoleAsync(usuario, "creador"))
             {
                 esCreador = true;
+                ganancia = _gananciaService.GetByIdCreador(usuario.IdDeCreador);
+                mesesGanancias = _mesGananciaService.GetByIdCreador(usuario.IdDeCreador);
             }
 
             facturas = _facturaServices.GetByIdUser(usuario.Id.ToString());
@@ -48,7 +63,9 @@ namespace Talent_Trade.Controllers
             {
                 EsCreador = esCreador,
                 Usuario = usuario,
-                Facturas = facturas
+                Facturas = facturas,
+                Ganancia = ganancia,
+                MesesGanancias = mesesGanancias
             };
 
             return View(modelo);
@@ -89,5 +106,27 @@ namespace Talent_Trade.Controllers
             }
             return BadRequest();
         }
+
+
+        [HttpPost("retirarGanancia")]
+        public async Task<IActionResult> RetirarGanancia()
+        {
+            var usuario = await _userManager.GetUserAsync(User);
+
+            if (usuario == null || !await _userManager.IsInRoleAsync(usuario, "creador"))
+            {
+                return Unauthorized();
+            }
+            try
+            {
+                _gananciaService.RetirarGanancia(usuario.IdDeCreador);
+                return RedirectToAction("Index", "Usuario");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

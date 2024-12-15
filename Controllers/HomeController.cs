@@ -24,9 +24,16 @@ namespace Talent_Trade.Controllers
 
         private readonly SuscripcionServices _suscripcionServices;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, 
-            UserManager<Usuario> userManager, CreadorServices creadorServices, 
-            GridFSService gridFSService, SuscripcionServices suscripcionServices
+        private readonly GananciaService _gananciaService;
+
+        public HomeController(
+            ILogger<HomeController> logger, 
+            SignInManager<Usuario> signInManager, 
+            UserManager<Usuario> userManager, 
+            CreadorServices creadorServices, 
+            GridFSService gridFSService, 
+            SuscripcionServices suscripcionServices,
+            GananciaService gananciaService
             )
         {
             _logger = logger;
@@ -35,6 +42,7 @@ namespace Talent_Trade.Controllers
             _creadorServices = creadorServices;
             _gridFSService = gridFSService;
             _suscripcionServices = suscripcionServices;
+            _gananciaService = gananciaService;
         }
 
         public IActionResult Index()
@@ -187,6 +195,17 @@ namespace Talent_Trade.Controllers
 
                 creador = _creadorServices.Create(creador);
                 usuario.IdDeCreador = creador.Id;
+
+                var ganancia = new Ganancia
+                {
+                    IdCreador = usuario.IdDeCreador,
+                    SinRetirar = 0,
+                    Retirado = 0,
+                    Total = 0
+                };
+                _gananciaService.Create(ganancia);
+
+
                 await _userManager.UpdateAsync(usuario);
 
 
