@@ -195,7 +195,6 @@ namespace Talent_Trade.Controllers
                         Contenido = contenido,
                         Fecha = DateTime.Now,
                         Likes = new List<string>(),
-                        Comentarios = new List<string>(),
                         Adjuntos = new List<string>(),
                         IdNivelSuscripcion = idNivelSuscripcion
                     };

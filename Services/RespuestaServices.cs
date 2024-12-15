@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Identity;
+using MongoDB.Driver;
 using Talent_Trade.Models;
 
 namespace Talent_Trade.Services
@@ -7,11 +8,15 @@ namespace Talent_Trade.Services
     {
         private readonly IMongoCollection<Respuesta> _respuestas;
 
-        public RespuestaServices(IConfiguration config)
+        private readonly UserManager<Usuario> _userManager;
+
+        public RespuestaServices(IConfiguration config, UserManager<Usuario> userManager)
         {
             MongoClient client = new MongoClient(config.GetConnectionString("MongoDB"));
             IMongoDatabase database = client.GetDatabase("Talent_Hub");
             _respuestas = database.GetCollection<Respuesta>("respuestas");
+
+            _userManager = userManager;
         }
 
         public List<Respuesta> GetAll() =>
@@ -34,5 +39,27 @@ namespace Talent_Trade.Services
 
         public void Remove(string id) =>
             _respuestas.DeleteOne(Respuesta => Respuesta.Id == id);
+
+        public async Task<List<Respuesta>> GetByIdComentarionOrderFechaAsync(string idComentario)
+        {
+            var filtro = Builders<Respuesta>.Filter.Eq(c => c.IdComentario, idComentario);
+            var orden = Builders<Respuesta>.Sort.Descending(c => c.Fecha);
+
+            var respuestas = _respuestas.Find(filtro).Sort(orden).ToList();
+
+            foreach (var item in respuestas)
+            {
+                var usuario = await _userManager.FindByIdAsync(item.IdUser);
+                if (usuario != null)
+                {
+                    item.UserName = usuario.UserName;
+                    item.FotoPerfil = usuario.ImagePerfil;
+                }
+
+            }
+
+
+            return respuestas;
+        }
     }
 }

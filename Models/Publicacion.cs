@@ -28,14 +28,14 @@ namespace Talent_Trade.Models
         [BsonElement("IdNivelSuscripcion")]
         public String? IdNivelSuscripcion { get; set; }
 
-        [BsonElement("comentarios")]
-        public List<string>? Comentarios { get; set; }
-
         [BsonElement("adjuntos")]
         public List<string>? Adjuntos { get; set; }
 
         [BsonIgnore]
         public bool TieneAcceso { get; set; } = true;
+
+        [BsonIgnore]
+        public List<Comentario>? Comentarios { get; set; }
 
         public void TruncarContenido(int maxLength)
         {

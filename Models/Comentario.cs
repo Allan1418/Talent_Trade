@@ -11,16 +11,29 @@ namespace Talent_Trade.Models
 
         [BsonElement("idUser")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdUser { get; set; }
+        public required string IdUser { get; set; }
+        
+        [BsonElement("idPublicacion")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public required string IdPublicacion { get; set; }
 
         [BsonElement("texto")]
-        public string? Texto { get; set; }
+        public required string Texto { get; set; }
 
         [BsonElement("fecha")]
-        public DateTime? Fecha { get; set; }
+        public required DateTime Fecha { get; set; }
 
         [BsonElement("likes")]
         public List<string>? Likes { get; set; }
+
+        [BsonIgnore]
+        public string? FotoPerfil { get; set; }
+        
+        [BsonIgnore]
+        public string? UserName { get; set; }
+        
+        [BsonIgnore]
+        public List<Respuesta>? Respuestas { get; set; }
 
     }
 }

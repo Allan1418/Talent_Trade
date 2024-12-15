@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Identity;
+using MongoDB.Driver;
 using Talent_Trade.Models;
 
 namespace Talent_Trade.Services
@@ -7,11 +8,18 @@ namespace Talent_Trade.Services
     {
         private readonly IMongoCollection<Comentario> _comentarios;
 
-        public ComentarioServices(IConfiguration config)
+        private readonly UserManager<Usuario> _userManager;
+
+        private readonly RespuestaServices _respuestaServices;
+
+        public ComentarioServices(IConfiguration config, UserManager<Usuario> userManager, RespuestaServices respuestaServices)
         {
             MongoClient client = new MongoClient(config.GetConnectionString("MongoDB"));
             IMongoDatabase database = client.GetDatabase("Talent_Hub");
             _comentarios = database.GetCollection<Comentario>("comentarios");
+
+            _userManager = userManager;
+            _respuestaServices = respuestaServices;
         }
 
         public List<Comentario> GetAll()
@@ -38,5 +46,28 @@ namespace Talent_Trade.Services
 
         public void Remove(string id) =>
             _comentarios.DeleteOne(comentario => comentario.Id == id);
+
+        public async Task<List<Comentario>> GetByIdPublicacionOrderFechaAsync(string idPublicacion)
+        {
+            var filtro = Builders<Comentario>.Filter.Eq(c => c.IdPublicacion, idPublicacion);
+            var orden = Builders<Comentario>.Sort.Descending(c => c.Fecha);
+
+            var comentarios = _comentarios.Find(filtro).Sort(orden).ToList();
+
+            foreach (var item in comentarios)
+            {
+                var usuario = await _userManager.FindByIdAsync(item.IdUser);
+                if (usuario != null)
+                {
+                    item.UserName = usuario.UserName;
+                    item.FotoPerfil = usuario.ImagePerfil;
+                }
+
+                item.Respuestas = await _respuestaServices.GetByIdComentarionOrderFechaAsync(item.Id);
+            }
+            
+
+            return comentarios;
+        }
     }
 }

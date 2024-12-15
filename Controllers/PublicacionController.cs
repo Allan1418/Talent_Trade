@@ -15,23 +15,34 @@ namespace Talent_Trade.Controllers
 
         private readonly GridFSService _gridFSService;
 
-        private readonly PublicacionServices _publicacionServices;
+        private readonly PublicacionServices _publicacionService;
 
-        private readonly NivelSuscripcionServices _nivelSuscripcionServices;
+        private readonly NivelSuscripcionServices _nivelSuscripcionService;
 
-        private readonly SuscripcionServices _suscripcionServices;
+        private readonly SuscripcionServices _suscripcionService;
 
-        public PublicacionController(UserManager<Usuario> userManager, CreadorServices creadorServices, 
-            GridFSService gridFSService, PublicacionServices publicacionServices, 
-            NivelSuscripcionServices nivelSuscripcionServices, SuscripcionServices suscripcionServices
+        private readonly ComentarioServices _comentarioService;
+
+        private readonly RespuestaServices _respuestaService;
+
+        public PublicacionController(UserManager<Usuario> userManager, 
+            CreadorServices creadorServices, 
+            GridFSService gridFSService, 
+            PublicacionServices publicacionServices, 
+            NivelSuscripcionServices nivelSuscripcionServices, 
+            SuscripcionServices suscripcionServices,
+            ComentarioServices comentarioServices,
+            RespuestaServices respuestaServices
             )
         {
             _userManager = userManager;
             _creadorServices = creadorServices;
             _gridFSService = gridFSService;
-            _publicacionServices = publicacionServices;
-            _nivelSuscripcionServices = nivelSuscripcionServices;
-            _suscripcionServices = suscripcionServices;
+            _publicacionService = publicacionServices;
+            _nivelSuscripcionService = nivelSuscripcionServices;
+            _suscripcionService = suscripcionServices;
+            _comentarioService = comentarioServices;
+            _respuestaService = respuestaServices;
 
         }
 
@@ -63,7 +74,7 @@ namespace Talent_Trade.Controllers
 
             try
             {
-                publicacion = _publicacionServices.Get(id);
+                publicacion = _publicacionService.Get(id);
             }
             catch (Exception ex)
             {
@@ -80,11 +91,15 @@ namespace Talent_Trade.Controllers
                 return NotFound();
             }
 
-            niveles = _nivelSuscripcionServices.GetByCreadorIdOrderByPrecio(publicacion.IdCreador);
+            niveles = _nivelSuscripcionService.GetByCreadorIdOrderByPrecio(publicacion.IdCreador);
 
-            publicacion.TieneAcceso = await _suscripcionServices.CheckTierAsync(publicacion.IdNivelSuscripcion);
+            publicacion.TieneAcceso = await _suscripcionService.CheckTierAsync(publicacion.IdNivelSuscripcion);
 
-            if (!publicacion.TieneAcceso)
+            if (publicacion.TieneAcceso)
+            {
+                publicacion.Comentarios = await _comentarioService.GetByIdPublicacionOrderFechaAsync(publicacion.Id);
+            }
+            else
             {
                 publicacion.TruncarContenido(45);
             }
@@ -109,7 +124,7 @@ namespace Talent_Trade.Controllers
                 try
                 {
 
-                    var publicacion = _publicacionServices.Get(id);
+                    var publicacion = _publicacionService.Get(id);
 
                     if (publicacion == null)
                     {
@@ -135,7 +150,7 @@ namespace Talent_Trade.Controllers
 
                     publicacion.IdNivelSuscripcion = idNivelSuscripcion;
 
-                    _publicacionServices.Update(id, publicacion);
+                    _publicacionService.Update(id, publicacion);
 
                     return RedirectToAction("Index", "Publicacion", new { id = publicacion.Id });
                 }
@@ -155,7 +170,7 @@ namespace Talent_Trade.Controllers
             {
                 try
                 {
-                    var publicacion = _publicacionServices.Get(id);
+                    var publicacion = _publicacionService.Get(id);
 
                     if (publicacion == null)
                     {
@@ -172,7 +187,7 @@ namespace Talent_Trade.Controllers
                         var imagenId = await _gridFSService.SubirImagen(imagen, publicacion.IdNivelSuscripcion);
                         publicacion.Adjuntos.Add(imagenId);
                     }
-                    _publicacionServices.Update(id, publicacion);
+                    _publicacionService.Update(id, publicacion);
 
                     return RedirectToAction("Index", "Publicacion", new { id = publicacion.Id });
                 }
@@ -192,7 +207,7 @@ namespace Talent_Trade.Controllers
             {
                 try
                 {
-                    var publicacion = _publicacionServices.Get(idPublicacion);
+                    var publicacion = _publicacionService.Get(idPublicacion);
 
                     if (publicacion == null)
                     {
@@ -213,7 +228,7 @@ namespace Talent_Trade.Controllers
 
                     publicacion.Adjuntos.Remove(idImagen);
 
-                    _publicacionServices.Update(idPublicacion, publicacion);
+                    _publicacionService.Update(idPublicacion, publicacion);
 
                     return RedirectToAction("Index", "Publicacion", new { id = publicacion.Id });
                 }
@@ -231,7 +246,7 @@ namespace Talent_Trade.Controllers
         {
             try
             {
-                var publicacion = _publicacionServices.Get(id);
+                var publicacion = _publicacionService.Get(id);
 
                 if (publicacion == null)
                 {
@@ -255,7 +270,7 @@ namespace Talent_Trade.Controllers
                 }
 
 
-                _publicacionServices.Remove(id);
+                _publicacionService.Remove(id);
 
 
                 return RedirectToAction("Index", "Creador", new { username = username });
@@ -266,7 +281,73 @@ namespace Talent_Trade.Controllers
             }
         }
 
+        [HttpPost("CrearComentario")]
+        public IActionResult CrearComentario(string idPublicacion, string texto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string idUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+                    if (string.IsNullOrEmpty(idUser))
+                    {
+                        return RedirectToAction("Login", "Home");
+                    }
+
+                    var comentario = new Comentario
+                    {
+                        IdPublicacion = idPublicacion,
+                        Texto = texto,
+                        Fecha = DateTime.Now,
+                        IdUser = idUser
+                    };
+
+                    _comentarioService.Create(comentario);
+
+                    return RedirectToAction("Index", "Publicacion", new { id = idPublicacion });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("CrearRespuesta")]
+        public IActionResult CrearRespuesta(string idPublicacion, string idComentario, string texto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string idUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                    if (string.IsNullOrEmpty(idUser))
+                    {
+                        return RedirectToAction("Login", "Home");
+                    }
+
+                    var respuesta = new Respuesta
+                    {
+                        IdComentario = idComentario,
+                        Texto = texto,
+                        Fecha = DateTime.Now,
+                        IdUser = idUser
+                    };
+
+                    _respuestaService.Create(respuesta);
+
+                    return RedirectToAction("Index", "Publicacion", new { id = idPublicacion });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return BadRequest();
+        }
 
     }
 }

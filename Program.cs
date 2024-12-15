@@ -49,6 +49,8 @@ builder.Services.AddScoped<SuscripcionServices>();
 builder.Services.AddScoped<FacturaServices>();
 builder.Services.AddScoped<GananciaService>();
 builder.Services.AddScoped<MesGananciaService>();
+builder.Services.AddScoped<ComentarioServices>();
+builder.Services.AddScoped<RespuestaServices>();
 
 
 //Identity configuration
