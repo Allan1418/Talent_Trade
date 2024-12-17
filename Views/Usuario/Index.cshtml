@@ -20,10 +20,7 @@
                         }
                         else
                         {
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
-                                <i class="fas fa-user-circle fa-5x text-muted"></i>
-                            </div>
-                            <p class="text-muted">No tienes una imagen de perfil.</p>
+                            <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
                         }
 
                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCambiarImagen">
@@ -42,7 +39,7 @@
                         <p><i class="fas fa-calendar-alt text-primary"></i> <strong>Fecha de Registro:</strong> @Model.Usuario.FechaRegistro.ToString("dd/MM/yyyy")</p>
 
                         <h5 class="mt-4 text-secondary">Facturas</h5>
-                        @if (Model.Usuario.Facturas != null && Model.Usuario.Facturas.Count > 0)
+                        @if (Model.Facturas != null && Model.Facturas.Count > 0)
                         {
                             <ul class="list-group">
                                 @foreach (var factura in Model.Usuario.Facturas)
@@ -62,6 +59,17 @@
             </div>
         </div>
     </div>
+
+    @if (Model.EsCreador)
+    {
+        <div class="mt-4">
+            <h5 class="text-secondary">Ganancias</h5>
+            <canvas id="gananciasChart"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="~/js/grafico.js"></script>
+    }
 
     <!-- Modal para cambiar imagen -->
     <div class="modal fade" id="modalCambiarImagen" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">

@@ -8,7 +8,6 @@
     <h1 id="intro5" class="text-center text-white mb-4">Detalles de la Publicación</h1>
 
     <div class="container" style="display: flex; flex-wrap: wrap; align-items: stretch;">
-        <!-- Contenedor principal -->
         <div class="image-section" style="flex: 2; padding: 10px;">
             @if (Model.Publicacion.Adjuntos != null && Model.Publicacion.Adjuntos.Count > 0)
             {
@@ -16,7 +15,8 @@
                     <div class="carousel-indicators">
                         @for (var i = 0; i < Model.Publicacion.Adjuntos.Count; i++)
                         {
-                            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "")" aria-label="Slide @i"></button>
+                            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")"
+                                    aria-current="@(i == 0 ? "true" : "")" aria-label="Slide @i"></button>
                         }
                     </div>
 
@@ -55,11 +55,11 @@
             }
         </div>
 
-        <!-- Sección de detalles -->
         <div class="details-section" style="flex: 1; background-color: #1A1E23; color: white; padding: 20px; border-radius: 10px; margin-left: 10px;">
             <h2>@Model.Publicacion.Titulo</h2>
             <p class="text-muted">Publicado el: @Model.Publicacion.Fecha.ToString("dd/MM/yyyy")</p>
             <span id="contenidoTexto">@Model.Publicacion.Contenido</span>
+
             @if (Model.EsPropietario)
             {
                 <div class="d-flex col-12 gap-2 mt-3">
@@ -80,7 +80,134 @@
         </div>
     </div>
 
-    <!-- Modal: Editar Publicación -->
+    <div class="comments-section mt-4 mx-auto" style="max-width: 800px; background-color: #1A1E23; color: white; padding: 20px; border-radius: 10px;">
+        <h3>Comentarios</h3>
+
+        <div class="comment-list mt-3">
+            @if (Model.Publicacion.TieneAcceso)
+            {
+                @foreach (var comentario in Model.Publicacion.Comentarios)
+                {
+                    <div class="comment-item mb-3 p-3" style="background-color: #2C3136; border-radius: 8px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+
+                            <strong>@comentario.UserName</strong>
+                        </div>
+                        <small class="text-muted">@comentario.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                    </div>
+                    <p>@comentario.Texto</p>
+
+                    @* Mostrar respuestas (si las hay) *@
+                    @if (comentario.Respuestas != null && comentario.Respuestas.Count > 0)
+                    {
+                        <div class="replies mt-2">
+                            @foreach (var respuesta in comentario.Respuestas)
+                            {
+                                <div class="reply mb-2 p-2" style="background-color: #3D4247; border-radius: 8px;">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <strong class="me-2">@respuesta.UserName</strong>
+                                        <small class="text-muted">@respuesta.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </div>
+                                    <p>@respuesta.Texto</p>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <div class="d-flex gap-2 mt-2">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form asp-controller="Publicacion" asp-action="EliminarComentario" method="post">
+                                <input type="hidden" name="idComentario" value="@comentario.Id" />
+                                <input type="hidden" name="idPublicacion" value="@Model.Publicacion.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal" onclick="editarComentario('@comentario.Id', '@comentario.Texto')">Editar</button>
+
+                            @* Formulario para agregar una respuesta *@
+                            <button class="btn btn-sm btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#responderComentario_@comentario.Id" aria-expanded="false" aria-controls="responderComentario_@comentario.Id">
+                                Responder
+                            </button>
+                            <div class="collapse" id="responderComentario_@comentario.Id">
+                                <div class="card card-body p-2">
+                                    <form asp-controller="Publicacion" asp-action="CrearRespuesta" method="post">
+                                        <input type="hidden" name="idPublicacion" value="@Model.Publicacion.Id" />
+                                        <input type="hidden" name="idComentario" value="@comentario.Id" />
+                                        <div class="mb-2">
+                                            <textarea class="form-control form-control-sm" name="texto" rows="2" placeholder="Escribe tu respuesta..." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-primary">Responder</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="add-comment mt-4">
+                <h5>Agregar un comentario</h5>
+                <form asp-controller="Publicacion" asp-action="CrearComentario" method="post">
+                    <input type="hidden" name="idPublicacion" value="@Model.Publicacion.Id" />
+                    <div class="mb-3">
+                        <textarea class="form-control" name="texto" rows="3" placeholder="Escribe tu comentario..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Comentar</button>
+                </form>
+            </div>
+        }
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="add-comment mt-4">
+            <h5>Agregar un comentario</h5>
+            <form asp-controller="Publicacion" asp-action="CrearComentario" method="post">
+                <input type="hidden" name="idPublicacion" value="@Model.Publicacion.Id" />
+                <div class="mb-3">
+                    <textarea class="form-control" name="texto" rows="3" placeholder="Escribe tu comentario..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Comentar</button>
+            </form>
+        </div>
+    }
+                        </div>
+
+    <div class="modal fade" id="editarComentarioModal" tabindex="-1" aria-labelledby="editarComentarioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="editarComentarioLabel">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form asp-controller="Publicacion" asp-action="EditarComentario" method="post">
+                    <input type="hidden" name="idPublicacion" value="@Model.Publicacion.Id" />
+                    <input type="hidden" name="idComentario" id="idComentarioEditar" value="" />
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="contenidoComentario" class="form-label">Contenido del Comentario</label>
+                            <textarea class="form-control" id="contenidoComentario" name="texto" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editarComentario(idComentario, textoComentario) {
+            document.getElementById('idComentarioEditar').value = idComentario;
+            document.getElementById('contenidoComentario').value = textoComentario;
+        }
+    </script>
+
     <div class="modal fade" id="editarPublicacionModal" tabindex="-1" aria-labelledby="editarPublicacionLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -99,6 +226,23 @@
                             <label for="contenido" class="form-label">Contenido</label>
                             <textarea class="form-control" id="contenido" name="contenido" rows="4" required>@Model.Publicacion.Contenido</textarea>
                         </div>
+                        <div class="mb-3">
+                            <label for="idNivelSuscripcion" class="form-label">Nivel de Suscripción</label>
+                            <select class="form-select" id="idNivelSuscripcion" name="idNivelSuscripcion">
+                                <option value="">Gratuito</option>
+                                @foreach (var nivel in Model.Niveles)
+                                {
+                                    if (Model.Publicacion.IdNivelSuscripcion != null && Model.Publicacion.IdNivelSuscripcion == nivel.Id)
+                                    {
+                                        <option value="@nivel.Id" selected>@nivel.Nombre</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@nivel.Id">@nivel.Nombre</option>
+                                    }
+                                }
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -109,7 +253,6 @@
         </div>
     </div>
 
-    <!-- Modal: Agregar Imágenes -->
     <div class="modal fade" id="agregarImagenesModal" tabindex="-1" aria-labelledby="agregarImagenesLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -133,109 +276,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Sección de comentarios -->
-    <div class="comments-section mt-4 mx-auto" style="max-width: 800px; background-color: #1A1E23; color: white; padding: 20px; border-radius: 10px;">
-        <h3>Comentarios</h3>
-
-        <!-- Lista de comentarios -->
-        <div class="comment-list mt-3">
-            <div class="comment-item mb-3 p-3" style="background-color: #2C3136; border-radius: 8px;">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <strong>Nombre del Usuario</strong>
-                    <small class="text-muted">01/01/2024 12:00</small>
-                </div>
-                <p>Este es un comentario de ejemplo.</p>
-                <div class="d-flex gap-2 mt-2">
-                    <form method="post">
-                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                    </form>
-                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal">Editar</button>
-                </div>
-            </div>
-
-            <div class="comment-item mb-3 p-3" style="background-color: #2C3136; border-radius: 8px;">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <strong>Otro Usuario</strong>
-                    <small class="text-muted">01/01/2024 12:30</small>
-                </div>
-                <p>Este es otro comentario de ejemplo.</p>
-                <div class="d-flex gap-2 mt-2">
-                    <form method="post">
-                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                    </form>
-                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal">Editar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Formulario para agregar un comentario -->
-        <div class="add-comment mt-4">
-            <h5>Agregar un comentario</h5>
-            <form method="post">
-                <div class="mb-3">
-                    <textarea class="form-control" name="contenido" rows="3" placeholder="Escribe tu comentario..." required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Comentar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal para editar comentario -->
-    <div class="modal fade" id="editarComentarioModal" tabindex="-1" aria-labelledby="editarComentarioLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title" id="editarComentarioLabel">Editar Comentario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <form method="post">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="contenidoComentario" class="form-label">Contenido del Comentario</label>
-                            <textarea class="form-control" id="contenidoComentario" name="contenido" rows="3" required>Texto del comentario seleccionado</textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-    <script>
-        function insertarSaltosDeLinea(texto, limite) {
-            let resultado = '';
-            let contador = 0;
-
-            for (let i = 0; i < texto.length; i++) {
-                resultado += texto[i];
-                contador++;
-
-                if (contador === limite) {
-                    resultado += '\n'; 
-                    contador = 0;
-                }
-            }
-
-            return resultado;
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const contenidoElemento = document.getElementById('contenidoTexto');
-            if (contenidoElemento) {
-                const textoOriginal = contenidoElemento.textContent || contenidoElemento.innerText;
-                const textoModificado = insertarSaltosDeLinea(textoOriginal, 57); 
-
-                contenidoElemento.innerHTML = textoModificado.replace(/\n/g, '<br>');
-            }
-        });
-    </script>
 }
 else
 {
