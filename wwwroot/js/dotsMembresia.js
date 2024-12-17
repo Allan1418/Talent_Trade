@@ -1,53 +1,54 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('cardContainer');
-    const prevButton = document.getElementById('prev');
-    const nextButton = document.getElementById('next');
-    const dotsContainer = document.getElementById('dots');
-    const cards = document.querySelectorAll('.membresias-card');
+﻿const carouselContainer = document.querySelector('.carousel-container');
+const prevButton = document.querySelector('.prev-button');
+const nextButton = document.querySelector('.next-button');
+const membershipCards = document.querySelectorAll('.membership-card');
+const dotsContainer = document.querySelector('.carousel-dots');
 
-    let currentIndex = 0;
-    const cardsPerView = 3; // Número de tarjetas visibles a la vez
-    const totalPages = Math.ceil(cards.length / cardsPerView);
+let currentIndex = 0;
+const cardsPerPage = 3; // Número de tarjetas visibles a la vez
 
-    function updateDots() {
-        dotsContainer.innerHTML = '';
-        for (let i = 0; i < totalPages; i++) {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if (i === currentIndex) {
-                dot.classList.add('active');
-            }
-            dot.addEventListener('click', () => {
-                scrollToPage(i);
-            });
-            dotsContainer.appendChild(dot);
-        }
-    }
+// Función para actualizar el carrusel
+function updateCarousel() {
+    const offset = -currentIndex * membershipCards[0].offsetWidth;
+    carouselContainer.style.transform = `translateX(${offset}px)`;
 
-    function scrollToPage(pageIndex) {
-        currentIndex = pageIndex;
-        container.scrollTo({ left: pageIndex * container.offsetWidth, behavior: 'smooth' });
-        updateDots();
-    }
-
-    prevButton.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            scrollToPage(currentIndex - 1);
-        }
-    });
-
-    nextButton.addEventListener('click', () => {
-        if (currentIndex < totalPages - 1) {
-            scrollToPage(currentIndex + 1);
-        }
-    });
-
-    container.addEventListener('scroll', () => {
-        const scrollLeft = container.scrollLeft;
-        const pageWidth = container.offsetWidth;
-        currentIndex = Math.round(scrollLeft / pageWidth);
-        updateDots();
-    });
-
+    // Actualizar los puntos
     updateDots();
+}
+
+// Función para crear los puntos de navegación
+function createDots() {
+    const totalDots = Math.ceil(membershipCards.length / cardsPerPage);
+    for (let i = 0; i < totalDots; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dot.addEventListener('click', () => {
+            currentIndex = i;
+            updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+    }
+}
+
+// Función para actualizar la clase 'active' de los puntos
+function updateDots() {
+    const dots = dotsContainer.querySelectorAll('.dot');
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentIndex].classList.add('active');
+}
+
+// Event listeners para los botones
+prevButton.addEventListener('click', () => {
+    currentIndex = Math.max(0, currentIndex - 1);
+    updateCarousel();
 });
+
+nextButton.addEventListener('click', () => {
+    const maxIndex = Math.ceil(membershipCards.length / cardsPerPage) - 1;
+    currentIndex = Math.min(maxIndex, currentIndex + 1);
+    updateCarousel();
+});
+
+// Inicialización
+createDots();
+updateCarousel();

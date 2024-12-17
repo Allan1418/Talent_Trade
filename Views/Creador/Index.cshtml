@@ -113,7 +113,7 @@
                             @foreach (var Publicacion in Model.Publicaciones)
                             {
                                 <div class="col-md-12 publicacion" style="display: none;">
-                                    <div style="background-color:#1A1E23" class="product-card mb-5">
+                                    <div style="background-color:#1A1E23" class="product-card">
                                         @if (Publicacion.Adjuntos != null && Publicacion.Adjuntos.Count > 0)
                                         {
                                             <img src="@Url.Action("File", "Home", new { id = Publicacion.Adjuntos[0] })" class="img-fluid rounded imagen-publicacion" alt="Producto">
@@ -217,7 +217,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="idNivelSuscripcion" class="control-label">Nivel de Suscripción</label>
-                                <select name="idNivelSuscripcion" id="idNivelSuscripcion" class="form-select" required>
+                                <select name="idNivelSuscripcion" id="idNivelSuscripcion" class="form-select">
                                     <option value="">Para todo el publico</option>
                                     @foreach (var nivel in Model.Niveles)
                                     {
