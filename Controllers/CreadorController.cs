@@ -96,7 +96,7 @@ namespace Talent_Trade.Controllers
                 }
 
 
-                suscripcionActual = await _suscripcionServices.GetNivelSuscripcionUsuarioAsync();
+                suscripcionActual = await _suscripcionServices.GetNivelSuscripcionUsuarioAsync(creador.Id);
 
 
             }

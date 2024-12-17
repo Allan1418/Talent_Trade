@@ -140,57 +140,58 @@ app.UseAuthentication();
 //-----------------------------------------
 //ejemplo de Usuario listo para logeo
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<MongoRole>>();
+async void crearUser()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<MongoRole>>();
 
-//    if (!await roleManager.RoleExistsAsync("usuario"))
-//    {
-//        await roleManager.CreateAsync(new MongoRole("usuario"));
-//    }
+        if (!await roleManager.RoleExistsAsync("usuario"))
+        {
+            await roleManager.CreateAsync(new MongoRole("usuario"));
+        }
 
-//    if (!await roleManager.RoleExistsAsync("creador"))
-//    {
-//        await roleManager.CreateAsync(new MongoRole("creador"));
-//    }
+        if (!await roleManager.RoleExistsAsync("creador"))
+        {
+            await roleManager.CreateAsync(new MongoRole("creador"));
+        }
 
-//    // Ejemplo Prueba Usuario Service
-//    Usuario nuevoUsuario = new Usuario
-//    {
-//        NombreCompleto = "Juan Pérez2",
-//        UserName = "juanperez",
-//        Email = "juan.perez@example.com",
-//        FechaRegistro = DateTime.Now,
-//        // ... otras propiedades ...
-//    };
+        // Ejemplo Prueba Usuario Service
+        Usuario nuevoUsuario = new Usuario
+        {
+            NombreCompleto = "Juan Pérez",
+            UserName = "juanperez",
+            Email = "juan.perez@example.com",
+            FechaRegistro = DateTime.Now,
+            // ... otras propiedades ...
+        };
 
-//    // Obtén una instancia del UserManager
-//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
+        // Obtén una instancia del UserManager
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
 
-//    // Genera un nuevo SecurityStamp
-//    nuevoUsuario.SecurityStamp = userManager.GenerateNewAuthenticatorKey();
+        // Genera un nuevo SecurityStamp
+        nuevoUsuario.SecurityStamp = userManager.GenerateNewAuthenticatorKey();
 
-//    IConfiguration config = builder.Configuration;
-//    UsuarioService usuarioService = new UsuarioService(config);
+        IConfiguration config = builder.Configuration;
+        UsuarioService usuarioService = new UsuarioService(config);
 
-//    Console.WriteLine("a--- " + nuevoUsuario.Id);
+        // Crea el usuario en la base de datos (sin contraseña)
+        nuevoUsuario = usuarioService.Create(nuevoUsuario);
 
-//    // Crea el usuario en la base de datos (sin contraseña)
-//    nuevoUsuario = usuarioService.Create(nuevoUsuario);
+        // Genera el hash de la contraseña
+        var passwordHash = userManager.PasswordHasher.HashPassword(nuevoUsuario, "1234");
 
-//    Console.WriteLine("d--- " + nuevoUsuario.Id);
+        // Actualiza el usuario con el hash de la contraseña
+        nuevoUsuario.PasswordHash = passwordHash;
 
-//    // Genera el hash de la contraseña
-//    var passwordHash = userManager.PasswordHasher.HashPassword(nuevoUsuario, "1234");
+        // Agrega el rol al usuario (usa await)
+        await userManager.AddToRoleAsync(nuevoUsuario, "usuario");
 
-//    // Actualiza el usuario con el hash de la contraseña
-//    nuevoUsuario.PasswordHash = passwordHash;
+        usuarioService.Update(nuevoUsuario.Id, nuevoUsuario);
+    }
+}
 
-//    // Agrega el rol al usuario (usa await)
-//    await userManager.AddToRoleAsync(nuevoUsuario, "usuario");
 
-//    usuarioService.Update(nuevoUsuario.Id, nuevoUsuario);
-//}
 
 
 
@@ -204,12 +205,19 @@ async void resetearBD()
     var json = File.ReadAllText("comandosMongo.json");
     var comandos = JArray.Parse(json);
 
+    database.DropCollection("fs.files");
+    database.DropCollection("fs.chunks");
+    database.DropCollection("usuarios");
+
     foreach (var comando in comandos)
     {
 
         var commandDocument = BsonDocument.Parse(comando.ToString());
         await database.RunCommandAsync<BsonDocument>(commandDocument);
     }
+    crearUser();
+
+    Console.WriteLine("--- Base de Datos Reseteada ---");
 }
 
 
@@ -224,7 +232,7 @@ async void resetearBD()
 //*                                                                             *
 //*******************************************************************************                                                                          
 //
-//Descomentar la linea de abajo para Resetear la Base de Datos de Mongo
+//Descomentar la linea de abajo para Resetear la Base de Datos de Mongo y crear un usuario por defecto
 
 //resetearBD();
 

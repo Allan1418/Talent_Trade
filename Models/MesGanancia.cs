@@ -18,7 +18,7 @@ namespace Talent_Trade.Models
         public required int Month { get; set; }
 
         [BsonElement("year")]
-        [BsonRepresentation(BsonType.Decimal128)]
+        [BsonRepresentation(BsonType.Int32)]
         public required int Year { get; set; }
 
         [BsonElement("total")]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using Talent_Trade.Models;
 
@@ -60,7 +61,7 @@ namespace Talent_Trade.Services
             return await _suscripciones.Find(s => s.IdUser == usuario.Id.ToString()).ToListAsync();
         }
 
-        public async Task<NivelSuscripcion?> GetNivelSuscripcionUsuarioAsync()
+        public async Task<NivelSuscripcion?> GetNivelSuscripcionUsuarioAsync(string idCreador)
         {
             var usuario = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
             if (usuario == null)
@@ -69,18 +70,15 @@ namespace Talent_Trade.Services
             }
 
             var nivelSuscripcion = await _suscripciones.Aggregate()
-                .Match(s => s.IdUser == usuario.Id.ToString())
+                .Match(s => s.IdUser == usuario.Id.ToString() && s.IdCreador == idCreador)
                 .Lookup("nivelesSuscripciones", "idNivelSuscripcion", "_id", "nivelSuscripcion")
                 .Unwind("nivelSuscripcion")
-                .Project<BsonDocument>(Builders<BsonDocument>.Projection.Include("nivelSuscripcion"))
+                .ReplaceRoot<NivelSuscripcion>("$nivelSuscripcion")
                 .FirstOrDefaultAsync();
 
-            if (nivelSuscripcion == null)
-            {
-                return null;
-            }
+            //Console.WriteLine(nivelSuscripcion.ToJson());
 
-            return BsonSerializer.Deserialize<NivelSuscripcion>(nivelSuscripcion["nivelSuscripcion"].AsBsonArray[0].AsBsonDocument);
+            return nivelSuscripcion;
         }
 
         public Suscripcion Create(Suscripcion suscripcion)
@@ -149,13 +147,15 @@ namespace Talent_Trade.Services
                 return false;
             }
 
-            var suscripcionConNivel = BsonSerializer.Deserialize<SuscripcionConNivel>(suscripcion);
+            //Console.WriteLine(suscripcion.ToJson());
 
-            return suscripcionConNivel.nivel.Precio >= tier.Precio;
+            var precio = suscripcion["nivel"]["precio"].AsDecimal;
+
+            return precio >= tier.Precio;
 
         }
     }
-    public class SuscripcionConNivel
+    public class SuscripcionConNivel : Suscripcion
     {
         public NivelSuscripcion nivel { get; set; }
     }
