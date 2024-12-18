@@ -236,5 +236,10 @@ namespace Talent_Trade.Controllers
             }
             return File(imagen.OpenReadStream(), imagen.ContentType);
         }
+
+        public IActionResult Faq ()
+        {
+            return View();
+        }
     }
 }

@@ -87,7 +87,7 @@ namespace Talent_Trade.Controllers
 
                 niveles = _nivelSuscripcionServices.GetByCreadorIdOrderByPrecio(creador.Id);
 
-                publicaciones = _publicacionServices.GetPublicacionesPorCreador(creador.Id, pagina, 30);
+                publicaciones = _publicacionServices.GetPublicacionesPorCreador(creador.Id, pagina, 3);
 
                 foreach (var item in publicaciones)
                 {

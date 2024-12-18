@@ -76,7 +76,7 @@
                                             <div class="card-text">
                                                 <p>Precio: $@nivel.Precio</p>
                                             </div>
-                                            <div class="d-grid gap-2 pt-4">
+                                            <div class="d-grid gap-2 pt-1">
                                                 @if (!Model.EsPropietario)
                                                 {
                                                     if (Model.SuscripcionActual == null || nivel.Precio > Model.SuscripcionActual.Precio)
@@ -193,6 +193,7 @@
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
                     <h2 class="d-flex justify-content-center pt-5 pb-5">Contenido Exclusivo</h2>
+
                     @if (Model.EsPropietario)
                     {
                         <div class="d-flex justify-content-center">
@@ -230,52 +231,55 @@
                             </div>
                         </div>
                     }
+                    <div class="pt-3 d-flex justify-content-center" id="contenedorBoton" data-pagina="1">
+                        <button id="btnVerMas" class="btn btn-primary">Ver más publicaciones</button>
+                    </div>
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            $("#btnVerMas").click(function () {
+                                var paginaActual = parseInt($("#contenedorBoton").attr("data-pagina"));
+                                var siguientePagina = paginaActual + 1;
+                                var username = "@Model.Creador.UserName"; // Obtener el nombre de usuario
+
+                                $.ajax({
+                                    url: "/Creador/" + username + "?pagina=" + siguientePagina,
+                                    type: "GET",
+                                    success: function (data) {
+                                        // Parsear la respuesta HTML
+                                        var nuevasPublicaciones = $(data).find(".publicacion");
+
+                                        // Agregar las nuevas publicaciones al final del contenedor
+                                        $("#cuerpoContenido").append(nuevasPublicaciones);
+
+                                        // Mostrar las nuevas publicaciones (estaban ocultas con display: none)
+                                        nuevasPublicaciones.fadeIn();
+
+                                        // Actualizar el atributo data-pagina
+                                        $("#contenedorBoton").attr("data-pagina", siguientePagina);
+
+                                        // Opcional: Ocultar el botón si no hay más publicaciones
+                                        if (nuevasPublicaciones.length === 0) {
+                                            $("#btnVerMas").hide();
+                                        }
+                                    },
+                                    error: function () {
+                                        // Manejar errores (mostrar un mensaje al usuario, por ejemplo)
+                                        console.error("Error al cargar más publicaciones.");
+                                    }
+                                });
+                            });
+                        });
+                    </script>
                 </div>
-
-                <div id="contenedorBoton" data-pagina="1" class="d-flex justify-content-center pt-5 pb-5">
-                    <button id="btnVerMas" class="btn btn-primary">Ver más publicaciones</button>
-                </div>
-
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script>
-                                        $(document).ready(function () {
-                                            <span class="math-inline">\("\#btnVerMas"\)\.click\(function \(\) \{
-                    var paginaActual \= parseInt\(</span>("#contenedorBoton").attr("data-pagina"));
-                                                var siguientePagina = paginaActual + 1;
-                                                var username = "@Model.Creador.UserName";
-
-                                                $.ajax({
-                                                    url: "/Creador/" + username + "?pagina=" + siguientePagina,
-                                                    type: "GET",
-                                                    success: function (data) {
-                                                        var nuevasPublicaciones = $(data).find(".publicacion");
-
-                                                        // Aplicar el estilo para ocultar las nuevas publicaciones
-                                                        nuevasPublicaciones.css("display", "none");
-
-                                                        $("#cuerpoContenido").append(nuevasPublicaciones);
-                                                        nuevasPublicaciones.fadeIn();
-                                                        $("#contenedorBoton").attr("data-pagina", siguientePagina);
-                                                        if (nuevasPublicaciones.length === 0) {
-                                                            $("#btnVerMas").hide();
-                                                        }
-                                                    },
-                                                    error: function () {
-                                                        console.error("Error al cargar más publicaciones.");
-                                                    }
-                                                });
-                                            });
-                                        });
-                </script>
 
                 <div class="tab-pane fade" id="acercaDe" role="tabpanel" aria-labelledby="acercaDe-tab">
-                    <div class="mb-5">
-                        <div>
-                            <h1>Acerca de</h1>
-                            <p id="acercaDe" class="fs-5">
-                                @(string.IsNullOrEmpty(Model.Creador.AcercaDe) ? "Información no disponible." : Model.Creador.AcercaDe)
-                            </p>
-                        </div>
+                    <div class="mb-5 d-flex flex-column align-items-center">
+                        <h1>Acerca de</h1>
+                        <p id="acercaDe" class="fs-5">
+                            @(string.IsNullOrEmpty(Model.Creador.AcercaDe) ? "Información no disponible." : Model.Creador.AcercaDe)
+                        </p>
                     </div>
                 </div>
             </div>
@@ -343,7 +347,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="idNivelSuscripcion" class="control-label">Nivel de Suscripción</label>
-                                    <select name="idNivelSuscripcion" id="idNivelSuscripcion" class="form-select">
+                                    <select name="idNivelSuscripcion" id="idNivelSuscripcion" class="form-select dropdown-menu-fixed">
                                         <option value="">Para todo el publico</option>
                                         @foreach (var nivel in Model.Niveles)
                                         {
@@ -379,7 +383,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="nuevoPrecio" class="form-label">Precio</label>
-                                    <input type="number" id="nuevoPrecio" name="precio" class="form-control" required />
+                                    <input type="number" id="nuevoPrecio" name="precio" class="form-control" min="1" max="10000" required />
                                 </div>
                                 <button type="submit" class="btn btn-success">Crear Membresía</button>
                             </form>
@@ -413,7 +417,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="precio-@nivel.Id" class="form-label">Precio</label>
-                                                <input type="number" id="precio-@nivel.Id" name="precio" class="form-control" value="@nivel.Precio" required />
+                                                <input type="number" id="nuevoPrecio" name="precio" class="form-control" min="1" max="1000" required />
                                             </div>
                                             <button type="submit" class="btn btn-success">Guardar Cambios</button>
                                         </form>

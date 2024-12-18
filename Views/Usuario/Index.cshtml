@@ -1,99 +1,175 @@
-﻿@model dynamic
-
-@if (Model != null)
+﻿@if (Model != null)
 {
-    <div id="Perfil" class="container">
-        <div class="text-center mb-4">
-            <h1 class="display-5 fw-bold text-primary">Perfil Profesional</h1>
-            <p class="lead">Bienvenido, <strong>@Model.Usuario.NombreCompleto</strong></p>
-        </div>
+    <body id="cuerpo">
 
-        <div class="row g-4">
-            <div class="col-6">
-                <div style="background-color:#1A1E23" class="card shadow-sm text-center">
-                    <div class="card-body">
-                        <h5 class="card-title text-secondary">Imagen de Perfil</h5>
-                        @if (Model.Usuario.ImagePerfil != null)
-                        {
-                            <img src="@Url.Action("File", "Home", new { id = Model.Usuario.ImagePerfil })" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
-                        }
-                        else
-                        {
-                            <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
-                        }
+        <div id="Perfil" class="container">
+            <div class="text-center mb-4">
+                <h1 class="display-5 fw-bold text-primary">Perfil Profesional</h1>
+                <p class="lead">Bienvenido, <strong>@Model.Usuario.NombreCompleto</strong></p>
+            </div>
 
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCambiarImagen">
-                            <i class="fas fa-camera"></i> Cambiar Imagen
-                        </button>
+            <div class="row g-4">
+                <div class="col-6">
+                    <div style="background-color:#1A1E23" class="card shadow-sm text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-secondary">Imagen de Perfil</h5>
+                            @if (Model.Usuario.ImagePerfil != null)
+                            {
+                                <img src="@Url.Action("File", "Home", new { id = Model.Usuario.ImagePerfil })" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+                            }
+                            else
+                            {
+                                <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+                            }
+
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCambiarImagen">
+                                <i class="fas fa-camera"></i> Cambiar Imagen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div style="background-color:#1A1E23" class="card shadow-sm">
+                        <div style="color: white" class="card-body">
+                            <h5 class="card-title text-secondary">Información del Usuario</h5>
+                            <p><i class="fas fa-envelope text-primary"></i> <strong>Email:</strong> @Model.Usuario.Email</p>
+                            <p><i class="fas fa-calendar-alt text-primary"></i> <strong>Fecha de Registro:</strong> @Model.Usuario.FechaRegistro.ToString("dd/MM/yyyy")</p>
+
+                            <h5 class="mt-4 text-secondary">Facturas</h5>
+                            @if (Model.Facturas != null && Model.Facturas.Count > 0)
+                            {
+                                <ul class="list-group">
+                                    @foreach (var factura in Model.Facturas)
+                                    {
+                                        <li style="background-color:#19191A; color:white" class="list-group-item">
+                                            <i class="fs-6 fas fa-file-invoice-dollar text-success">Fecha de pago: @factura.FechaPago.ToString("dd/MM/yyyy")</i><br>
+                                            <i class="fs-6 fas fa-file-invoice-dollar text-success">Costo membresia: @factura.Monto</i>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p class="text-primary">No tienes facturas registradas.</p>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-6">
+            <div class="col-md-3">
                 <div style="background-color:#1A1E23" class="card shadow-sm">
-                    <div style="color: white" class="card-body">
-                        <h5 class="card-title text-secondary">Información del Usuario</h5>
-                        <p><i class="fas fa-envelope text-primary"></i> <strong>Email:</strong> @Model.Usuario.Email</p>
-                        <p><i class="fas fa-calendar-alt text-primary"></i> <strong>Fecha de Registro:</strong> @Model.Usuario.FechaRegistro.ToString("dd/MM/yyyy")</p>
-
-                        <h5 class="mt-4 text-secondary">Facturas</h5>
-                        @if (Model.Facturas != null && Model.Facturas.Count > 0)
+                    <div style="color: white" class="card-body text-center">
+                        <h5 class="card-title text-secondary">Ganancias</h5>
+                        @if (Model.Ganancia != null)
                         {
-                            <ul class="list-group">
-                                @foreach (var factura in Model.Facturas)
-                                {
-                                    <li class="list-group-item">
-                                        <i class="fas fa-file-invoice-dollar text-success"></i>
-                                        Fecha de pago: @factura.FechaPago  Precio: @factura.Monto
-                                    </li>
-                                }
-                            </ul>
+                            <p><i class="fas fa-wallet text-primary"></i> <strong>Dinero sin retirar:</strong> @Model.Ganancia.SinRetirar</p>
+                            <p><i class="fas fa-wallet text-primary"></i> <strong>Dinero retirado:</strong> @Model.Ganancia.Retirado</p>
+                            <p><i class="fas fa-money-bill-wave text-primary"></i> <strong>Dinero total:</strong> @Model.Ganancia.Total</p>
+
+                            <div>
+                                <form asp-controller="Usuario" asp-action="retirarGanancia" method="post">
+                                    <button class="btn btn-success">Retirar Ganancias</button>
+                                </form>
+                            </div>
+
                         }
                         else
                         {
-                            <p class="text-primary">No tienes facturas registradas.</p>
+                            <p class="text-primary">No hay información de ganancias disponible.</p>
                         }
                     </div>
                 </div>
             </div>
+
+
         </div>
 
         @if (Model.EsCreador)
         {
-            <div class="mt-4">
-                <h5 class="text-secondary">Ganancias</h5>
+            <div class="row pb-5">
+                <h5 class="text-secondary text-center pb-3">Ganancias</h5>
 
-                <div class="row">
-                    <div class="col-md-12"> <canvas id="gananciasMensualesChart"></canvas> </div>
+                <div class="form-check form-switch d-flex justify-content-center">
+                    <div class="pe-5 form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tipoGrafica" id="mostrarMensual" checked>
+                        <label class="form-check-label" for="mostrarMensual">Mensual</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tipoGrafica" id="mostrarAnual">
+                        <label class="form-check-label" for="mostrarAnual">Anual</label>
+                    </div>
                 </div>
-                <form asp-controller="Usuario" asp-action="retirarGanancia" method="post">
-                <button class="btn btn-success mt-3">Retirar Ganancias</button>
-                </form>
+
+                <div>
+                    <canvas id="gananciasChart" style="width: 150%; height: 1000px;"></canvas>
+                </div>
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('DOMContentLoaded', function () {
                     var mesesGananciasData = @Html.Raw(Json.Serialize(Model.MesesGanancias));
 
-                    // Obtener los meses y las ganancias
-                    var labelsMeses = mesesGananciasData.map(function (item) {
-                        // Ajustar el formato del mes si es necesario
+                    // --- Procesar datos para la gráfica ---
+
+                    // --- Generar etiquetas y datos para la gráfica mensual ---
+                    var labelsMensual = mesesGananciasData.map(function (item) {
                         var monthName = new Date(item.year, item.month - 1).toLocaleString('default', { month: 'long' });
                         return monthName + ' ' + item.year;
                     });
-                    var dataMeses = mesesGananciasData.map(function (item) { return item.total; });
+                    var dataMensual = mesesGananciasData.map(function (item) {
+                        return item.total;
+                    });
 
-                    var ctxMeses = document.getElementById('gananciasMensualesChart').getContext('2d');
-                    new Chart(ctxMeses, {
+                    // --- Agrupar ganancias por año ---
+                    var gananciasPorAnio = {};
+                    mesesGananciasData.forEach(function (item) {
+                        gananciasPorAnio[item.year] = (gananciasPorAnio[item.year] || 0) + item.total;
+                    });
+
+                    // --- Generar etiquetas y datos para la gráfica anual ---
+                    var labelsAnual = Object.keys(gananciasPorAnio);
+                    var dataAnual = Object.values(gananciasPorAnio);
+
+
+                    // --- Crear arrays de colores para meses y años ---
+                    var coloresMeses = [
+                        'rgba(54, 162, 235, 0.5)',   // Azul
+                        'rgba(75, 192, 192, 0.5)',   // Verde azulado
+                        'rgba(153, 102, 255, 0.5)',  // Morado
+                        // Agrega más tonos de azul si es necesario
+                    ];
+
+                    var coloresAnios = [
+                        'rgba(255, 99, 132, 0.5)',   // Rojo
+                        'rgba(255, 159, 64, 0.5)',   // Naranja rojizo
+                        // Agrega más tonos de rojo si es necesario
+                    ];
+
+                    // --- Asignar colores a las barras de meses ---
+                    var backgroundColorsMensual = labelsMensual.map(function (label, index) {
+                        var colorIndex = Math.floor(Math.random() * coloresMeses.length); // Color aleatorio del array
+                        return coloresMeses[colorIndex];
+                    });
+
+                    // --- Asignar colores a las barras de años ---
+                    var backgroundColorsAnual = labelsAnual.map(function (label, index) {
+                        var colorIndex = Math.floor(Math.random() * coloresAnios.length); // Color aleatorio del array
+                        return coloresAnios[colorIndex];
+                    });
+
+                    // --- Crear la gráfica ---
+                    var ctx = document.getElementById('gananciasChart').getContext('2d');
+                    var gananciasChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: labelsMeses,
+                            labels: labelsMensual, // Usar las etiquetas mensuales como base inicialmente
                             datasets: [{
                                 label: 'Ganancias Mensuales',
-                                data: dataMeses,
-                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                data: dataMensual,
+                                backgroundColor: backgroundColorsMensual,
                                 borderColor: 'rgba(54, 162, 235, 1)',
                                 borderWidth: 1
                             }]
@@ -106,31 +182,56 @@
                             }
                         }
                     });
-                });
 
+                    // --- Controlar el tipo de gráfica con los radio buttons ---
+                    var radioMensual = document.getElementById('mostrarMensual');
+                    var radioAnual = document.getElementById('mostrarAnual');
+
+                    radioMensual.addEventListener('change', function () {
+                        if (this.checked) {
+                            gananciasChart.data.labels = labelsMensual;
+                            gananciasChart.data.datasets[0].label = 'Ganancias Mensuales';
+                            gananciasChart.data.datasets[0].data = dataMensual;
+                            gananciasChart.data.datasets[0].backgroundColor = backgroundColorsMensual;
+                            gananciasChart.data.datasets[0].borderColor = 'rgba(54, 162, 235, 1)';
+                            gananciasChart.update();
+                        }
+                    });
+
+                    radioAnual.addEventListener('change', function () {
+                        if (this.checked) {
+                            gananciasChart.data.labels = labelsAnual;
+                            gananciasChart.data.datasets[0].label = 'Ganancias Anuales';
+                            gananciasChart.data.datasets[0].data = dataAnual;
+                            gananciasChart.data.datasets[0].backgroundColor = backgroundColorsAnual;
+                            gananciasChart.data.datasets[0].borderColor = 'rgba(255, 99, 132, 1)';
+                            gananciasChart.update();
+                        }
+                    });
+                });
             </script>
         }
-    </div>
 
-    <div class="modal fade" id="modalCambiarImagen" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar Imagen de Perfil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form asp-controller="Usuario" asp-action="CambiarImagenPerfil" method="post" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="nuevaImagen" class="form-label">Seleccionar nueva imagen:</label>
-                            <input type="file" id="nuevaImagen" name="nuevaImagen" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Actualizar Imagen</button>
-                    </form>
+        <div class="modal fade" id="modalCambiarImagen" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar Imagen de Perfil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form asp-controller="Usuario" asp-action="CambiarImagenPerfil" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="nuevaImagen" class="form-label">Seleccionar nueva imagen:</label>
+                                <input type="file" id="nuevaImagen" name="nuevaImagen" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Actualizar Imagen</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </body>
 }
 else
 {

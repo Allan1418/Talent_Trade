@@ -1,33 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿<body id="cuerpo">
 
-}
-@model dynamic
-
-<body id="cuerpo">
     <div id="barraLateral" class="sidebar container-fluid">
         <h2>Suscripciones</h2>
-        <ul class="pt-2">
+        <dl class="suscripciones">
             @foreach (var sus in Model.Suscripciones)
             {
                 <a href="@Url.Action("Index", "Creador", new { username = sus.UserName })">
-                <li class="pt-4">
-
-                        @if (sus.ImagePerfil != null)
-                        {
-                        <img src="@Url.Action("File", "Home", new { id = sus.ImagePerfil })" style="width: 40px; height: 30px;" />
-                        }
-                        else
-                        {
-                        <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 40px; height: 30px;">
-                        }
-
-
-                    <p class="profile-name">@sus.UserName</p>
-                </li>
+                    <div class="perfil">
+                        <div class="imagen-perfil">
+                            @if (sus.ImagePerfil != null)
+                            {
+                                <img src="@Url.Action("File", "Home", new { id = sus.ImagePerfil })" alt="Imagen de Perfil de @sus.UserName" />
+                            }
+                            else
+                            {
+                                <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" />
+                            }
+                        </div>
+                        <dt class="nombre-perfil mt-3">@sus.UserName</dt>
+                    </div>
                 </a>
+                <hr class="separador">
             }
-        </ul>
+        </dl>
     </div>
 
     <div id="intro">
@@ -39,39 +34,59 @@
     <div id="intro" class="image-container">
         <img id="index" src="~/img/menu.png" alt="index" />
     </div>
-    
-    <div id="intro2">
+
+    <div id="intro2" class="pb-5 ">
         <h1>¡Aquí te mostramos un poco sobre nuestras estrellas!</h1>
-        <h2>Talent Trade está diseñado para cualquier persona con una audiencia establecida o emergente</h2>
-        <h2>para todos aquellos que producen contenido atractivo de manera regular.</h2>
+        <h3>Talent Trade está diseñado para cualquier persona con una audiencia establecida o emergente</h3>
+        <h3>para todos aquellos que producen contenido atractivo de manera regular.</h3>
     </div>
 
-    <div id="carrusel" class="container-fluid">
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="arrowL" onclick="navigate(-1)">&#9664;</div>
-            <div class="profiles">
-                @foreach (var creador in Model.Creadores)
-                {
-
+    <div class="mt-5 swiper">
+        <div class="swiper-wrapper">
+            @foreach (var creador in Model.Creadores)
+            {
+                <div class="swiper-slide">
                     <a href="@Url.Action("Index", "Creador", new { username = creador.UserName })">
-                        <div class="profile">
-                            <div class="circle">
+                        <div class="perfil">
+                            <div class="imagen-perfil">
                                 @if (creador.ImagePerfil != null)
                                 {
-                                    <img src="@Url.Action("File", "Home", new { id = creador.ImagePerfil })" alt="Imagen de Perfil" />
-                                }else
-                                {
-                                    <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+                                    <img src="@Url.Action("File", "Home", new { id = creador.ImagePerfil })" alt="Imagen de Perfil de @creador.UserName" />
                                 }
-                                
+                                else
+                                {
+                                    <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" />
+                                }
                             </div>
-                            <div class="profile-name">@creador.UserName</div>
+                            <dt class="nombre-perfil">@creador.UserName</dt>
                         </div>
                     </a>
-                }
-                
-            </div>
-            <div class="arrowR" onclick="navigate(1)">&#9654;</div>
+                </div>
+            }
         </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
     </div>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+
+        // Inicializar Swiper.js
+        var swiper = new Swiper(".swiper", {
+            slidesPerView: 3, // Número de diapositivas visibles a la vez
+            spaceBetween: 30, // Espacio entre diapositivas
+            // Opciones de navegación
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            // Opciones de paginación
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+    </script>
 </body>

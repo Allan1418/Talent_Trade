@@ -1,5 +1,5 @@
 /* Estilos generales */
-body {
+#cuerpo {
     background-color: #19191A;
     color: white;
     font-family: 'Roboto', sans-serif; /* Ejemplo de tipografía */
@@ -23,7 +23,7 @@ footer {
     width: 100%;
     overflow-y: auto;
     position: fixed;
-    z-index: 1;
+    z-index: 100; /* A high z-index value */
     font-size: 20px;
 }
 
@@ -52,11 +52,58 @@ footer {
 
 .sidebar {
     width: 250px;
-    background-color: #1A1E23;
+    background-color: #222; /* Color de fondo más claro */
     color: white;
-    padding: 15px;
+    padding: 20px;
     position: fixed;
     height: 100%;
+}
+
+#carrusel {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    position: relative;
+}
+
+.profiles {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 30px;
+    width: fit-content;
+}
+
+.profile {
+    min-width: 250px;
+    flex: 0 0 calc(25% - 30px);
+}
+
+.imagen-perfil img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.nombre-perfil {
+    font-weight: bold;
+}
+
+.separador {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0;
+}
+
+.perfil:hover {
+    background-color: #f0f0f0; /* Cambia el color de fondo al pasar el ratón */
+}
+
+.suscripciones {
+    margin: 50px 0px 50px 0px;
+    display: flex;
+    flex-direction: column;
 }
 
 .content {
@@ -75,6 +122,7 @@ footer {
         margin-left: 280px;
     }
 
+
 /* Estilos para el index */
 #index {
     width: 40%;
@@ -82,7 +130,34 @@ footer {
     margin: 0px 0px 12% 52%;
 }
 
+.swiper {
+    width: 50%; /* Ajusta el ancho de la imagen */
+    height: 250px; /* Ajusta el alto de la imagen */
+}
+
 /* Estilos para el carrusel de perfiles */
+.swiper-slide .perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: transparent; /* Fondo transparente para el contenedor */
+}
+
+.swiper-slide .imagen-perfil {
+  width: 150px;  /* Ajusta el ancho de la imagen */
+  height: 150px; /* Ajusta el alto de la imagen */
+  overflow: hidden;  /* Recorta la imagen si es necesario */
+  border-radius: 50%; /* Haz la imagen circular (opcional) */
+  margin-bottom: 10px; /* Espacio entre la imagen y el nombre */
+}
+
+.swiper-slide .imagen-perfil img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta la imagen al contenedor */
+}
+
 #intro2 {
     padding: 0px 0px 20px 25%;
 }
@@ -92,18 +167,16 @@ footer {
     }
 
 #carrusel {
-    padding: 6% 0px 14% 12%;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    overflow-x: hidden; /* Ocultar el scroll horizontal */
+    position: relative;
 }
 
-.profiles {
-    display: flex;
-    gap: 80px;
-    overflow-x: auto;
-}
 
-.profile-name {
-    display: flex;
-    margin: 20px 0px 5% 50px;
+.suscripciones a:hover .perfil {
+    background-color: #19191A;
 }
 
 .container {
@@ -154,6 +227,36 @@ footer {
         z-index: -2;
     }
 
+/* Estilos para la navegación */
+
+.navigation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 1;
+    pointer-events: none;
+}
+
+    .navigation button {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 50%;
+        font-size: 20px;
+        pointer-events: auto;
+    }
+
+        .navigation button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+        }
+
+
 /* Estilos para SignUp */
 #intro3 {
     padding: 6% 0px 28px 9%;
@@ -172,17 +275,30 @@ footer {
 }
 
 /* Estilos para login */
+
 #intro4 {
     padding: 6% 0px 28px 9%;
+    background-color: #19191A;
+    color: #fff; /* Texto blanco por defecto */
 }
 
 #formulario2 {
-    background-color: #1A1E23;
+    background-color: #1A1E23; /* Fondo oscuro para el formulario */
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 0px 0px 9px 160px;
     margin: 0px 150px 3% 160px;
+    color: #fff; /* Texto blanco dentro del formulario */
 }
+
+    #formulario2 input,
+    #formulario2 label {
+        color: #fff; /* Texto blanco para inputs y labels */
+    }
+
+    #formulario2 input {
+        background-color: #212529; /* Fondo oscuro para los inputs */
+    }
 
 #login {
     width: 440%;
@@ -267,13 +383,18 @@ footer {
     justify-content: normal;
 }
 
+.dropdown-menu-fixed {
+    max-height: 200px; /* Adjust as needed */
+    overflow-y: auto; 
+}
+
 /*Estilos membresias carrusel*/
 
 .carousel-container {
-    width: 60%; /* Ajusta el ancho del carrusel */
-    margin: 30px auto; /* Centra el carrusel con margen superior e inferior */
+    width: 60%;
+    margin: 30px auto;
     overflow: hidden;
-    position: relative;
+    position: relative; /* Agrega esta línea */
 }
 
 
@@ -353,14 +474,16 @@ footer {
     word-wrap: break-word;
     white-space: normal;
 }
+
 .navigation {
     position: absolute;
-    top: 50%;
+    top: calc(50% + 80px);  /* Ajusta el valor 80px según sea necesario */
     left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
-    z-index: 1; /* Ensure buttons are on top */
+    z-index: 1;
+    pointer-events: none; 
 }
 
     .navigation button {
@@ -378,24 +501,6 @@ footer {
             color: black;
         }
 
-.dots {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.dot {
-    width: 10px;
-    height: 10px;
-    background-color: #bbb;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-    .dot.active {
-        background-color: #333;
-    }
 
 /* Estilos para los mensajes */
 .mensaje-suscripcion {
@@ -464,6 +569,30 @@ footer {
 
 /* Estilos para publicaciones */
 
+/* Estilos para los márgenes */
+.details-section {
+    padding-left: 20px;
+}
+
+.titulo-publicacion {
+    margin-bottom: 10px;
+}
+
+.fecha-publicacion {
+    margin-bottom: 15px;
+}
+
+/* Estilo para el color del texto */
+.contenedor-texto {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+    max-height: 80px; /* Ajusta la altura máxima según tu preferencia */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Número máximo de líneas visibles */
+    -webkit-box-orient: vertical;
+}
+
 .publicacion {
     /* Ajusta el ancho de las columnas */
     width: 100%;
@@ -531,15 +660,24 @@ footer {
 /* Estilos para comentarios */
 
 .comment-container {
-    margin: 0 auto;
+    text-align: left;
+    margin: 0 auto; /* Elimina el margen automático para evitar el centrado */
     width: 80%;
     border: 1px solid #eee;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
     padding: 10px;
     background-color: #212529;
-    color: #fff; /* Texto blanco */
+    color: #fff;
 }
+    .comment-container p {
+        margin: 20px 20px 20px 0px; /* Agrega el margen al texto del comentario */
+        text-align: left;
+    }
+
+    .comment-container .reply p { 
+        margin: 20px 20px 20px 0px;
+        text-align: left;
+    }
 
 .comment-item {
     background-color: #212529;
@@ -651,7 +789,6 @@ footer {
 }
 
 /* Media query para responsivo */
-
 @media (max-width: 768px) {
     .product-card {
         margin: 0 auto;
@@ -663,5 +800,19 @@ footer {
 
     .comentario-textarea {
         width: 90%; /* Ancho mayor en pantallas pequeñas */
+    }
+
+    .profile {
+        min-width: calc(50% - 20px);
+        flex: 0 0 calc(50% - 20px);
+    }
+}
+}
+
+/* Para pantallas aún más pequeñas */
+@media (max-width: 480px) {
+    .profile {
+        min-width: 100%;
+        flex: 0 0 100%;
     }
 }

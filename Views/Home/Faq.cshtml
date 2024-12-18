@@ -1,0 +1,123 @@
+﻿
+<style>
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .faq-container {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+    }
+
+    .faq-question {
+        cursor: pointer;
+        position: relative;
+        padding: 10px 0;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .faq-question::after {
+            content: "\002B";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active::after {
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
+
+        .faq-answer p {
+            margin-top: 10px;
+        }
+</style>
+<body id="cuerpo">
+
+    <h1>Preguntas Frecuentes</h1>
+
+    <div class="faq-container">
+
+        <div class="faq-question">
+            <h2>¿Qué es Talent Trade?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Talent Trade es una plataforma que permite a los creadores de contenido conectar con sus fans y obtener ingresos por su trabajo. A través de suscripciones mensuales, los fans pueden acceder a contenido exclusivo, beneficios especiales y la oportunidad de interactuar directamente con sus creadores favoritos. </p>
+        </div>
+
+        <div class="faq-question">
+            <h2>¿Cómo funciona Talent Trade?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Los creadores establecen diferentes niveles de suscripción con beneficios exclusivos para cada uno. Los fans eligen el nivel que mejor se adapte a sus preferencias y presupuesto, y a cambio reciben acceso al contenido y beneficios que ofrece el creador en ese nivel. </p>
+        </div>
+
+        <div class="faq-question">
+            <h2>¿Qué tipo de contenido puedo encontrar en Talent Trade?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Encontrarás una gran variedad de contenido, desde videos, música, podcasts y escritos hasta arte digital, tutoriales, cursos online y mucho más. ¡Explora la plataforma y descubre a tus nuevos creadores favoritos!</p>
+        </div>
+
+        <div class="faq-question">
+            <h2>¿Cómo puedo convertirme en creador en Talent Trade?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Crear una cuenta en Talent Trade es muy sencillo. Solo necesitas registrarte, configurar tu perfil y establecer tus niveles de suscripción con los beneficios que ofrecerás a tus fans. ¡Empieza a compartir tu pasión y construir tu comunidad!</p>
+        </div>
+
+        <div class="faq-question">
+            <h2>¿Es seguro usar Talent Trade?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Nos tomamos muy en serio la seguridad de nuestros usuarios. Talent Trade utiliza tecnología de encriptación para proteger tu información personal y financiera. Además, contamos con un equipo de soporte dedicado a resolver cualquier duda o problema que puedas tener.</p>
+        </div>
+
+        <div class="faq-question">
+            <h2>¿Cómo puedo contactar con el equipo de Talent Trade?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Si tienes alguna pregunta o necesitas ayuda, puedes contactarnos a través de nuestro formulario de contacto o enviando un correo electrónico a <a href="mailto:soporte@talenttrade.com">soporte@talenttrade.com</a>.</p>
+        </div>
+
+        <div class="faq-question">
+            <h2>¿Talent Trade ofrece alguna garantía?</h2>
+        </div>
+        <div class="faq-answer">
+            <p>Si no estás satisfecho con tu experiencia en Talent Trade, puedes cancelar tu suscripción en cualquier momento. Nos esforzamos por ofrecer un servicio de calidad y queremos que nuestros usuarios estén contentos.</p>
+        </div>
+
+    </div>
+
+    <script>
+        const questions = document.querySelectorAll('.faq-question');
+
+        questions.forEach(question => {
+          question.addEventListener('click', () => {
+            question.classList.toggle('active');
+            const answer = question.nextElementSibling;
+            if (question.classList.contains('active')) {
+              answer.style.maxHeight = answer.scrollHeight + 'px';
+            } else {
+              answer.style.maxHeight = 0;
+            }
+          });
+        });
+    </script>
+
+</body>
+</html>
