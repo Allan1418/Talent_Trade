@@ -18,11 +18,14 @@ namespace Talent_Trade.Controllers
 
         private readonly MesGananciaService _mesGananciaService;
 
+        private readonly CreadorServices _creadorServices;
+
         public UsuarioController(UserManager<Usuario> userManager, 
             GridFSService gridFSService, 
             FacturaServices facturaServices, 
             GananciaService gananciaService,
-            MesGananciaService mesGananciaService
+            MesGananciaService mesGananciaService,
+            CreadorServices creadorServices
             )
         {
             _userManager = userManager;
@@ -30,6 +33,7 @@ namespace Talent_Trade.Controllers
             _facturaServices = facturaServices;
             _gananciaService = gananciaService;
             _mesGananciaService = mesGananciaService;
+            _creadorServices = creadorServices;
 
         }
 
@@ -95,6 +99,19 @@ namespace Talent_Trade.Controllers
                     usuario.ImagePerfil = nuevoIdImagen;
 
                     var result = await _userManager.UpdateAsync(usuario);
+
+
+                    if (await _userManager.IsInRoleAsync(usuario, "creador"))
+                    {
+                        var creador = _creadorServices.Get(usuario.IdDeCreador);
+                        if (creador != null)
+                        {
+                            creador.ImagePerfil = nuevoIdImagen;
+                            _creadorServices.Update(creador.Id, creador);
+                        }
+
+                    }
+
 
                     return RedirectToAction("Index", "Usuario");
 

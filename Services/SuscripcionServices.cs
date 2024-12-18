@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using System.Collections.Generic;
 using Talent_Trade.Models;
 
 namespace Talent_Trade.Services
@@ -61,6 +62,34 @@ namespace Talent_Trade.Services
             return await _suscripciones.Find(s => s.IdUser == usuario.Id.ToString()).ToListAsync();
         }
 
+        public async Task<List<Creador>> GetCreadoresSuscritosAsync()
+        {
+            var usuario = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+
+            if (usuario == null)
+            {
+                return new List<Creador>();
+            }
+
+            var creadores = await _suscripciones.Aggregate()
+                .Match(s => s.IdUser == usuario.Id.ToString())
+                .Lookup("creadores", "idCreador", "_id", "creadores")
+                .Unwind("creadores")
+                .ReplaceRoot(x => x["creadores"])
+                .ToListAsync();
+
+            //Console.WriteLine(creadores.ToJson());
+
+            List<Creador> retorno = creadores.Select(c => BsonSerializer.Deserialize<Creador>(c.ToBsonDocument())).ToList();
+            //foreach (var item in retorno)
+            //{
+            //    Console.WriteLine(item.ToJson());
+            //    Console.WriteLine("---------");
+            //}
+
+            return retorno;
+
+        }
         public async Task<NivelSuscripcion?> GetNivelSuscripcionUsuarioAsync(string idCreador)
         {
             var usuario = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);

@@ -2,26 +2,31 @@
     ViewData["Title"] = "Home Page";
 
 }
+@model dynamic
+
 <body id="cuerpo">
     <div id="barraLateral" class="sidebar container-fluid">
         <h2>Suscripciones</h2>
         <ul class="pt-2">
-            <li class="pt-4">
-                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
-                <a href="link del perfil" class="ps-2"> materias</a>
-            </li>
-            <li class="pt-4">
-                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
-                <a href="link del perfil" class="ps-2"> materias</a>
-            </li>
-            <li class="pt-4">
-                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
-                <a href="link del perfil" class="ps-2"> materias</a>
-            </li>
-            <li class="pt-4">
-                <img src="imagen del perfil" style="width: 40px; height: 30px;" />
-                <a href="link del perfil" class="ps-2"> materias</a>
-            </li>
+            @foreach (var sus in Model.Suscripciones)
+            {
+                <a href="@Url.Action("Index", "Creador", new { username = sus.UserName })">
+                <li class="pt-4">
+
+                        @if (sus.ImagePerfil != null)
+                        {
+                        <img src="@Url.Action("File", "Home", new { id = sus.ImagePerfil })" style="width: 40px; height: 30px;" />
+                        }
+                        else
+                        {
+                        <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 40px; height: 30px;">
+                        }
+
+
+                    <p class="profile-name">@sus.UserName</p>
+                </li>
+                </a>
+            }
         </ul>
     </div>
 
@@ -45,30 +50,26 @@
         <div class="container d-flex justify-content-center align-items-center">
             <div class="arrowL" onclick="navigate(-1)">&#9664;</div>
             <div class="profiles">
-                <div class="profile">
-                    <div class="circle">
-                        <img src="https://www.egames.news/__export/1721813598210/sites/debate/img/2024/07/24/rias_gremory_de_high_school_dxd.jpg" alt="User   1" />
-                    </div>
-                    <div class="profile-name">User   1</div>
-                </div>
-                <div class="profile">
-                    <div class="circle">
-                        <img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/33deeac3-6797-4990-a40d-aa19089840ba/original=true,quality=90/00135.jpeg" alt="User   2" />
-                    </div>
-                    <div class="profile-name">User   2</div>
-                </div>
-                <div class="profile">
-                    <div class="circle">
-                        <img src="https://example.com/image3.jpg" alt="User   3" />
-                    </div>
-                    <div class="profile-name">User   3</div>
-                </div>
-                <div class="profile">
-                    <div class="circle">
-                        <img src="https://example.com/image4.jpg" alt="User   4" />
-                    </div>
-                    <div class="profile-name">User   4</div>
-                </div>
+                @foreach (var creador in Model.Creadores)
+                {
+
+                    <a href="@Url.Action("Index", "Creador", new { username = creador.UserName })">
+                        <div class="profile">
+                            <div class="circle">
+                                @if (creador.ImagePerfil != null)
+                                {
+                                    <img src="@Url.Action("File", "Home", new { id = creador.ImagePerfil })" alt="Imagen de Perfil" />
+                                }else
+                                {
+                                    <img src="~/img/No imagen.jpg" alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+                                }
+                                
+                            </div>
+                            <div class="profile-name">@creador.UserName</div>
+                        </div>
+                    </a>
+                }
+                
             </div>
             <div class="arrowR" onclick="navigate(1)">&#9654;</div>
         </div>

@@ -45,9 +45,20 @@ namespace Talent_Trade.Controllers
             _gananciaService = gananciaService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var creadores = _creadorServices.GetAll();
+            List<Creador> suscripciones = await _suscripcionServices.GetCreadoresSuscritosAsync();
+
+            _suscripcionServices.GetCreadoresSuscritosAsync();
+
+            var modelo = new
+            {
+                Creadores = creadores,
+                Suscripciones = suscripciones
+            };
+
+            return View(modelo);
         }
 
         public IActionResult Privacy()
