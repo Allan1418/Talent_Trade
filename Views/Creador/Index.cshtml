@@ -16,7 +16,9 @@
                 @if (Model.ImagenPerfil != null)
                 {
                     <img src="@Url.Action("File", "Home", new { id = Model.ImagenPerfil })"
-                         alt="Imagen de Perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px;">
+                         alt="Imagen de Perfil"
+                         class="img-thumbnail rounded-circle mb-3"
+                         style="width: 150px; height: 150px;">
                 }
 
                 @if (Model.EsPropietario)
@@ -26,8 +28,8 @@
                                 data-bs-toggle="modal" data-bs-target="#modal">
                             Modificar Datos
                         </button>
-                        <script src="~/js/site.js"></script>
                     </div>
+                    <script src="~/js/site.js"></script>
                 }
                 <h1 class="pt-2">@Model.Creador.nombrePagina</h1>
                 <p id="shortDes" class="fs-5">@Model.Creador.ShortDescripcion</p>
@@ -45,262 +47,384 @@
             <div id="membresias" class="membresias-container pt-5">
                 @if (Model.Niveles != null)
                 {
-                    <div class="membresias-card-container" id="cardContainer">
-                        @foreach (var nivel in Model.Niveles)
-                        {
-                            <div class="membresias-card">
-                                <h3 class="membresias-card-title">
-                                    @nivel.Nombre
-                                </h3>
-                                <div class="membresias-price">Precio: $@nivel.Precio</div>
-                                @if (!Model.EsPropietario)
-                                {
-                                    <form asp-action="Suscribirse" asp-controller="Creador" asp-route-idNivelSuscripcion="@nivel.Id" method="post">
-                                        <button type="submit" class="membresias-button-suscribe mb-3">Suscribirse</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <button type="button" class="membresias-button-edit" data-bs-toggle="modal" data-bs-target="#editarModal-@nivel.Id">
-                                        Editar Membresía
-                                    </button>
-                                    <form asp-action="EliminarNivelSuscripcion" asp-controller="Creador" method="post" class="membresias-form-delete">
-                                        <input type="hidden" name="id" value="@nivel.Id" />
-                                        <button type="submit" class="membresias-button-delete mt-3 mb-3">Eliminar</button>
-                                    </form>
-                                }
-                                <p class="membresias-card-text">@nivel.Descripcion</p>
-                            </div>
-                        }
-                    </div>
-                }
-                <div class="navigation pb-5 pt-4">
-                    <button id="prev">&#8249;</button>
-                    <button id="next">&#8250;</button>
-                </div>
-                <div class="dots pb-5" id="dots"></div>
-            </div>
-            <script src="~/js/dotsMembresia.js"></script>
-        </div>
-
-        <!-- Pestañas -->
-        <div class="nav nav-tabs container" id="myTab" role="tablist">
-            <button class="nav-link active" id="publicaciones-tab" data-bs-toggle="tab" data-bs-target="#publicaciones"
-                    type="button" role="tab" aria-controls="publicaciones" aria-selected="true">
-                Publicaciones
-            </button>
-            <button class="nav-link" id="acercaDe-tab" data-bs-toggle="tab" data-bs-target="#acercaDe"
-                    type="button" role="tab" aria-controls="acercaDe" aria-selected="false">
-                Acerca de
-            </button>
-        </div>
-
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
-                <h2 id="publiTitulo" class="mb-5 mt-5">Contenido Exclusivo</h2>
-                @if (Model.EsPropietario)
-                {
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearPublicacion">
-                            Crear publicación
-                        </button>
-                    </div>
-                }
-                @if (Model.Publicaciones != null)
-                {
-                    <div class="container">
-                        <div id="cuerpoContenido" class="row">
-                            @foreach (var Publicacion in Model.Publicaciones)
+                    <div class="carousel-container">
+                        <div class="membresias-card-container">
+                            @foreach (var nivel in Model.Niveles)
                             {
-                                <div class="col-md-12 publicacion" style="display: none;">
-                                    <div style="background-color:#1A1E23" class="product-card">
-                                        @if (Publicacion.Adjuntos != null && Publicacion.Adjuntos.Count > 0)
-                                        {
-                                            <img src="@Url.Action("File", "Home", new { id = Publicacion.Adjuntos[0] })" class="img-fluid rounded imagen-publicacion" alt="Producto">
-                                        }
-                                        else
-                                        {
-                                            <img src="~/img/No imagen.jpg" class="img-fluid rounded imagen-publicacion" alt="Producto">
-                                        }
-                                        <h2>@Publicacion.Titulo</h2>
-                                        <p>@Publicacion.Contenido</p>
-                                        <p>@Publicacion.Fecha</p>
-                                        <p>
-                                            <a href="@Url.Action("Index", "Publicacion", new { id = Publicacion.Id })" class="btn btn-primary">Ver Publicación</a>
-                                        </p>
+                                <div class="membresias-card">
+                                    @if (!Model.EsPropietario)
+                                    {
+                                        <div class="mensaje-suscripcion">
+                                            @if (Model.SuscripcionActual != null && nivel.Id == Model.SuscripcionActual.Id)
+                                            {
+                                                <div class="alert alert-success text-center p-2" role="alert">
+                                                    Ya tienes esta suscripción
+                                                </div>
+                                            }
+                                            else if (Model.SuscripcionActual != null && nivel.Precio < Model.SuscripcionActual.Precio)
+                                            {
+                                                <div class="alert alert-info text-center p-2" role="alert">
+                                                    Tienes una membresía mayor
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+
+                                    <div class="card h-100 shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h3 class="card-title">@nivel.Nombre</h3>
+                                            <div class="card-text">
+                                                <p>Precio: $@nivel.Precio</p>
+                                            </div>
+                                            <div class="d-grid gap-2 pt-4">
+                                                @if (!Model.EsPropietario)
+                                                {
+                                                    if (Model.SuscripcionActual == null || nivel.Precio > Model.SuscripcionActual.Precio)
+                                                    {
+                                                        <form asp-action="Suscribirse" asp-controller="Creador" asp-route-idNivelSuscripcion="@nivel.Id" method="post">
+                                                            <button type="submit" class="btn btn-primary">Suscribirse</button>
+                                                        </form>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#editarModal-@nivel.Id">Editar</button>
+                                                    <form asp-action="EliminarNivelSuscripcion" asp-controller="Creador" method="post">
+                                                        <input type="hidden" name="id" value="@nivel.Id" />
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                    </form>
+                                                }
+                                            </div>
+                                            <div class="card-text mt-3 mb-3">
+                                                <p>@nivel.Descripcion</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             }
                         </div>
+                        <div class="navigation">
+                            <button id="prevBtn">&lt;</button>
+                            <button id="nextBtn">&gt;</button>
+                        </div>
+                        <div class="dots">
+                        </div>
                     </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const cardContainer = document.querySelector('.membresias-card-container');
+                            const prevBtn = document.getElementById('prevBtn');
+                            const nextBtn = document.getElementById('nextBtn');
+                            const dotsContainer = document.querySelector('.dots');
+
+                            let cardWidth = document.querySelector('.membresias-card').offsetWidth;
+                            let currentPosition = 0;
+                            let maxPosition = cardContainer.scrollWidth - cardContainer.offsetWidth;
+
+                            // Create dots based on the number of cards
+                            const cards = document.querySelectorAll('.membresias-card');
+                            for (let i = 0; i < cards.length; i++) {
+                                const dot = document.createElement('div');
+                                dot.classList.add('dot');
+                                dot.addEventListener('click', () => {
+                                    currentPosition = i * cardWidth;
+                                    updateCarousel();
+                                });
+                                dotsContainer.appendChild(dot);
+                            }
+                            updateDots();
+
+                            // Update the carousel position and dots
+                            function updateCarousel() {
+                                cardContainer.style.transform = `translateX(-${currentPosition}px)`;
+                                updateDots();
+                            }
+
+                            // Update active dot
+                            function updateDots() {
+                                const dots = document.querySelectorAll('.dot');
+                                dots.forEach((dot, index) => {
+                                    dot.classList.toggle('active', index * cardWidth === currentPosition);
+                                });
+                            }
+
+                            // Event listeners for navigation buttons
+                            prevBtn.addEventListener('click', () => {
+                                currentPosition -= cardWidth;
+                                if (currentPosition < 0) {
+                                    currentPosition = 0;
+                                }
+                                updateCarousel();
+                            });
+
+                            nextBtn.addEventListener('click', () => {
+                                currentPosition += cardWidth;
+                                if (currentPosition > maxPosition) {
+                                    currentPosition = maxPosition;
+                                }
+                                updateCarousel();
+                            });
+
+                            // Update cardWidth and maxPosition on window resize
+                            window.addEventListener('resize', () => {
+                                cardWidth = document.querySelector('.membresias-card').offsetWidth;
+                                maxPosition = cardContainer.scrollWidth - cardContainer.offsetWidth;
+                                updateCarousel();
+                            });
+                        });
+                    </script>
                 }
+                <div class="dots pb-5" id="dots"></div>
+            </div>
+            <script src="~/js/dotsMembresia.js"></script>
+
+            <div class="nav nav-tabs container" id="myTab" role="tablist">
+                <button class="nav-link active" id="publicaciones-tab" data-bs-toggle="tab" data-bs-target="#publicaciones"
+                        type="button" role="tab" aria-controls="publicaciones" aria-selected="true">
+                    Publicaciones
+                </button>
+                <button class="nav-link" id="acercaDe-tab" data-bs-toggle="tab" data-bs-target="#acercaDe"
+                        type="button" role="tab" aria-controls="acercaDe" aria-selected="false">
+                    Acerca de
+                </button>
             </div>
 
-            <div class="tab-pane fade" id="acercaDe" role="tabpanel" aria-labelledby="acercaDe-tab">
-                <div id="publiTitulo" class="mb-5">
-                    <div>
-                        <h1>Acerca de</h1>
-                        <p id="acercaDe" class="fs-5">
-                            @(string.IsNullOrEmpty(Model.Creador.AcercaDe) ? "Información no disponible." : Model.Creador.AcercaDe)
-                        </p>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab">
+                    <h2 class="d-flex justify-content-center pt-5 pb-5">Contenido Exclusivo</h2>
+                    @if (Model.EsPropietario)
+                    {
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearPublicacion">
+                                Crear publicación
+                            </button>
+                        </div>
+                    }
+
+                    @if (Model.Publicaciones != null)
+                    {
+                        <div class="container">
+                            <div id="cuerpoContenido" class="row">
+                                @foreach (var publicacion in Model.Publicaciones)
+                                {
+                                    <div class="col-md-12 publicacion">
+                                        <div style="background-color:#1A1E23" class="product-card">
+                                            @if (publicacion.Adjuntos != null && publicacion.Adjuntos.Count > 0)
+                                            {
+                                                <img src="@Url.Action("File", "Home", new { id = publicacion.Adjuntos[0] })" class="img-fluid rounded imagen-publicacion" alt="Producto">
+                                            }
+                                            else
+                                            {
+                                                <img src="~/img/No imagen.jpg" class="img-fluid rounded imagen-publicacion" alt="Producto">
+                                            }
+                                            <h2>@publicacion.Titulo</h2>
+                                            <p>@publicacion.Contenido</p>
+                                            <p>@publicacion.Fecha</p>
+                                            <p>
+                                                <a href="@Url.Action("Index", "Publicacion", new { id = publicacion.Id })" class="btn btn-primary">Ver Publicación</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div id="contenedorBoton" data-pagina="1" class="d-flex justify-content-center pt-5 pb-5">
+                    <button id="btnVerMas" class="btn btn-primary">Ver más publicaciones</button>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                                        $(document).ready(function () {
+                                            <span class="math-inline">\("\#btnVerMas"\)\.click\(function \(\) \{
+                    var paginaActual \= parseInt\(</span>("#contenedorBoton").attr("data-pagina"));
+                                                var siguientePagina = paginaActual + 1;
+                                                var username = "@Model.Creador.UserName";
+
+                                                $.ajax({
+                                                    url: "/Creador/" + username + "?pagina=" + siguientePagina,
+                                                    type: "GET",
+                                                    success: function (data) {
+                                                        var nuevasPublicaciones = $(data).find(".publicacion");
+
+                                                        // Aplicar el estilo para ocultar las nuevas publicaciones
+                                                        nuevasPublicaciones.css("display", "none");
+
+                                                        $("#cuerpoContenido").append(nuevasPublicaciones);
+                                                        nuevasPublicaciones.fadeIn();
+                                                        $("#contenedorBoton").attr("data-pagina", siguientePagina);
+                                                        if (nuevasPublicaciones.length === 0) {
+                                                            $("#btnVerMas").hide();
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        console.error("Error al cargar más publicaciones.");
+                                                    }
+                                                });
+                                            });
+                                        });
+                </script>
+
+                <div class="tab-pane fade" id="acercaDe" role="tabpanel" aria-labelledby="acercaDe-tab">
+                    <div class="mb-5">
+                        <div>
+                            <h1>Acerca de</h1>
+                            <p id="acercaDe" class="fs-5">
+                                @(string.IsNullOrEmpty(Model.Creador.AcercaDe) ? "Información no disponible." : Model.Creador.AcercaDe)
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="d-flex justify-content-center">
-            <button id="verMasBtn" class="btn btn-secondary mt-3">Ver más</button>
-            <script src="~/js/VerMas.js"></script>
-        </div>
 
 
-
-        <div id="modal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modificar Datos</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="modifyDataForm" asp-controller="Creador" asp-action="EditarCreador" method="post" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="nombrePagina" class="form-label">Nombre de la Página</label>
-                                <textarea type="text" class="form-control" id="nombrePagina" name="nombrePagina" required>@Model.Creador.nombrePagina</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="shortDescripcion" class="form-label">Descripción Corta</label>
-                                <textarea class="form-control" id="shortDescripcion" name="shortDescripcion" rows="3">@Model.Creador.ShortDescripcion</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="acercaDe" class="form-label">Acerca De</label>
-                                <textarea class="form-control" id="AcercaDe" name="acercaDe" rows="3">@Model.Creador.AcercaDe</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nuevaImagen" class="form-label">Subir Imagen</label>
-                                <input type="file" class="form-control" id="nuevaImagen" name="nuevaImagen">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" form="modifyDataForm" class="btn btn-primary">Guardar Cambios</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div id="crearPublicacion" class="modal fade" tabindex="-1" aria-labelledby="modalPublicacion" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalPublicacionLabel">Crear Publicación</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="crearPublicacionForm" asp-controller="Creador" asp-action="CrearPublicacion" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="Titulo" class="control-label">Titulo</label>
-                                <input name="titulo" id="Titulo" class="form-control" required />
-                                <span for="titulo" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="Contenido" class="control-label">Contenido</label>
-                                <textarea name="contenido" id="Contenido" class="form-control" rows="4" required></textarea>
-                                <span for="contenido" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="Archivos" class="control-label">Archivos</label>
-                                <input type="file" name="archivos" id="Archivos" class="form-control-file" multiple />
-                                <span for="archivos" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="idNivelSuscripcion" class="control-label">Nivel de Suscripción</label>
-                                <select name="idNivelSuscripcion" id="idNivelSuscripcion" class="form-select">
-                                    <option value="">Para todo el publico</option>
-                                    @foreach (var nivel in Model.Niveles)
-                                    {
-                                        <option value="@nivel.Id">@nivel.Nombre</option>
-                                    }
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" form="crearPublicacionForm" class="btn btn-primary">Crear</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="modal fade" id="createMembershipModal" tabindex="-1" aria-labelledby="createMembershipModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createMembershipModalLabel">Crear Nueva Membresía</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form asp-action="CrearNivelSuscripcion" asp-controller="Creador" method="post">
-                            <div class="mb-3">
-                                <label for="nuevoNombre" class="form-label">Nombre</label>
-                                <input type="text" id="nuevoNombre" name="nombre" class="form-control" required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="nuevaDescripcion" class="form-label">Descripción</label>
-                                <textarea id="nuevaDescripcion" name="descripcion" class="form-control" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nuevoPrecio" class="form-label">Precio</label>
-                                <input type="number" id="nuevoPrecio" name="precio" class="form-control" required />
-                            </div>
-                            <button type="submit" class="btn btn-success">Crear Membresía</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <!-- Modales de edición -->
-            @if (Model.Niveles != null)
-            {
-                foreach (var nivel in Model.Niveles)
-                {
-                    <div class="modal fade" id="editarModal-@nivel.Id" tabindex="-1" aria-labelledby="editarModalLabel-@nivel.Id" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editarModalLabel-@nivel.Id">Editar Membresía</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div id="modal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modificar Datos</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="modifyDataForm" asp-controller="Creador" asp-action="EditarCreador" method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="nombrePagina" class="form-label">Nombre de la Página</label>
+                                    <textarea type="text" class="form-control" id="nombrePagina" name="nombrePagina" required>@Model.Creador.nombrePagina</textarea>
                                 </div>
-                                <div class="modal-body">
-                                    <form asp-action="EditarNivelSuscripcion" asp-controller="Creador" method="post">
-                                        <input type="hidden" name="id" value="@nivel.Id" />
-                                        <div class="mb-3">
-                                            <label for="nombre-@nivel.Id" class="form-label">Nombre</label>
-                                            <input type="text" id="nombre-@nivel.Id" name="nombre" class="form-control" value="@nivel.Nombre" required />
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="descripcion-@nivel.Id" class="form-label">Descripción</label>
-                                            <textarea id="descripcion-@nivel.Id" name="descripcion" class="form-control" required>@nivel.Descripcion</textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="precio-@nivel.Id" class="form-label">Precio</label>
-                                            <input type="number" id="precio-@nivel.Id" name="precio" class="form-control" value="@nivel.Precio" required />
-                                        </div>
-                                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
-                                    </form>
+                                <div class="mb-3">
+                                    <label for="shortDescripcion" class="form-label">Descripción Corta</label>
+                                    <textarea class="form-control" id="shortDescripcion" name="shortDescripcion" rows="3">@Model.Creador.ShortDescripcion</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="acercaDe" class="form-label">Acerca De</label>
+                                    <textarea class="form-control" id="AcercaDe" name="acercaDe" rows="3">@Model.Creador.AcercaDe</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nuevaImagen" class="form-label">Subir Imagen</label>
+                                    <input type="file" class="form-control" id="nuevaImagen" name="nuevaImagen">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" form="modifyDataForm" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="crearPublicacion" class="modal fade" tabindex="-1" aria-labelledby="modalPublicacion" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalPublicacionLabel">Crear Publicación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="crearPublicacionForm" asp-controller="Creador" asp-action="CrearPublicacion" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="Titulo" class="control-label">Titulo</label>
+                                    <input name="titulo" id="Titulo" class="form-control" required />
+                                    <span for="titulo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Contenido" class="control-label">Contenido</label>
+                                    <textarea name="contenido" id="Contenido" class="form-control" rows="4" required></textarea>
+                                    <span for="contenido" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Archivos" class="control-label">Archivos</label>
+                                    <input type="file" name="archivos" id="Archivos" class="form-control-file" multiple />
+                                    <span for="archivos" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="idNivelSuscripcion" class="control-label">Nivel de Suscripción</label>
+                                    <select name="idNivelSuscripcion" id="idNivelSuscripcion" class="form-select">
+                                        <option value="">Para todo el publico</option>
+                                        @foreach (var nivel in Model.Niveles)
+                                        {
+                                            <option value="@nivel.Id">@nivel.Nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" form="crearPublicacionForm" class="btn btn-primary">Crear</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="createMembershipModal" tabindex="-1" aria-labelledby="createMembershipModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createMembershipModalLabel">Crear Nueva Membresía</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="CrearNivelSuscripcion" asp-controller="Creador" method="post">
+                                <div class="mb-3">
+                                    <label for="nuevoNombre" class="form-label">Nombre</label>
+                                    <input type="text" id="nuevoNombre" name="nombre" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nuevaDescripcion" class="form-label">Descripción</label>
+                                    <textarea id="nuevaDescripcion" name="descripcion" class="form-control" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nuevoPrecio" class="form-label">Precio</label>
+                                    <input type="number" id="nuevoPrecio" name="precio" class="form-control" required />
+                                </div>
+                                <button type="submit" class="btn btn-success">Crear Membresía</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                @if (Model.Niveles != null)
+                {
+                    foreach (var nivel in Model.Niveles)
+                    {
+                        <div class="modal fade" id="editarModal-@nivel.Id" tabindex="-1" aria-labelledby="editarModalLabel-@nivel.Id" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editarModalLabel-@nivel.Id">Editar Membresía</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form asp-action="EditarNivelSuscripcion" asp-controller="Creador" method="post">
+                                            <input type="hidden" name="id" value="@nivel.Id" />
+                                            <div class="mb-3">
+                                                <label for="nombre-@nivel.Id" class="form-label">Nombre</label>
+                                                <input type="text" id="nombre-@nivel.Id" name="nombre" class="form-control" value="@nivel.Nombre" required />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="descripcion-@nivel.Id" class="form-label">Descripción</label>
+                                                <textarea id="descripcion-@nivel.Id" name="descripcion" class="form-control" required>@nivel.Descripcion</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="precio-@nivel.Id" class="form-label">Precio</label>
+                                                <input type="number" id="precio-@nivel.Id" name="precio" class="form-control" value="@nivel.Precio" required />
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
-            }
+            </div>
         </div>
-
     </body>
 }
 else
@@ -310,5 +434,3 @@ else
         <p>La página que estás buscando no existe.</p>
     </div>
 }
-
-

@@ -9,7 +9,6 @@
         </div>
 
         <div class="row g-4">
-            <!-- Sección de Imagen de Perfil -->
             <div class="col-6">
                 <div style="background-color:#1A1E23" class="card shadow-sm text-center">
                     <div class="card-body">
@@ -30,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- Sección de Información del Usuario -->
             <div class="col-6">
                 <div style="background-color:#1A1E23" class="card shadow-sm">
                     <div style="color: white" class="card-body">
@@ -45,7 +43,8 @@
                                 @foreach (var factura in Model.Facturas)
                                 {
                                     <li class="list-group-item">
-                                        <i class="fas fa-file-invoice-dollar text-success"></i> @factura
+                                        <i class="fas fa-file-invoice-dollar text-success"></i>
+                                        Fecha de pago: @factura.FechaPago  Precio: @factura.Monto
                                     </li>
                                 }
                             </ul>
@@ -58,20 +57,61 @@
                 </div>
             </div>
         </div>
+
+        @if (Model.EsCreador)
+        {
+            <div class="mt-4">
+                <h5 class="text-secondary">Ganancias</h5>
+
+                <div class="row">
+                    <div class="col-md-12"> <canvas id="gananciasMensualesChart"></canvas> </div>
+                </div>
+                <form asp-controller="Usuario" asp-action="retirarGanancia" method="post">
+                <button class="btn btn-success mt-3">Retirar Ganancias</button>
+                </form>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                    var mesesGananciasData = @Html.Raw(Json.Serialize(Model.MesesGanancias));
+
+                    // Obtener los meses y las ganancias
+                    var labelsMeses = mesesGananciasData.map(function (item) {
+                        // Ajustar el formato del mes si es necesario
+                        var monthName = new Date(item.year, item.month - 1).toLocaleString('default', { month: 'long' });
+                        return monthName + ' ' + item.year;
+                    });
+                    var dataMeses = mesesGananciasData.map(function (item) { return item.total; });
+
+                    var ctxMeses = document.getElementById('gananciasMensualesChart').getContext('2d');
+                    new Chart(ctxMeses, {
+                        type: 'bar',
+                        data: {
+                            labels: labelsMeses,
+                            datasets: [{
+                                label: 'Ganancias Mensuales',
+                                data: dataMeses,
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+
+            </script>
+        }
     </div>
 
-    @if (Model.EsCreador)
-    {
-        <div class="mt-4">
-            <h5 class="text-secondary">Ganancias</h5>
-            <canvas id="gananciasChart"></canvas>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="~/js/grafico.js"></script>
-    }
-
-    <!-- Modal para cambiar imagen -->
     <div class="modal fade" id="modalCambiarImagen" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
