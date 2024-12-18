@@ -58,7 +58,8 @@
           "UserName",
           "nombrePagina",
           "shortDescripcion",
-          "acercaDe"
+          "acercaDe",
+          "imagePerfil"
         ],
         "properties": {
           "idUser": {
@@ -76,7 +77,7 @@
             "description": "debe ser un string y es obligatorio"
           },
           "imageBackground": {
-            "bsonType": ["objectId", "null"],
+            "bsonType": [ "objectId", "null" ],
             "description": "debe ser un ObjectId o null"
           },
           "shortDescripcion": {
@@ -88,9 +89,14 @@
             "bsonType": "string",
             "minLength": 0,
             "description": "debe ser un string y es obligatorio"
+          },
+          "imagePerfil": {
+            "bsonType": [ "objectId", "null" ],
+            "description": "debe ser un ObjectId o null"
+          }
+
           }
         }
-      }
     }
   },
   {
